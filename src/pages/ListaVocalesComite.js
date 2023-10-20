@@ -32,6 +32,7 @@ function ListaVocalesComite({ idComite }) {
                       <span className="vocal-name">{`${titular.NOMBRE} ${titular.APELLIDO}`}</span>
                       
                       <span className="vocal-ci">CI: {titular.CARNETIDENTIDAD}</span>
+                      <span className="vocal-name"> :{titular.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}</span> 
                     </div>
                   </li>
                 ))}
@@ -46,6 +47,7 @@ function ListaVocalesComite({ idComite }) {
                     <div className="vocal-item">
                       <span className="vocal-name">{`${suplente.NOMBRE} ${suplente.APELLIDO}`}</span>
                       <span className="vocal-ci">CI: {suplente.CARNETIDENTIDAD}</span>
+                      <span className="vocal-name"> : {suplente.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}</span>
                     </div>
                   </li>
                 ))}

@@ -19,7 +19,8 @@ const menuAbrir= (e) => {
 };
 
 const cerrarMenu=(e)=>{
-  navLinks.classList.remove("open");
+  //navLinks.classList.remove("open");
+  setIsNavOpen(!isNavOpen);
 }
 useEffect(() => {
   const scrollReveal = scrollreveal();
