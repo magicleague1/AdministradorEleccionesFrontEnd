@@ -1,0 +1,21 @@
+.H3LISTA{
+	font-weight: bold;
+	color: white;
+	padding-top: 1rem;
+	padding-left: 2rem;
+}
+.ListaComitePadre{
+	width: 90%;
+	height: 24rem;
+	background-color: #cccccc95;
+	overflow-y: auto;
+}
+.vocal-name{
+	color: white;
+	padding-left: 3rem;
+	padding-right: 0.1rem;
+}
+.vocal-ci{
+	color: white;
+	padding-left: 3rem;
+}

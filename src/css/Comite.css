@@ -1,0 +1,176 @@
+
+.divComite{
+  padding: 70px;
+  background-color: #F2F3F2;
+  height: 100%;
+}
+
+.titleC{
+  font-size: 2.2rem;
+  color: #00909E;
+  text-align: center;
+  font-weight: bold;
+  margin-top: -3.5rem;
+  margin-bottom: 1.5rem;
+}
+.TablaComite {
+  border-collapse: collapse;
+  width: 100%;
+  max-height: 20rem;
+  border: 2px solid rgba(0, 56, 116, 0.797); /* Borde azul para la tabla */
+  text-align: center;
+  overflow-y: auto;
+}
+
+th, td {
+  border: 1px solid rgb(9, 9, 24); /* Borde azul para celdas de encabezado y datos */
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: rgba(0, 56, 116, 0.797); /* Color de fondo para las celdas de encabezado */
+   color: white; 
+   border: 1px solid #000; 
+padding: 8px; 
+}
+.trVerComite{
+  height: 60px;
+
+}
+.tdNormalBoton{
+  background-color: white;
+    border: 2.5px solid rgba(0, 56, 116, 0.797); /* Agrega un borde sólido de 1 píxel */
+    padding: 1px; /* Opcional: agrega relleno para separar el texto del borde */
+    font-size: 1rem;
+    width: 20rem;
+}
+  .CuerpoComite{
+    width: 40rem;
+    height: 33rem;
+     background-color: rgba(0, 56, 116, 0.977);
+     margin-top: 3rem;
+     margin-left: 25rem;
+  }
+  
+  .ComiteTitulo{
+    padding-top: 1rem;
+    font-size: 2rem;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+  }
+  .ContenedorVocales{
+    display: flex;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center; 
+  }
+  .modal-content{
+    width: 90%;
+    max-width: 500px;
+    background-color: #ffffff;
+    padding: 10px;
+  
+  }
+  .BotonComiteModal{
+      padding: 5px;
+      font-size: large;
+      float: right;
+      cursor: pointer;   
+  }
+  button {
+    margin: 20px;
+  }
+  .custom-btn {
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+     box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+     7px 7px 20px 0px rgba(0,0,0,.1),
+     4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
+    justify-content: center;
+  align-items: flex-end;
+  }
+  
+  /* 1 */
+  .btn-1 {
+    background: rgb(244,244,244);
+    background: linear-gradient(0deg, rgba(244,244,244,1) 0%, rgba(250,233,254,1) 100%);
+    border: none;
+    color: black;
+    left: 17rem;
+    bottom: -1.5rem;
+  }
+  .btn-1:hover {
+     background: rgb(0,3,255);
+  background: linear-gradient(0deg, rgba(0,3,255,1) 0%, rgba(2,126,251,1) 100%);
+  }
+  /* 1 */
+  .btn-13 {
+    background: rgb(0,187,45);
+    background: linear-gradient(0deg, rgba(0,187,45,1) 0%, rgba(33,183,45,1) 100%);
+    border: none;
+    width: 8rem;
+    justify-content: center;
+    margin-right: 1rem;
+    
+  }
+  .btn-13:before {
+    height: 0%;
+    width: 1.5px;
+  }
+  .btn-13:hover {
+    box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+                -4px -4px 6px 0 rgba(116, 125, 136, .5), 
+      inset -4px -4px 6px 0 rgba(255,255,255,.2),
+      inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+  }
+
+    /* 1 */
+  .btn-14 {
+    background: rgb(0,172,238);;
+    background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
+    border: none;
+    width: 8rem;
+    justify-content: center;
+    
+  }
+  .btn-14:before {
+    height: 0%;
+    width: 1.5px;
+  }
+  .btn-14:hover {
+    box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+                -4px -4px 6px 0 rgba(116, 125, 136, .5), 
+      inset -4px -4px 6px 0 rgba(255,255,255,.2),
+      inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+  }
+  
+  .AsignacionComite{
+    width: 28rem;
+    height: 12rem;
+    background-color: rgb(200, 200, 200);
+    margin-top: 12rem;
+    margin-left: 35rem;
+  }
+  .modal-title{
+    font-size: 1.5rem;
+    color: rgb(0,57,116);
+    text-align: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  .modal-body{
+    margin-top: 1rem;
+    text-align: center;
+  }
+  .LetraActualizacionConf{
+    font-size: 1.7rem;
+  }
