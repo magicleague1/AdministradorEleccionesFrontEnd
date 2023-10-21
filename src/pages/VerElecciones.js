@@ -49,6 +49,7 @@ const VerElecciones = ({ lista }) => {
     <>
     <div className="ver-elecciones">
       <h3>ELECCIONES ACTIVAS</h3>
+      <div className="ContenedorTabla">
     <table>
       <thead>
         <tr>
@@ -83,6 +84,7 @@ const VerElecciones = ({ lista }) => {
         
       </tbody>
     </table>
+    </div>
     </div>
     <ActualizarEleccionModal
         isOpen={modalIsOpen}

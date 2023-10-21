@@ -5,6 +5,7 @@ import "styled-components";
 import axios from "axios";
 import Modal from "react-modal";
 import ListaVocalesComite from "./ListaVocalesComite";
+import Swal from 'sweetalert2';
 
 function AsignacionComite({ lista }) {
   const [proceso, setproceso] = useState([]);
@@ -64,20 +65,39 @@ function AsignacionComite({ lista }) {
           axios
             .post(`http://localhost:8000/asignar-vocales/${COD_COMITE}`)
             .then((responseVocales) => {
-              console.log("Asignación de vocales exitosa:", responseVocales.data);
-              setCodComite(COD_COMITE);
-              setmodalAbrir(true);
+              // Muestra una alerta de éxito
+              Swal.fire({
+                icon: 'success',
+                title: 'Asignación exitosa',
+                text: 'La asignación del comité y vocales se realizó con éxito.'
+              }).then(() => {
+                setCodComite(COD_COMITE);
+                setmodalAbrir(true);
+              });
             })
             .catch((errorVocales) => {
-              console.error("Error en la asignación de vocales:", errorVocales);
+              // Muestra una alerta de error
+              Swal.fire({
+                icon: 'error',
+                title: 'Error en la asignación de vocales',
+                text: `Ocurrió un error en la asignación de vocales: ${errorVocales}`
+              });
             });
         })
         .catch((errorComite) => {
-          console.error("Error en la asignación de comité:", errorComite);
+          // Muestra una alerta de error
+          Swal.fire({
+            icon: 'error',
+            title: 'Error en la asignación de comité',
+            text: `Ocurrió un error en la asignación de comité: ${errorComite}`
+          });
         });
     } else {
-      // Puedes mostrar un mensaje de error o tomar otras medidas si el comité no existe
-      console.log("No se puede asignar el comité porque no existe");
+      Swal.fire({
+        icon: 'error',
+        title: 'No se puede asignar el comité',
+        text: 'El comité no existe, no se puede realizar la asignación.'
+      });
     }
   };
 
@@ -104,6 +124,7 @@ function AsignacionComite({ lista }) {
     <>
     <div className="divComite">
       <h1 className="titleC"> COMITE ELECTORAL</h1>
+      <div className="ContenedorTabla">
         <table className="TablaComite">
           <thead >
             <tr>
@@ -134,6 +155,7 @@ function AsignacionComite({ lista }) {
           </tbody>
         </table>
         </div>
+        </div>
 
       <Modal
         isOpen={modalIsOpen}
@@ -154,27 +176,7 @@ function AsignacionComite({ lista }) {
           Cerrar
         </button>
       </Modal>
-      <Modal  
-        className={"AsignacionComite"}
-        isOpen={modalAbrir}
-        onRequestClose={cerrarModal}
-        contentLabel="Confirmacion de vocales"
-        onClick={handleModalClick}>
-          
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <div className="ContenedorTituloMo">
-                      <h5 class="modal-title">DESIGNACION CONFIRMADA</h5>
-                      </div>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={cerrarModal}></button>
-                    </div>
-                    <div class="modal-body">
-                      <p className="LetraActualizacionConf">Se asigno un Comite Electoral al eleccion!</p>
-                    </div>
-                    
-                  </div>
-            
-      </Modal>  
+      
       </>
   );
 }

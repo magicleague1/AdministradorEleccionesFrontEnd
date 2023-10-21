@@ -3,6 +3,7 @@ import "../css/MenuVertical.css";
 import "../css/botones.css"
 import Modal from "./Modal";
 import axios from "axios";
+import Swal from 'sweetalert2';
 import "../css/CreacionModal.css"
 
 const CrearElecciones = () => {
@@ -71,17 +72,27 @@ const CrearElecciones = () => {
       };
   
       axios.post(url + "elecciones_data", nuevoProceso)
-        .then((response) => {
-          console.log("El proceso se registro correctamente");
-          setModalMessage(`El proceso electoral se ha creado con éxito para el motivo: ${formData.motivoEleccion}`);
+      .then((response) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Proceso registrado correctamente',
+          text: `El proceso electoral se ha creado con éxito para el motivo: ${formData.motivoEleccion}`
+        }).then(() => {
           setShowModal(true);
           setFormData(initialState);
-        })
-        .catch((error) => {
-          console.error("Error al crear el proceso electoral:", error);
         });
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al crear el proceso electoral',
+          text: `Ocurrió un error al crear el proceso electoral: ${error}`
+        });
+      });
     };
+    
   return (
+    <>
     <div className="crear-elecciones">
       <h3>NUEVO PROCESO ELECTORAL</h3>
       <div className="NuevoCrear" >
@@ -182,12 +193,10 @@ const CrearElecciones = () => {
       </button>{ "    "}
       <button className="custom-btn btn-7">Cancelar</button>
       </div>
-      
-      {showModal && (
-        <Modal  mensaje={modalMessage} onClose={() => setShowModal(false)} />
-      )}
       </div>
     </div>
+   
+    </>
   );
 };
 

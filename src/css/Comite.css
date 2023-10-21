@@ -174,3 +174,8 @@ padding: 8px;
   .LetraActualizacionConf{
     font-size: 1.7rem;
   }
+  .ContenedorTabla{
+    width: 100%;
+    max-height: 28rem;
+    overflow-y: auto;
+  }

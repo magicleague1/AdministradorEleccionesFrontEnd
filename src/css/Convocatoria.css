@@ -1,9 +1,9 @@
 .CuerpoConvocatoria{
-    width: 33rem;
+    width: 35rem;
     height: auto;
      background-color: rgba(0, 56, 116, 0.977);
-     margin-top: 3rem;
-     margin-left: 30rem;
+     margin-top: 1rem;
+     margin-left: 28rem;
 }
 .ConvocatoriaTitulo{
     font-size: 2rem;

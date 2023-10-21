@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "../css/ActualizacionEleccionModal.css"
-
+import Swal from 'sweetalert2';
 Modal.setAppElement("#root");
 
 const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
@@ -55,13 +55,20 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
         FECHA_ELECCION: formData.fechaElecciones,
       })
       .then((response) => {
-        
-        closeModal();
-        setModalIsOpen(true);
-        // Puedes mostrar un mensaje de éxito aquí si lo deseas.
+        Swal.fire({
+          icon: 'success',
+          title: 'Proceso se actualizo correctamente',
+          text: `El proceso electoral se ha actualizado con éxito!`
+        }).then(() => {
+          handleVolverAtras();
+        });
       })
       .catch((error) => {
-        console.error("Error al actualizar el proceso electoral:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al actualizar el proceso electoral',
+          text: `Ocurrió un error al actualizar el proceso electoral`
+        });
       });
   };
 
@@ -72,11 +79,7 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
   const cerrarModal= () => {
     setModalIsOpen(false);
   };
-  const handleModalClick = (e) => {
-    if (e.target === e.currentTarget) {
-      cerrarModal();
-    }
-  };
+  
   return (
     <>
      <Modal
@@ -138,27 +141,6 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
       </button>
       </div>
     </Modal>
-    <Modal  
-        className={"ActualizarModal"}
-        isOpen={modalIsOpen}
-        onRequestClose={cerrarModal}
-        contentLabel="Modal de actualizacion"
-        onClick={handleModalClick}>
-          
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <div className="ContenedorTituloMo">
-                      <h5 class="modal-title">Confirmacion de actualizacion</h5>
-                      </div>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={cerrarModal}></button>
-                    </div>
-                    <div class="modal-body">
-                      <p className="LetraActualizacionConf">Se actualizo correctamente el proceso !</p>
-                    </div>
-                    
-                  </div>
-            
-      </Modal>  
     </>
    
   );
