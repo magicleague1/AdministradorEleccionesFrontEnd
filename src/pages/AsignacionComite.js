@@ -13,6 +13,7 @@ function AsignacionComite({ lista }) {
   const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
   const [existeComite, setExisteComite] = useState(false); // Estado para verificar la existencia del comité
+  const [existeVocales, setExisteVocales] = useState(false);
   const url = "http://localhost:8000/";
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
@@ -22,39 +23,47 @@ function AsignacionComite({ lista }) {
 
 
   // Función para verificar la existencia del comité
-  const verificarExistenciaComite = (codComite) => {
-    // Realiza una solicitud GET al servidor de Laravel para verificar la existencia del comité
-    axios
-      .get(`http://localhost:8000/verificar-comite/${codComite}`)
-      .then((response) => {
-        
-        // La respuesta debe ser un objeto JSON con el campo "existeComite"
-        if (response.data.existeComite) {
-          // Si el comité no existe, establece setExisteComite en true
-          setExisteComite(true);
-          console.log("El comité no existe");
-        } else {
-          // Si el comité existe, puedes realizar otras acciones aquí
-          setExisteComite(false);
-          console.log("El comité existe");
-        }
-      })
-      .catch((error) => {
-        console.error("Error al verificar la existencia del comité:", error);
-      });
+  const verificarExistenciaComite = async (codComite) => {
+    try {
+      // Realiza una solicitud GET al servidor de Laravel para verificar la existencia del comité
+      const response = await axios.get(`http://localhost:8000/verificar-comite/${codComite}`);
+  
+      // La respuesta debe ser un objeto JSON con el campo "existeComite"
+      if (response.data.existeComite) {
+        // Si el comité existe, devuelve false
+        console.log("El comité existe");
+        return false;
+      } else {
+        // Si el comité no existe, devuelve true
+        console.log("El comité no existe");
+        return true;
+      }
+    } catch (error) {
+      console.error("Error al verificar la existencia del comité:", error);
+      // En caso de error, puedes manejarlo adecuadamente, como lanzar una excepción o manejarlo según tus necesidades.
+      // En este ejemplo, lo he dejado como un error en la consola.
+      return false; // O devolver false en caso de error si lo prefieres
+    }
   };
-
   
   const handleAsociarClick = (COD_ELECCION, COD_COMITE) => {
-    // Antes de asociar el comité, verifica si existe
-    verificarExistenciaComite(COD_COMITE);
-
+    // Antes de asociar el comité, verifica si existe  
     
-  
-    // Realiza la asignación solo si el comité existe
-    if (!existeComite) {
-      console.log(!existeComite)
-      //elecciones/asignar_comite/  AQUI CAMBIAR RUTA----------------ruta asi cambiar
+    verificarExistenciaComite(COD_COMITE)
+    .then((existeComite) => {
+      if (!existeComite) {
+        // Si el comité no existe, muestra un mensaje de error
+        Swal.fire({
+          icon: 'error',
+          title: 'Asignacion incorrecta',
+          text: 'Ya se asigno Vocales de comite electoral'
+        });
+        return;
+      }
+
+      // Si el comité existe, procede con la asignación
+      console.log("El comité existe, procediendo con la asignación...");
+
       // Realizar una solicitud PUT para asociar el comité a la elección
       axios
         .put(`http://localhost:8000/asignar-comite/${COD_ELECCION}`)
@@ -62,43 +71,41 @@ function AsignacionComite({ lista }) {
           console.log("Asignación de comité exitosa:", responseComite.data);
 
           // Luego, realizar una solicitud POST para asignar vocales al comité
-          axios
-            .post(`http://localhost:8000/asignar-vocales/${COD_COMITE}`)
-            .then((responseVocales) => {
-              // Muestra una alerta de éxito
-              Swal.fire({
-                icon: 'success',
-                title: 'Asignación exitosa',
-                text: 'La asignación del comité y vocales se realizó con éxito.'
-              }).then(() => {
-                setCodComite(COD_COMITE);
-                setmodalAbrir(true);
+            axios
+              .post(`http://localhost:8000/asignar-vocales/${COD_COMITE}`)
+              .then((responseVocales) => {
+                // Muestra una alerta de éxito
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Asignación exitosa',
+                  text: 'La asignación del comité y vocales se realizó con éxito.'
+                }).then(() => {
+                  setCodComite(COD_COMITE);
+                  setmodalAbrir(true);
+                });
+              })
+              .catch((errorVocales) => {
+                // Muestra una alerta de error
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error en la asignación de vocales',
+                  text: `Ocurrió un error en la asignación de vocales: ${errorVocales}`
+                });
               });
-            })
-            .catch((errorVocales) => {
-              // Muestra una alerta de error
-              Swal.fire({
-                icon: 'error',
-                title: 'Error en la asignación de vocales',
-                text: `Ocurrió un error en la asignación de vocales: ${errorVocales}`
-              });
+          })
+          .catch((errorComite) => {
+            // Muestra una alerta de error
+            Swal.fire({
+              icon: 'error',
+              title: 'Error en la asignación de comité',
+              text: `Ocurrió un error en la asignación de comité: ${errorComite}`
             });
-        })
-        .catch((errorComite) => {
-          // Muestra una alerta de error
-          Swal.fire({
-            icon: 'error',
-            title: 'Error en la asignación de comité',
-            text: `Ocurrió un error en la asignación de comité: ${errorComite}`
           });
-        });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'No se puede asignar el comité',
-        text: 'El comité no existe, no se puede realizar la asignación.'
-      });
-    }
+        })
+        .catch((error) => {
+           
+      }); 
+      
   };
 
   const handleVerListaClick = (eleccionId) => {
@@ -111,9 +118,6 @@ function AsignacionComite({ lista }) {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-  const cerrarModal = () => {
-    setmodalAbrir(false);
-  };
   const handleModalClick = (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
@@ -123,13 +127,13 @@ function AsignacionComite({ lista }) {
   return (
     <>
     <div className="divComite">
-      <h1 className="titleC"> COMITE ELECTORAL</h1>
+      <h1 className="titleC"> LISTA DE VOCALES DEL COMITE ELECTORAL</h1>
       <div className="ContenedorTabla">
         <table className="TablaComite">
           <thead >
             <tr>
               <th> ID </th>
-              <th> NAME </th>
+              <th> PROCESO </th>
               <th> ACCIONES </th>
             </tr>
           </thead>
@@ -146,7 +150,7 @@ function AsignacionComite({ lista }) {
                       handleAsociarClick(elemento.COD_ELECCION, elemento.COD_COMITE)
                     }
                   >
-                    Asignar
+                    Asignacion
                   </button>{" "}
                   <button class="custom-btn btn-14" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>Ver Lista</button>
                 </td>

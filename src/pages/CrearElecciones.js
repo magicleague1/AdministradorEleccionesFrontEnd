@@ -48,17 +48,24 @@ const CrearElecciones = () => {
     const handleGuardarClick = () => {
      console.log(formData.motivoEleccion)
       if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
-        setModalMessage("Por favor, complete todos los campos.");
-        setShowModal(true);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al crear el proceso electoral',
+          text: `Llene correctamente los datos `
+        });
         return;
       }
   
       if (new Date(formData.fechaFin) <= new Date(formData.fechaInicio) || new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)) {
-        setModalMessage("Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin.");
-        setShowModal(true);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al crear el proceso electoral',
+          text: ` Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin. `
+        });
+
         return;
       }
-  
+     
       const nuevoProceso = {
         COD_ADMIN: "", // Reemplaza con el código de administrador adecuado
         COD_FRENTE: 0, // Reemplaza con el código de frente adecuado
@@ -90,7 +97,10 @@ const CrearElecciones = () => {
         });
       });
     };
-    
+    const handleVolverAtras = () => {
+      setShowModal(true);
+          setFormData(initialState);
+    }
   return (
     <>
     <div className="crear-elecciones">
@@ -191,7 +201,7 @@ const CrearElecciones = () => {
       <button className ="custom-btn btn-6" onClick={handleGuardarClick}>
         Guardar
       </button>{ "    "}
-      <button className="custom-btn btn-7">Cancelar</button>
+      <button className="custom-btn btn-7" onClick={handleVolverAtras}>Cancelar</button>
       </div>
       </div>
     </div>
