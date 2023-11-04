@@ -65,6 +65,26 @@
     text-align: center;
   
   }
+  .Ocultos{
+    width: 99%;
+    height: 8vh;
+    border: 1px solid  #10558d;
+    list-style: none;
+    flex-direction: row;
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    color:#fafafa;
+    background-color: #a7a7a7;
+    text-align: center;
+  }
+  .Ocultos:hover {
+    background-color: #082338; /* Cambia el color de fondo en hover */
+    color: #ffffff; /* Cambia el color del texto en hover */
+    cursor: pointer;
+    border: 1px solid #ffffff;
+    font-style: bold;
+  }
   
   .listaSidebar .row:hover {
     cursor: pointer;

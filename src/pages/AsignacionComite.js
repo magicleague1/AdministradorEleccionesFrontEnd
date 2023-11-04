@@ -12,8 +12,6 @@ function AsignacionComite({ lista }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
-  const [existeComite, setExisteComite] = useState(false); // Estado para verificar la existencia del comité
-  const [existeVocales, setExisteVocales] = useState(false);
   const url = "http://localhost:8000/";
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
