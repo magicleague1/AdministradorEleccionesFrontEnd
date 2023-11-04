@@ -11,6 +11,7 @@ import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined'; //importa
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined'; //importar icono editar
 import AgregarFrenteModal from './AgregarFrenteModal.js'; //importar el modal Agregar frente 
 import AsignarFrente from "./AsignarFrente";
+import EdicionAsigFrentes from "./EdicionAsigFrentes"
 
 const VerElecciones = ({ lista }) => {
   //const numRows = 4; // Número de filas
@@ -22,6 +23,7 @@ const VerElecciones = ({ lista }) => {
 
   const [modalAddFP, setModalADDFP] = useState(false); // Nuevo estado para controlar el modal agregar frentes politicos a elecciones activas
   const [modalAFP, setModalAFP] = useState(false);
+  const [modalEAFP, setModalEAFP] = useState(false);
   const [listaElecciones,setListaElecciones] = useState([])
 
   //controladores del modal frentes de elecciones activas
@@ -39,7 +41,12 @@ const closeModalAFP = () =>{
     setModalAFP(false);
 };
 
-
+const openModalEAFP = () =>{
+  setModalEAFP(true);
+};
+const closeModalEAFP = () =>{
+  setModalEAFP(false);
+};
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
       setListaElecciones(response.data)
@@ -110,7 +117,7 @@ const closeModalAFP = () =>{
                   <button className="icono" onClick={() => openModalADDFP()}>
                     <ListAltOutlinedIcon fontSize="large"/>
                   </button>
-                  <button className="icono">
+                  <button className="icono" onClick={() => openModalEAFP()}>
                     <DriveFileRenameOutlineOutlinedIcon fontSize="large"/>
                   </button>
                 </td>
@@ -140,6 +147,10 @@ const closeModalAFP = () =>{
        <AsignarFrente
         isOpen={modalAFP}
         closeModal={closeModalAFP}
+      />
+       <EdicionAsigFrentes
+        isOpen={modalEAFP}
+        closeModal={closeModalEAFP}
       />
     </>
     

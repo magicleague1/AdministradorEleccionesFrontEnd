@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import "../css/agregarFrenteModal.css";
+import "../css/AgregarFrenteModal.css";
 Modal.setAppElement("#root");
 
 
