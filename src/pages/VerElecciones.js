@@ -10,6 +10,7 @@ import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined'; //importar el icono de list
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined'; //importar icono editar
 import AgregarFrenteModal from './AgregarFrenteModal.js'; //importar el modal Agregar frente 
+import AsignarFrente from "./AsignarFrente";
 
 const VerElecciones = ({ lista }) => {
   //const numRows = 4; // Número de filas
@@ -20,7 +21,7 @@ const VerElecciones = ({ lista }) => {
   const url = "http://localhost:8000/";
 
   const [modalAddFP, setModalADDFP] = useState(false); // Nuevo estado para controlar el modal agregar frentes politicos a elecciones activas
-
+  const [modalAFP, setModalAFP] = useState(false);
   const [listaElecciones,setListaElecciones] = useState([])
 
   //controladores del modal frentes de elecciones activas
@@ -30,6 +31,13 @@ const VerElecciones = ({ lista }) => {
   const closeModalADDFP = () =>{
       setModalADDFP(false);
   };
+
+  const openModalAFP = () =>{
+    setModalAFP(true);
+};
+const closeModalAFP = () =>{
+    setModalAFP(false);
+};
 
 
   useEffect(() => {
@@ -96,7 +104,7 @@ const VerElecciones = ({ lista }) => {
                       </button>
                 </td>
                 <td className="tdNormal">
-                  <button className="icono" >
+                  <button className="icono" onClick={() => openModalAFP()} >
                     <PersonAddAltOutlinedIcon fontSize="large"/>
                   </button>
                   <button className="icono" onClick={() => openModalADDFP()}>
@@ -128,6 +136,10 @@ const VerElecciones = ({ lista }) => {
       <AgregarFrenteModal
         isOpen={modalAddFP}
         closeModal={closeModalADDFP}
+      />
+       <AsignarFrente
+        isOpen={modalAFP}
+        closeModal={closeModalAFP}
       />
     </>
     
