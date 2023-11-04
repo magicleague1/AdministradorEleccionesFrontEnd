@@ -102,8 +102,6 @@ function MenuIzquierdo() {
             </div>
         
         </div>
-         
-        
 
     );
 }

@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "../css/MenuVertical.css";
-import "../css/botones2.css"
+import "../css/botones2.css";
+import "../css/iconos.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import ActualizarEleccionModal from "../pages/ActualizarEleccionModal";
 import PdfConvocatoria from "./pdfConvocatoria";
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'; //importa el icono de user-plus icono
+import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined'; //importar el icono de list
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined'; //importar icono editar
+import AgregarFrenteModal from './AgregarFrenteModal.js'; //importar el modal Agregar frente 
+
 const VerElecciones = ({ lista }) => {
   //const numRows = 4; // Número de filas
   const navigate = useNavigate();
@@ -13,7 +19,18 @@ const VerElecciones = ({ lista }) => {
   const [selectedEleccionId, setSelectedEleccionId] = useState(null); // Nuevo estado para almacenar el ID de la elección seleccionada
   const url = "http://localhost:8000/";
 
+  const [modalAddFP, setModalADDFP] = useState(false); // Nuevo estado para controlar el modal agregar frentes politicos a elecciones activas
+
   const [listaElecciones,setListaElecciones] = useState([])
+
+  //controladores del modal frentes de elecciones activas
+  const openModalADDFP = () =>{
+      setModalADDFP(true);
+  };
+  const closeModalADDFP = () =>{
+      setModalADDFP(false);
+  };
+
 
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
@@ -57,6 +74,7 @@ const VerElecciones = ({ lista }) => {
           <th>FECHA</th>
           <th>DETALLE</th>
           <th>CONVOCATORIA</th>
+          <th>FRENTES</th>
         </tr>
       </thead>
       <tbody>
@@ -77,6 +95,17 @@ const VerElecciones = ({ lista }) => {
                             Convocatoria
                       </button>
                 </td>
+                <td className="tdNormal">
+                  <button className="icono" >
+                    <PersonAddAltOutlinedIcon fontSize="large"/>
+                  </button>
+                  <button className="icono" onClick={() => openModalADDFP()}>
+                    <ListAltOutlinedIcon fontSize="large"/>
+                  </button>
+                  <button className="icono">
+                    <DriveFileRenameOutlineOutlinedIcon fontSize="large"/>
+                  </button>
+                </td>
            </tr>
           )
           
@@ -95,6 +124,10 @@ const VerElecciones = ({ lista }) => {
           isOpen={modalConvo}
           closeModal={closeModal1}
           eleccionId={selectedEleccionId}
+      />
+      <AgregarFrenteModal
+        isOpen={modalAddFP}
+        closeModal={closeModalADDFP}
       />
     </>
     
