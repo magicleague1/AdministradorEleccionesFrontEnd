@@ -3,7 +3,7 @@ import "../css/inicio.css"
 
 const Inicio = () => {
   return (
-    <div className='Inicio1'>
+    
          <div className="inicio-container">
           <div className='LetrasDescripcion'>
           <h2 className='Letras2'>Bienvenido al sistema de administracion de elecciones </h2>
@@ -11,7 +11,7 @@ const Inicio = () => {
           </div>
             
         </div>
-    </div>
+    
     
   );
 };

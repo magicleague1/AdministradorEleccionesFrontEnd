@@ -24,6 +24,7 @@
     width: 8rem;
     justify-content: center;
     margin-top: 1rem;
+    margin-bottom: 2rem;
   }
   .botonvfrente:before {
     height: 0%;

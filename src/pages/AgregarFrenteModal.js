@@ -23,7 +23,7 @@ const AgregarFrenteModal = ({ isOpen, closeModal }) => {
             ))}
             <br/>
         <button className ="custom-btn botonvfrente" onClick={()=> toogle()}>
-          Volver
+          Cerrar
         </button>
     </Modal>
   );
