@@ -86,7 +86,7 @@ const VerPartidosPoliticos = ({ lista }) => {
                     <button className="custom-btn btn-16 btn-delete d-flex align-items-center justify-content-center" onClick={() => handleEliminacionClick(eleccion.COD_ELECCION)}>
                         <FontAwesomeIcon icon={faTrash} style={{ fontSize: '24px' }} />
                     </button>
-                    <button className="custom-btn btn-17 btn-agregar d-flex align-items-center justify-content-center" onClick={() => openModalAC()}>
+                    <button className="custom-btn btn-25 btn-agregar d-flex align-items-center justify-content-center" onClick={() => openModalAC()}>
                         <FontAwesomeIcon icon={faUserPlus} style={{ fontSize: '24px' }} />
                     </button>
                     </div>

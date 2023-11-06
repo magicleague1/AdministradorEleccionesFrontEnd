@@ -18,8 +18,8 @@
       inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
   }
   .btn-16 {
-    background: rgb(0,172,238);;
-    background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
+    background: rgb(238, 32, 0);;
+    background: linear-gradient(0deg, rgba(238,32,0,1) 0%, rgb(251, 145, 126) 100%);
     border: none;
     width: 5px;
     justify-content: center;
@@ -35,20 +35,19 @@
       inset -4px -4px 6px 0 rgba(255,255,255,.2),
       inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
   }
-  .btn-17 {
-    background: rgb(0,187,45);
-    background: linear-gradient(0deg, rgba(0,187,45,1) 0%, rgba(33,183,45,1) 100%);
+  .btn-25 {
+     background: rgb(0,172,238);;
+    background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
     border: none;
     width: 5px;
     justify-content: center;
-    margin-right: 1rem;
     
   }
-  .btn-17:before {
+  .btn-25:before {
     height: 0%;
     width: 1.5px;
   }
-  .btn-17:hover {
+  .btn-25:hover {
     box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
                 -4px -4px 6px 0 rgba(116, 125, 136, .5), 
       inset -4px -4px 6px 0 rgba(255,255,255,.2),
