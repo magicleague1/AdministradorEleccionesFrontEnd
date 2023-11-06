@@ -18,6 +18,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
   const[modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const url = "http://localhost:8000/";
   console.log(url + `obtener_id/${eleccionId}`);
   useEffect(() => {
@@ -95,7 +96,10 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   const cerrarModal= () => {
     setModalIsOpen(false);
   };
-  
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]; // Obtiene el primer archivo seleccionado
+    setSelectedFile(file);
+  };
   return (
     <>
      <Modal
@@ -142,14 +146,18 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
       <div className="form-group">
         <label className="LabelCrearActualizar">Logo:</label>
         <input
-          className="InputCrearActualizar"
-          type="date"
-          name="fechaElecciones"
-          value={formData.fechaElecciones}
-          min={formData.fechaFin}
-          onChange={handleInputChange}
-        />
-      </div>
+           className="InputCrearActualizar"
+           type="file"
+           accept="image/*"
+           onChange={handleFileChange}
+          value={formData.motivoEleccion}
+          />
+        </div>
+        {selectedFile && (
+        <div>
+          <p>Archivo seleccionado: {selectedFile.name}</p>
+        </div>
+      )}
       <div className="BotonesDivCrearActualizar">
       <button className ="custom-btn btn-9" onClick={handleActualizarClick}>
         Actualizar

@@ -46,23 +46,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   const handleActualizarClick = () => {
-    if (!formData.nombre || !formData.sigla || !formData.fechaInscripcion|| !formData.logo) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al actualizar el frente politico',
-        text: `Llene correctamente los datos `
-      });
-      return;
-    }
-
-    if (new Date(formData.fechaFin) <= new Date(formData.fechaInicio) || new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al crear el proceso electoral',
-        text: ` Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin. `
-      });
-      return;
-    }
+  
     axios
       .put(url + `eleccionesUpdate/${eleccionId}`, {
         nombre: formData.motivoEleccion,

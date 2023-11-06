@@ -12,6 +12,7 @@ const CrearElecciones = () => {
       motivoEleccion: "",
       votanteEleccion:"",
       facultadEleccion:"",
+      carreraEleccion:"",
       motivoPersonalizado: "",
       fechaInicio: "",
       fechaFin: "",
@@ -74,6 +75,7 @@ const CrearElecciones = () => {
         MOTIVO_ELECCION: formData.motivoEleccion,
         VOTANTE_ELECCION: formData. votanteEleccion,
         FACULDAD_ELECCION: formData.facultadEleccion,
+        CARRERA_ELECCION: formData.carreraEleccion,
         FECHA_ELECCION: formData.fechaElecciones,
         FECHA_INI_CONVOCATORIA: formData.fechaInicio,
         FECHA_FIN_CONVOCATORIA: formData.fechaFin,
@@ -174,12 +176,29 @@ const CrearElecciones = () => {
         </div>
       )}
       {formData.votanteEleccion === 'Carrera' && (
-        <div className="form-group">
-          <label className="LabelCrear">Carrera:</label>
+        <div>
+          <div className="form-group">
+          <label className="LabelCrear">Facultad:</label>
           <select
             className="InputCrear"
             name="facultadEleccion"
             value={formData.facultadEleccion}
+            onChange={handleInputChange}
+
+          >
+            <option value="">Seleccione una opción</option>
+            <option value="1">Facultad de Ciencias y tecnologia</option>
+            <option value="2">Facultad Medecina</option>
+            <option value="3">Facultad de Ciencias Economicas</option>
+          
+          </select>
+        </div>
+       <div className="form-group">
+          <label className="LabelCrear">Carrera:</label>
+          <select
+            className="InputCrear"
+            name="carreraEleccion"
+            value={formData.carreraEleccion}
             onChange={handleInputChange}
 
           >
@@ -189,6 +208,7 @@ const CrearElecciones = () => {
             <option value="3">Ingeneria Quimica</option>
            
           </select>
+        </div>
         </div>
       )}
       <div className="form-group">
