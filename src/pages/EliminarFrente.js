@@ -105,17 +105,17 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
       contentLabel="Actualizar Elección"
     >
       <div className="Titulopolitico">
-      <h3 className="ActualizarTitulo">ELIMINACION DE FRENTE POLITICO</h3>
+      <h3 className="ActualizarTituloEliminar">ELIMINACION DE FRENTE POLITICO</h3>
       </div>
       
       <div className="form-group">
-        <label className="LabelCrearActualizar">¿Deseas eliminar el frente politivo ?</label>
+        <label className="LabelCrearEliminar">¿Deseas eliminar el frente politivo ?</label>
       </div>
       <div className="d-flex align-items-center justify-content-center">
-      <button className ="custom-btn btn-9 d-flex align-items-center justify-content-center" onClick={handleActualizarClick}>
+      <button className ="custom-btn btn-17 d-flex align-items-center justify-content-center" onClick={handleActualizarClick}>
         Eliminar
       </button>
-      <button className ="custom-btn btn-8 d-flex align-items-center justify-content-center" onClick={handleVolverAtras}>
+      <button className ="custom-btn btn-18 d-flex align-items-center justify-content-center" onClick={handleVolverAtras}>
         Cancelar
       </button>
       </div>

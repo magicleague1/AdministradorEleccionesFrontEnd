@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../css/MenuVertical.css";
 import "../css/botones.css"
-import Modal from "./Modal";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import "../css/CreacionModal.css"
@@ -11,6 +10,8 @@ const CrearElecciones = () => {
     const initialState = {
       nuevoTipoEleccion: "",
       motivoEleccion: "",
+      votanteEleccion:"",
+      facultadEleccion:"",
       motivoPersonalizado: "",
       fechaInicio: "",
       fechaFin: "",
@@ -19,7 +20,6 @@ const CrearElecciones = () => {
   
     const [formData, setFormData] = useState(initialState);
     const [showModal, setShowModal] = useState(false);
-    const [modalMessage, setModalMessage] = useState("");
   
     const url = "http://localhost:8000/";
     const handleNuevoTipoEleccionChange = (e) => {
@@ -72,6 +72,8 @@ const CrearElecciones = () => {
         COD_TEU: 0, // Reemplaza con el código de TEU adecuado
         COD_COMITE: 0, // Reemplaza con el código de comité adecuado
         MOTIVO_ELECCION: formData.motivoEleccion,
+        VOTANTE_ELECCION: formData. votanteEleccion,
+        FACULDAD_ELECCION: formData.facultadEleccion,
         FECHA_ELECCION: formData.fechaElecciones,
         FECHA_INI_CONVOCATORIA: formData.fechaInicio,
         FECHA_FIN_CONVOCATORIA: formData.fechaFin,
@@ -106,33 +108,7 @@ const CrearElecciones = () => {
     <div className="crear-elecciones">
       <h3>NUEVO PROCESO ELECTORAL</h3>
       <div className="NuevoCrear" >
-      <div className="form-group1">
-        <label className="LabelCrear">¿Quiere iniciar un nuevo tipo de elección?</label>
-        <select
-          className="InputCrear"
-          name="nuevoTipoEleccion"
-          value={formData.nuevoTipoEleccion}
-          onChange={handleNuevoTipoEleccionChange}
-        >
-          <option value="">Seleccione una opción</option>
-          <option value="Si">Sí</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-      {formData.nuevoTipoEleccion === "Si" && (
-        <div className="form-group">
-          <label className="LabelCrear">Motivo:</label>
-          <input
-            type="text"
-            name="motivoEleccion"
-            value={formData.motivoEleccion}
-            onChange={handleInputChange}
-            placeholder="Ingrese el motivo"
-            className="motivo-input"
-          />
-        </div>
-      )}
-      {formData.nuevoTipoEleccion === "No" && (
+      
         <div className="form-group">
           <label className="LabelCrear" >Motivo:</label>
           <select
@@ -161,6 +137,57 @@ const CrearElecciones = () => {
             <option value="Congreso universitario">
               Congreso universitario (Delegados docentes y estudiantes)
             </option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label className="LabelCrear" >Poblacion Votante:</label>
+          <select
+            className="InputCrear"
+            name="votanteEleccion"
+            value={formData.votanteEleccion}
+            onChange={handleInputChange}
+
+          >
+            <option value="">Seleccione una opción</option>
+            <option value="Universitario">Global</option>
+            <option value="Facultativo">Facultativo</option>
+            <option value="Carrera">Carrera</option>
+           
+          </select>
+        </div>
+        {formData.votanteEleccion === 'Facultativo' && (
+        <div className="form-group">
+          <label className="LabelCrear">Facultad:</label>
+          <select
+            className="InputCrear"
+            name="facultadEleccion"
+            value={formData.facultadEleccion}
+            onChange={handleInputChange}
+
+          >
+            <option value="">Seleccione una opción</option>
+            <option value="1">Facultad de Ciencias y tecnologia</option>
+            <option value="2">Facultad Medecina</option>
+            <option value="3">Facultad de Ciencias Economicas</option>
+           
+          </select>
+        </div>
+      )}
+      {formData.votanteEleccion === 'Carrera' && (
+        <div className="form-group">
+          <label className="LabelCrear">Carrera:</label>
+          <select
+            className="InputCrear"
+            name="facultadEleccion"
+            value={formData.facultadEleccion}
+            onChange={handleInputChange}
+
+          >
+            <option value="">Seleccione una opción</option>
+            <option value="1">Ingeneria Industrial</option>
+            <option value="2">Ingeneria de sistemas</option>
+            <option value="3">Ingeneria Quimica</option>
+           
           </select>
         </div>
       )}

@@ -6,21 +6,21 @@
      margin-left: 30rem;
 
 }
-.ActualizarTitulo {
+.ActualizarTituloEliminar {
     font-size: 1.8rem;
     color: white;
     text-align: center;
     font-weight: bold;
     padding-top: 1rem;
   }
-  .LabelCrearActualizar{
+  .LabelCrearEliminar{
     color: #fff;
     font-weight: bold;
     font-size: 1.4rem;
     margin-left: 17%;
 }
  /* 1 */
- .btn-9 {
+ .btn-17 {
     background: rgb(0,187,45);
     background: linear-gradient(0deg, rgba(0,187,45,1) 0%, rgba(33,183,45,1) 100%);
     border: none;
@@ -30,11 +30,11 @@
     margin-right: 2rem;
     
   }
-  .btn-9:before {
+  .btn-17:before {
     height: 0%;
     width: 1.5px;
   }
-  .btn-9:hover {
+  .btn-17:hover {
     box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
                 -4px -4px 6px 0 rgba(116, 125, 136, .5), 
       inset -4px -4px 6px 0 rgba(255,255,255,.2),
@@ -42,7 +42,7 @@
   }
 
     /* 1 */
-  .btn-8 {
+  .btn-18 {
     background: rgb(0,172,238);;
     background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
     border: none;
@@ -51,7 +51,7 @@
     justify-content: center;
     
   }
-  .btn-8:before {
+  .btn-18:before {
     height: 0%;
     width: 1.5px;
   }

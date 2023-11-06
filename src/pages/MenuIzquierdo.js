@@ -8,7 +8,7 @@ import VerElecciones from './VerElecciones';
 import AsignacionComite from "./AsignacionComite";
 import PartidosPoliticos from "./CrearPartidosPoliticos";
 import VerPartidosPoliticos from "./VerPartidosPoliticos";
-
+import AsignacionMesas from "./AsignacionMesas";
 
 function MenuIzquierdo() {
     const [mostrarCrearEleccion, setMostrarCrearEleccion] = useState(false);
@@ -17,6 +17,8 @@ function MenuIzquierdo() {
     const [mostrarVerComite, setMostrarVerComite] = useState(false);
     const [mostrarCrearPartido, setMostrarCrearPartido] = useState(false);
     const [mostrarVerPartido, setMostrarVerPartido] = useState(false);
+    const [mostrarAsignacion, setMostrarAsignacion] = useState(false);
+
     const [menuDesplegableCrearEleccion, setMenuDesplegableCrearEleccion] = useState(false);
     const [menuDesplegableCrearPartido, setMenuDesplegableCrearPartido] = useState(false);
     const handleCrearEleccionClick = () => {
@@ -26,6 +28,7 @@ function MenuIzquierdo() {
       setMostrarVerComite(false); 
       setMostrarCrearPartido(false);  
       setMostrarVerPartido(false); 
+      setMostrarAsignacion(false);
     };
   
     const handleInicioClick = () => {
@@ -35,6 +38,7 @@ function MenuIzquierdo() {
       setMostrarVerComite(false);
       setMostrarCrearPartido(false);
       setMostrarVerPartido(false); 
+      setMostrarAsignacion(false);
     };
   
     const handleVerEleccionesClick = () => {
@@ -44,6 +48,7 @@ function MenuIzquierdo() {
       setMostrarVerComite(false);
       setMostrarCrearPartido(false);
       setMostrarVerPartido(false); 
+      setMostrarAsignacion(false);
         // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
     };
     const handleVerComiteClick = () => {
@@ -53,6 +58,7 @@ function MenuIzquierdo() {
         setMostrarVerComite(true);
         setMostrarCrearPartido(false);
         setMostrarVerPartido(false); 
+        setMostrarAsignacion(false);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
       const handleCrearPartidoClick = () => {
@@ -61,7 +67,8 @@ function MenuIzquierdo() {
         setMostrarVerElecciones(false);
         setMostrarVerComite(false);
         setMostrarCrearPartido(true);
-        setMostrarVerPartido(false); 
+        setMostrarVerPartido(false);
+        setMostrarAsignacion(false); 
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
       const handleVerPartidoClick = () => {
@@ -71,6 +78,17 @@ function MenuIzquierdo() {
         setMostrarVerComite(false);
         setMostrarCrearPartido(false);
         setMostrarVerPartido(true); 
+        setMostrarAsignacion(false);
+          // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
+      };
+      const handleAsignarMesaClick = () => {
+        setMostrarCrearEleccion(false);
+        setMostrarInicio(false);
+        setMostrarVerElecciones(false);
+        setMostrarVerComite(false);
+        setMostrarCrearPartido(false);
+        setMostrarVerPartido(false);
+        setMostrarAsignacion(true); 
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
       const toggleMenuDesplegable = (opcion) => {
@@ -182,7 +200,15 @@ function MenuIzquierdo() {
                                         </li>
                                             </div>
                                         )}
-                                        
+                                         <li  className="row" id={ mostrarVerComite ? "active" : ""}
+                                        onClick=
+                                            {handleAsignarMesaClick}
+                                        >
+                                            
+                                                <span class="icon"><i class="fas fa-home"></i></span>
+                                                <span class="item">Asignacion de Mesas</span>
+                                                
+                                        </li>
                                     
                         
                     </ul>
@@ -196,6 +222,7 @@ function MenuIzquierdo() {
                     {mostrarVerComite && <AsignacionComite/>}
                     {mostrarCrearPartido && <PartidosPoliticos/>}
                     {mostrarVerPartido && <VerPartidosPoliticos/>}
+                    {mostrarAsignacion && <AsignacionMesas/>}
             </div>
         
         </div>
