@@ -105,7 +105,7 @@ const CrearElecciones = () => {
     }
   return (
     <>
-    <div className="crear-elecciones">
+   <div className="crear-elecciones">
       <h3>NUEVO PROCESO ELECTORAL</h3>
       <div className="NuevoCrear" >
       

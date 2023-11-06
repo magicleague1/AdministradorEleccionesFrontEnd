@@ -4,7 +4,7 @@ import "../css/MenuIzquierdo.css"
 import Logo from '../assets/logo.png';
 import CrearElecciones from './CrearElecciones';
 import Inicio from './Inicio';
-import VerElecciones from './VerElecciones'; 
+import VerElecciones from './VerElecciones';
 import AsignacionComite from "./AsignacionComite";
 import PartidosPoliticos from "./CrearPartidosPoliticos";
 import VerPartidosPoliticos from "./VerPartidosPoliticos";
@@ -30,7 +30,7 @@ function MenuIzquierdo() {
       setMostrarVerPartido(false); 
       setMostrarAsignacion(false);
     };
-  
+
     const handleInicioClick = () => {
       setMostrarCrearEleccion(false);
       setMostrarInicio(true);
@@ -40,7 +40,7 @@ function MenuIzquierdo() {
       setMostrarVerPartido(false); 
       setMostrarAsignacion(false);
     };
-  
+
     const handleVerEleccionesClick = () => {
       setMostrarCrearEleccion(false);
       setMostrarInicio(false);
@@ -231,5 +231,5 @@ function MenuIzquierdo() {
 
     );
 }
-   
+
 export default MenuIzquierdo;    

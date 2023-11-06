@@ -1,17 +1,22 @@
   
   /*FORMULARIO cREAR*/
   .crear-elecciones {
-    padding: 50px;
-    height: 38.1rem;
-    background-size: 100% 100%;
+   
+    padding: 70px;
+    background-color: #F2F3F2;
+    height: 100%;
+
+    
   }
   .NuevoCrear{
+    
     background-color: rgba(0, 56, 116, 0.817);
     width: 50rem;
     height: 30rem;
-    margin-left: 5rem; 
+    margin: 0 auto; /* Esto centra horizontalmente el elemento */
     position: relative;
     overflow-y: auto;
+    
   }
  
   .LabelCrear{
@@ -80,14 +85,7 @@
      text-align: center;
      margin-left: 1.2rem;
   }
-  
-  
-  .crear-elecciones {
-    padding: 70px;
-    background-color: #F2F3F2; /* Color de fondo para el área del formulario */
-  }
-  
-  
+ 
   /*inicio*/
   .fcyt-image {
     width: 100%; /* Ajusta el ancho de la imagen */
