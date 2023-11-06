@@ -17,6 +17,7 @@ const PartidosPoliticos = () => {
     } 
   
     const [formData, setFormData] = useState(initialState);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [showModal, setShowModal] = useState(false);
   
     const url = "http://localhost:8000/";
@@ -31,7 +32,7 @@ const PartidosPoliticos = () => {
       if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
         Swal.fire({
           icon: 'error',
-          title: 'Error al crear el proceso electoral',
+          title: 'Error al crear el frente politico',
           text: `Llene correctamente los datos `
         });
         return;
@@ -40,8 +41,8 @@ const PartidosPoliticos = () => {
       if (new Date(formData.fechaFin) <= new Date(formData.fechaInicio) || new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)) {
         Swal.fire({
           icon: 'error',
-          title: 'Error al crear el proceso electoral',
-          text: ` Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin. `
+          title: 'Error al crear el frente politico',
+          text: ` La fecha no es válidas. Asegúrese de introducir una fecha valida. `
         });
 
         return;
@@ -64,7 +65,7 @@ const PartidosPoliticos = () => {
         Swal.fire({
           icon: 'success',
           title: 'Proceso registrado correctamente',
-          text: `El proceso electoral se ha creado con éxito para el motivo: ${formData.motivoEleccion}`
+          text: `El frente politico se ha creado con éxito`
         }).then(() => {
           setShowModal(true);
           setFormData(initialState);
@@ -73,8 +74,8 @@ const PartidosPoliticos = () => {
       .catch((error) => {
         Swal.fire({
           icon: 'error',
-          title: 'Error al crear el proceso electoral',
-          text: `Ocurrió un error al crear el proceso electoral: ${error}`
+          title: 'Error al crear el frente politico',
+          text: `Ocurrió un error al crear el frente politico: ${error}`
         });
       });
     };
@@ -82,6 +83,10 @@ const PartidosPoliticos = () => {
       setShowModal(true);
           setFormData(initialState);
     }
+    const handleFileChange = (e) => {
+      const file = e.target.files[0]; // Obtiene el primer archivo seleccionado
+      setSelectedFile(file);
+    };
   return (
     <>
     <div className="crear-elecciones">
@@ -126,14 +131,17 @@ const PartidosPoliticos = () => {
       <div className="form-group">
           <label className="LabelCrear">Logo:</label>
           <input
-            type="text"
-            name="motivoEleccion"
-            value={formData.motivoEleccion}
-            onChange={handleInputChange}
-            placeholder="Ingrese la sigla del frente politico"
-            className="motivo-input"
+           type="file"
+           accept="image/*"
+           onChange={handleFileChange}
+          value={formData.motivoEleccion}
           />
         </div>
+        {selectedFile && (
+        <div>
+          <p>Archivo seleccionado: {selectedFile.name}</p>
+        </div>
+      )}
       
       <div className="BotonesDivCrear">
       <button className ="custom-btn btn-6" onClick={handleGuardarClick}>
