@@ -5,7 +5,8 @@ import axios from "axios";
 import ActualizarFrenteModal from "../pages/ActualizarFrentePolitico";
 import EliminarFrente from "../pages/EliminarFrente";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import ReasignarCandidatoModal from "./AgregarCandidatoModal";
 const VerPartidosPoliticos = ({ lista }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false); // Nuevo estado para controlar el modal
   const [modalConvo, setModalConvo] = useState(false);
@@ -13,6 +14,8 @@ const VerPartidosPoliticos = ({ lista }) => {
   const url = "http://localhost:8000/";
 
   const [listaElecciones,setListaElecciones] = useState([])
+
+  const [modalAC, setModalAC] = useState(false);
 
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
@@ -44,6 +47,15 @@ const VerPartidosPoliticos = ({ lista }) => {
     console.log(id);
     setModalConvo(true);
   };
+
+  const openModalAC = () =>{
+    setModalAC(true);
+  };
+  const closeModalAC = () =>{
+    setModalAC(false);
+  };
+
+
   return (
     <>
     <div className="ver-elecciones">
@@ -74,6 +86,9 @@ const VerPartidosPoliticos = ({ lista }) => {
                     <button className="custom-btn btn-16 btn-delete d-flex align-items-center justify-content-center" onClick={() => handleEliminacionClick(eleccion.COD_ELECCION)}>
                         <FontAwesomeIcon icon={faTrash} style={{ fontSize: '24px' }} />
                     </button>
+                    <button className="custom-btn btn-17 btn-agregar d-flex align-items-center justify-content-center" onClick={() => openModalAC()}>
+                        <FontAwesomeIcon icon={faUserPlus} style={{ fontSize: '24px' }} />
+                    </button>
                     </div>
                 </td>
            </tr>
@@ -95,6 +110,11 @@ const VerPartidosPoliticos = ({ lista }) => {
           closeModal={closeModal1}
           eleccionId={selectedEleccionId}
       />
+       <ReasignarCandidatoModal
+        isOpen={modalAC}
+        closeModal={closeModalAC}
+      />
+        
     </>
     
   );
