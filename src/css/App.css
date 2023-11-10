@@ -1,0 +1,5 @@
+.contenedor {
+    display: flex; /* Utiliza flexbox para alinear los divs en fila */
+    justify-content: space-between; /* Coloca espacio entre los divs */
+    align-items: flex-start; /* Alinea los elementos en la parte superior */
+  }

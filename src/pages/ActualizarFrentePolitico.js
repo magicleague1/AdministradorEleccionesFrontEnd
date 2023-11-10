@@ -6,7 +6,7 @@ import "../css/ActualizacionFrente.css"
 import Swal from 'sweetalert2';
 Modal.setAppElement("#root");
 
-const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
+const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   const { id } = useParams();
   const initialState = {
     nombre: "",
@@ -20,25 +20,28 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   const[modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const url = "http://localhost:8000/";
-  console.log(url + `obtener_id/${eleccionId}`);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(url + `obtener_id/${eleccionId}`);
-        const eleccion = response.data;
+        const response = await axios.get(url + `frentes/${frenteId}`);
+        console.log(response.data);
+        const frente = response.data;
+        console.log(frente);
         setFormData({
-          nombre: eleccion.MOTIVO_ELECCION,
-          sigla: eleccion.FECHA_INI_CONVOCATORIA,
-          fechaInscripcion: eleccion.FECHA_FIN_CONVOCATORIA,
-          Logo: eleccion.FECHA_ELECCION,
+          nombre: frente.NOMBRE_FRENTE,
+          sigla: frente.SIGLA_FRENTE,
+          fechaInscripcion: frente.FECHA_INSCRIPCION,
+          Logo: "",
         });
+        console.log(formData);
       } catch (error) {
         console.error("Error al obtener los datos del frente politico:", error);
       }
     };
 
     fetchData();
-  }, [eleccionId]);
+  }, [frenteId ]);
 
 
   const handleInputChange = (e) => {
@@ -47,7 +50,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   const handleActualizarClick = () => {
-    if (!formData.nombre || !formData.sigla || !formData.fechaInscripcion|| !formData.logo) {
+    if (!formData.nombre || !formData.sigla || !formData.fechaInscripcion) {
       Swal.fire({
         icon: 'error',
         title: 'Error al actualizar el frente politico',
@@ -65,11 +68,11 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
       return;
     }
     axios
-      .put(url + `eleccionesUpdate/${eleccionId}`, {
-        nombre: formData.motivoEleccion,
-        sigla: formData.fechaInicio,
-        fechaInscripcion: formData.fechaFin,
-        logo: formData.fechaElecciones,
+      .put(url + `frentes/${frenteId}`, {
+        NOMBRE_FRENTE: formData.nombre,
+        SIGLA_FRENTE: formData.sigla,
+        FECHA_INSCRIPCION: formData.fechaInscripcion,
+        ARCHIVADO: "",
       })
       .then((response) => {
         Swal.fire({
@@ -138,7 +141,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
           className="InputCrearActualizar"
           type="date"
           name="fechaFin"
-          value={formData.fechaFin}
+          value={formData.fechaInscripcion}
           min={formData.fechaInicio}
           onChange={handleInputChange}
         />
@@ -150,7 +153,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
            type="file"
            accept="image/*"
            onChange={handleFileChange}
-          value={formData.motivoEleccion}
+          value={""}
           />
         </div>
         {selectedFile && (

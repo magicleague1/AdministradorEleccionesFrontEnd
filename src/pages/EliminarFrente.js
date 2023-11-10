@@ -1,59 +1,20 @@
-import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "../css/EliminacionFrente.css"
 import Swal from 'sweetalert2';
 Modal.setAppElement("#root");
 
-const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
+const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   const { id } = useParams();
-  const initialState = {
-    nombre: "",
-    sigla: "",
-    fechaInscripcion: "",
-    Logo: "",
-  };
+  
 
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState(initialState);
-  const[modalIsOpen, setModalIsOpen] = useState(false);
   const url = "http://localhost:8000/";
-  console.log(url + `obtener_id/${eleccionId}`);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(url + `obtener_id/${eleccionId}`);
-        const eleccion = response.data;
-        setFormData({
-          nombre: eleccion.MOTIVO_ELECCION,
-          sigla: eleccion.FECHA_INI_CONVOCATORIA,
-          fechaInscripcion: eleccion.FECHA_FIN_CONVOCATORIA,
-          Logo: eleccion.FECHA_ELECCION,
-        });
-      } catch (error) {
-        console.error("Error al obtener los datos del frente politico:", error);
-      }
-    };
-
-    fetchData();
-  }, [eleccionId]);
-
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleActualizarClick = () => {
+  
+  const handleEliminarClick = () => {
   
     axios
-      .put(url + `eleccionesUpdate/${eleccionId}`, {
-        nombre: formData.motivoEleccion,
-        sigla: formData.fechaInicio,
-        fechaInscripcion: formData.fechaFin,
-        logo: formData.fechaElecciones,
-      })
+      .delete(url + `frentes/${frenteId}`)
       .then((response) => {
         Swal.fire({
           icon: 'success',
@@ -74,11 +35,8 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
 
   const handleVolverAtras = () => {
     closeModal();
-    navigate("/home");
   };
-  const cerrarModal= () => {
-    setModalIsOpen(false);
-  };
+
   
   return (
     <>
@@ -96,7 +54,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
         <label className="LabelCrearEliminar">¿Deseas eliminar el frente politivo ?</label>
       </div>
       <div className="d-flex align-items-center justify-content-center">
-      <button className ="custom-btn btn-17 d-flex align-items-center justify-content-center" onClick={handleActualizarClick}>
+      <button className ="custom-btn btn-17 d-flex align-items-center justify-content-center" onClick={handleEliminarClick}>
         Eliminar
       </button>
       <button className ="custom-btn btn-18 d-flex align-items-center justify-content-center" onClick={handleVolverAtras}>
@@ -109,4 +67,4 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   );
 };
 
-export default ActualizarFrenteModal;
+export default EliminarFrenteModal;

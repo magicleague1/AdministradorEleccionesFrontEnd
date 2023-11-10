@@ -26,6 +26,7 @@ const VerElecciones = ({ lista }) => {
   const [modalEAFP, setModalEAFP] = useState(false);
   const [listaElecciones,setListaElecciones] = useState([])
 
+
   //controladores del modal frentes de elecciones activas
   const openModalADDFP = () =>{
       setModalADDFP(true);
@@ -34,7 +35,8 @@ const VerElecciones = ({ lista }) => {
       setModalADDFP(false);
   };
 
-  const openModalAFP = () =>{
+  const openModalAFP = (id) =>{
+    setSelectedEleccionId(id);
     setModalAFP(true);
 };
 const closeModalAFP = () =>{
@@ -111,7 +113,7 @@ const closeModalEAFP = () =>{
                       </button>
                 </td>
                 <td className="tdNormal">
-                  <button className="icono" onClick={() => openModalAFP()} >
+                  <button className="icono" onClick={() => openModalAFP(eleccion.COD_ELECCION)} >
                     <PersonAddAltOutlinedIcon fontSize="large"/>
                   </button>
                   <button className="icono" onClick={() => openModalADDFP()}>
@@ -147,6 +149,7 @@ const closeModalEAFP = () =>{
        <AsignarFrente
         isOpen={modalAFP}
         closeModal={closeModalAFP}
+        eleccionId={selectedEleccionId}
       />
        <EdicionAsigFrentes
         isOpen={modalEAFP}
