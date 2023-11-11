@@ -3,55 +3,60 @@ import axios from 'axios';
 import  "../css/Asignacion.css"
 
 
-function ListaMesas({ idComite }) {
-  const [titulares, setTitulares] = useState([]);
-  const [suplentes, setSuplentes] = useState([]);
+function ListaMesas() {
+  const [Mesas, setMesas] = useState([]);
+  
 
   useEffect(() => {
     // Realizar una solicitud GET para obtener los datos de titulares y suplentes
-    axios.get(`http://localhost:8000/ver-lista-comite/${idComite}`)
+    axios.get(`http://localhost:8000/mesas_asignadas2`)
       .then((response) => {
-        console.log(response.data)
         const data = response.data;
-        setTitulares(data.titulares);
-        setSuplentes(data.suplentes);
+        setMesas(data);
+        console.log(Mesas)
       })
       .catch((error) => {
         console.error('Error al obtener la lista de comité:', error);
       });
-  }, [idComite]);
+  }, []);
   
   return (
     <div className="ListaComitePadre">
-            <div>
+            {Mesas.map((Mesas1 , index) => (   
+              <div key={index}>
             <div className='ContenedorConvocatoriaTexto'>
                 <div className="LabelCrearConvocatoriaM">Facultad:</div>
-                <div className="NormalConvocatoriaM">Facultad Ciencias y Tecnologia</div>
+                <div className="NormalConvocatoriaM">{Mesas1.facultad}</div>
             </div>
             <div className='ContenedorConvocatoriaTexto'>
                 <div className="LabelCrearConvocatoriaM">Fecha de la eleccion:</div>
-                <div className="NormalConvocatoriaM">2023/02/23</div>
+                <div className="NormalConvocatoriaM">{Mesas1.fecha_eleccion}</div>
             </div>
             <div>
               <h3 className='H3LISTA'>Carreras:</h3>
               <ul>
-                {suplentes.map((suplente) => (
-                  <li key={suplente.CARNETIDENTIDAD}>
+              {Mesas1.carreras.map((carrera, idx) => (
+            
+               <li key={idx}>
                    <div className='ContenedorConvocatoriaTexto'>
                         <div className="LabelCrearConvocatoriaM">Nombre de la carrera:</div>
-                        <div className="NormalConvocatoriaM">Ingeneria de sistemas</div>
+                        <div className="NormalConvocatoriaM">{carrera.nombre_carrera}</div>
                     </div>
                     <div className='ContenedorConvocatoriaTexto'>
                         <div className="LabelCrearConvocatoriaM">Total de mesas:</div>
-                        <div className="NormalConvocatoriaM">3</div>
+                        <div className="NormalConvocatoriaM">{carrera.total_mesas_por_carrera}</div>
                     </div>
                   </li>
-                ))}
+            
+          ))}
+                 
               </ul>
             </div>
             </div>
-
-    </div>
+             ))}
+     </div>
+           
+   
      
   );
 }

@@ -1,11 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import "../css/AgregarFrenteModal.css";
+import axios from "axios";
 Modal.setAppElement("#root");
 
 
-const AgregarFrenteModal = ({ isOpen, closeModal }) => {
-  const [listaFrentesP, setListaFrentesP] = useState(["NOMBRE 1","NOMBRE 2","NOMBRE 3","NOMBRE 4","NOMBRE 5","NOMBRE 6","NOMBRE 7","NOMBRE 8","NOMBRE 9"]); // Lista de Frentes Politicos, esto debe proporcionarlo el backend
+const AgregarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
+  console.log(eleccionId)
+  const [listaFrentesP, setListaFrentesP] = useState([]); // Lista de Frentes Politicos, esto debe proporcionarlo el backend
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/obtener_frentes_por_eleccion/${eleccionId}`);
+        setListaFrentesP(response.data.frentes);
+      } catch (error) {
+        console.log('Error al obtener los frentes');
+      }
+    };
+
+    fetchData();
+  }, [eleccionId]);
   const toogle =()=>{
     closeModal();
   }
@@ -18,8 +34,10 @@ const AgregarFrenteModal = ({ isOpen, closeModal }) => {
       shouldCloseOnOverlayClick={true}
     >
         <h3 className="tituloPfrente">FRENTES POLÍTICOS</h3>
-            {listaFrentesP.map((frente, index) => (
-              <li className="titulofrente" key={index}>{frente}</li>
+            {listaFrentesP.map((frente) => (
+              <li className="titulofrente" >
+                {frente.NOMBRE_FRENTE} 
+              </li>
             ))}
             <br/>
         <button className ="custom-btn botonvfrente" onClick={()=> toogle()}>

@@ -28,7 +28,8 @@ const VerElecciones = ({ lista }) => {
 
 
   //controladores del modal frentes de elecciones activas
-  const openModalADDFP = () =>{
+  const openModalADDFP = (id) =>{
+    setSelectedEleccionId(id);
       setModalADDFP(true);
   };
   const closeModalADDFP = () =>{
@@ -116,7 +117,7 @@ const closeModalEAFP = () =>{
                   <button className="icono" onClick={() => openModalAFP(eleccion.COD_ELECCION)} >
                     <PersonAddAltOutlinedIcon fontSize="large"/>
                   </button>
-                  <button className="icono" onClick={() => openModalADDFP()}>
+                  <button className="icono" onClick={() => openModalADDFP(eleccion.COD_ELECCION)}>
                     <ListAltOutlinedIcon fontSize="large"/>
                   </button>
                   <button className="icono" onClick={() => openModalEAFP()}>
@@ -145,6 +146,7 @@ const closeModalEAFP = () =>{
       <AgregarFrenteModal
         isOpen={modalAddFP}
         closeModal={closeModalADDFP}
+        eleccionId={selectedEleccionId}
       />
        <AsignarFrente
         isOpen={modalAFP}

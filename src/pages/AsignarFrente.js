@@ -9,7 +9,6 @@ Modal.setAppElement("#root");
 const AsignarFrente = ({ isOpen, closeModal, eleccionId}) => {
   const [listaFrentesP, setListaFrentesP] = useState([]);
   const [frentesAsignados, setFrentesAsignados] = useState([]);
-  const [selectedFrentes, setSelectedFrentes] = useState([]);
 
   
   useEffect(() => {
@@ -44,7 +43,6 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId}) => {
 
   const toogleCancelar = () => {
     closeModal();
-    setSelectedFrentes([]);
   };
   const handleFrenteSelection = (frenteId) => { 
     // Buscar si el frente ya está asignado
@@ -63,7 +61,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId}) => {
       }
     }
   };
-  const validarYRegistrar = () => {
+  const validarYRegistrar = async () => {
     
       // if (selectedFrentes.length === 0) {
       //   Swal.fire({
@@ -79,8 +77,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId}) => {
       }));
       console.log(data)
       // Realizar la petición al backend para guardar los cambios
-      axios
-      .post('http://localhost:8000/actualizar_frentes', data)
+      await axios.post('http://localhost:8000/actualizar_frentes', data)
       .then((response) => {
         Swal.fire({
           icon: 'success',
