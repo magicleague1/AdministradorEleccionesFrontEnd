@@ -3,17 +3,17 @@ import axios from 'axios';
 import  "../css/Asignacion.css"
 
 
-function ListaMesas() {
+function ListaMesas({eleccionId}) {
   const [Mesas, setMesas] = useState([]);
   
-
+  console.log('----',eleccionId);
   useEffect(() => {
     // Realizar una solicitud GET para obtener los datos de titulares y suplentes
-    axios.get(`http://localhost:8000/mesas_asignadas2`)
+    axios.get(`http://localhost:8000/listarMesasAsignadasPorEleccion/${eleccionId}`)
       .then((response) => {
         const data = response.data;
         setMesas(data);
-        console.log(Mesas)
+        console.log('>>>>>>>',response.data)
       })
       .catch((error) => {
         console.error('Error al obtener la lista de comité:', error);

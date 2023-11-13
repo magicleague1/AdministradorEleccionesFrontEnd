@@ -18,6 +18,7 @@ const CrearElecciones = () => {
     } 
   
     const [formData, setFormData] = useState(initialState);
+    const [formData2, setFormData2] = useState(initialState);
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
 
@@ -29,6 +30,9 @@ const CrearElecciones = () => {
   const [selectedFacultad, setSelectedFacultad] = useState('');
   const [selectedCarrera, setSelectedCarrera] = useState('');
 
+  const [tipoEleccionselect, setTipoEleccionselect] = useState('');
+
+  console.log(tipoEleccionselect);
 
   console.log(selectedFacultad);
   console.log(selectedCarrera);
@@ -68,13 +72,44 @@ const CrearElecciones = () => {
         motivoPersonalizado,
       });
     };
+
+
+    const opcionesMotivo = [
+      { value: 'select', label: '-----Selecciones una Eleccion-----' },
+      { value: 'universitaria', label: 'Rector, Vicerrector' },
+      { value: 'facultativa', label: 'Decano, Director Académico' },
+      { value: 'carrera', label: 'Director de carrera' },
+    ];
+
     const handleInputChange = (e) => {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
+    
+    
+      setFormData((prevData) => {
+        // Obtener el texto asociado al valor seleccionado
+        const textoSeleccionado = opcionesMotivo.find(
+          (opcion) => opcion.value === value
+        )?.label;
+
+        console.log('namesss',name);
+    
+        // Actualizar el estado de tipoEleccionselect solo si no estás cambiando la fecha
+        if (name !==  'fechaInicio' && name!=='fechaFin'&& name!=='fechaElecciones') {
+          setTipoEleccionselect(textoSeleccionado);
+        }
+         
+    
+        return {
+          ...prevData,
+          [name]: value,
+          tipoElecciones: textoSeleccionado, // Añadir el textoSeleccionado a formData
+        };
+      });
     };
-  
     const handleGuardarClick = () => {
      console.log(formData.motivoEleccion)
+     
+   
       if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
         Swal.fire({
           icon: 'error',
@@ -100,6 +135,7 @@ const CrearElecciones = () => {
         COD_TEU: 0, // Reemplaza con el código de TEU adecuado
         COD_COMITE: 0, // Reemplaza con el código de comité adecuado
         MOTIVO_ELECCION: formData.motivoEleccion,
+        TIPO_ELECCION: tipoEleccionselect,
         FECHA_ELECCION: formData.fechaElecciones,
         FECHA_INI_CONVOCATORIA: formData.fechaInicio,
         FECHA_FIN_CONVOCATORIA: formData.fechaFin,
@@ -107,6 +143,9 @@ const CrearElecciones = () => {
         cod_facultad: selectedFacultad, // Datos adicionales
         cod_carrera: selectedCarrera // Datos adicionales
       };
+
+      console.log('----->>>',nuevoProceso);
+
   
       axios.post(url + "elecciones_data", nuevoProceso)
       .then((response) => {
@@ -152,69 +191,61 @@ const CrearElecciones = () => {
       <div className="NuevoCrear" >
       <div className="form-group1">
         <label className="LabelCrear">¿Quiere iniciar un nuevo tipo de elección?</label>
-        <select
-          className="InputCrear"
-          name="nuevoTipoEleccion"
-          value={formData.nuevoTipoEleccion}
-          onChange={handleNuevoTipoEleccionChange}
-        >
-          <option value="">Seleccione una opción</option>
-          <option value="Si">Sí</option>
-          <option value="No">No</option>
-        </select>
+       
       </div>
-      {formData.nuevoTipoEleccion === "Si" && (
-        <div className="form-group">
-          <label className="LabelCrear">Motivo:</label>
-          <input
-            type="text"
-            name="motivoEleccion"
-            value={formData.motivoEleccion}
-            onChange={handleInputChange}
-            placeholder="Ingrese el motivo"
-            className="motivo-input"
-          />
-        </div>
-      )}
-      {formData.nuevoTipoEleccion === "No" && (
+    
+   
         <div className="form-group">
           <label className="LabelCrear" >Motivo:</label>
           <select
-            className="InputCrear"
-            name="motivoEleccion"
-            value={formData.motivoEleccion}
-            onChange={handleInputChange}
+  className="InputCrear"
+  name="motivoEleccion"
+  value={formData.motivoEleccion}
+  onChange={handleInputChange}
+>
+  {opcionesMotivo.map(opcion => (
+    <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+  ))}
+</select>
 
-          >
-            <option value="">Seleccione una opción</option>
-            <option value="universitaria">Elecciones Universitarias</option>
-            <option value="facultativa">Elecciones Facultativas</option>
-            <option value="carrera">Director de carrera</option>
-           
-          
-          </select>
+       {formData.motivoEleccion === "facultativa" && (
+      <div>
+        <label htmlFor="facultad">Selecciona una facultad:</label>
+        <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
+          <option value={0}>Seleccione una facultad</option>
+          {facultades.map(facultad => (
+            <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
+              {facultad.NOMBRE_FACULTAD}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
 
-          <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
-        <option value={0}>Seleccione una facultad</option>
-        {facultades.map(facultad => (
-          <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
-            {facultad.NOMBRE_FACULTAD}
-          </option>
-        ))}
-      </select>
+    {formData.motivoEleccion === "carrera" && (
+      <div>
+        <label htmlFor="facultad">Selecciona una facultad:</label>
+        <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
+          <option value={0}>Seleccione una facultad</option>
+          {facultades.map(facultad => (
+            <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
+              {facultad.NOMBRE_FACULTAD}
+            </option>
+          ))}
+        </select>
 
-      <label htmlFor="carrera">Selecciona una carrera:</label>
-
-      <select className="InputCrear" id="carrera" onChange={handleCarreraChange}>
-        <option value={0}>Seleccione una carrera</option>
-        {carreras.map(carrera => (
-          <option key={carrera.COD_CARRERA} value={carrera.COD_CARRERA}>
-            {carrera.NOMBRE_CARRERA}
-          </option>
-        ))}
-      </select>
-        </div>
-      )}
+        <label htmlFor="carrera">Selecciona una carrera:</label>
+        <select className="InputCrear" id="carrera" onChange={handleCarreraChange}>
+          <option value={0}>Seleccione una carrera</option>
+          {carreras.map(carrera => (
+            <option key={carrera.COD_CARRERA} value={carrera.COD_CARRERA}>
+              {carrera.NOMBRE_CARRERA}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+  </div>
 
 
 

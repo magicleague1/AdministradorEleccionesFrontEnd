@@ -15,6 +15,8 @@ function AsignacionMesas({ lista }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
+  const [selectedEleccionId, setSelectedEleccionId] = useState(null);
+
   const url = "http://localhost:8000/";
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
@@ -106,10 +108,12 @@ function AsignacionMesas({ lista }) {
       
     };
 
-  const handleVerListaClick = () => {
+  const handleVerListaClick = (ideleciciones) => {
     // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
     // Puedes abrir un modal o redirigir a una página para ver la lista
+    setSelectedEleccionId(ideleciciones);
 
+  
     setModalIsOpen(true);
   };
 
@@ -152,7 +156,7 @@ function AsignacionMesas({ lista }) {
                          <FontAwesomeIcon icon={faPlus} className="plus-icon" /> {/* Ícono de "más" */}
                     </div>
                 </button>{" "}
-                <button class="custom-btn btn-20 d-flex align-items-center justify-content-center" onClick={() => handleVerListaClick()}>
+                <button class="custom-btn btn-20 d-flex align-items-center justify-content-center" onClick={() => handleVerListaClick(elemento.COD_ELECCION)}>
                   <FontAwesomeIcon icon={faFile} className="add-icon" />
                 </button>
                 </div>
@@ -173,7 +177,7 @@ function AsignacionMesas({ lista }) {
       >
         <h2 className="ComiteTitulo">Lista de Asignacion de Mesas</h2>
         <div className="ContenedorVocales">
-        { <ListaMesas />}
+        { <ListaMesas eleccionId={selectedEleccionId} />}
         </div>
         <button
           className="BotonComiteModal"
