@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import "../css/MenuVertical.css";
 import "../css/BotonesPartidos.css"
 import axios from "axios";
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'; //importa el icono de user-plus icono
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined'; //importar icono editar
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ActualizarFrenteModal from "../pages/ActualizarFrentePolitico";
 import EliminarFrente from "../pages/EliminarFrente";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import ReasignarCandidatoModal from "./AgregarCandidatoModal";
 const VerPartidosPoliticos = ({ lista }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false); // Nuevo estado para controlar el modal
@@ -81,15 +82,16 @@ const VerPartidosPoliticos = ({ lista }) => {
                 <td className="tdNormal">{frentes.FECHA_INSCRIPCION}</td>
                 <td className="tdNormalPartidoPolitico">
                 <div className="d-flex">
-                    <button className="custom-btn btn-15 d-flex align-items-center justify-content-center" onClick={() => handleActualizarClick(frentes.COD_FRENTE)}>
-                        <FontAwesomeIcon icon={faEdit} style={{ fontSize: '24px' }} />
-                    </button>
-                    <button className="custom-btn btn-16 btn-delete d-flex align-items-center justify-content-center" onClick={() => handleEliminacionClick(frentes.COD_FRENTE)}>
-                        <FontAwesomeIcon icon={faTrash} style={{ fontSize: '24px' }} />
-                    </button>
-                    <button className="custom-btn btn-25 btn-agregar d-flex align-items-center justify-content-center" onClick={() => openModalAC(frentes.COD_FRENTE)}>
-                        <FontAwesomeIcon icon={faUserPlus} style={{ fontSize: '24px' }} />
-                    </button>
+                <button className="icono"  onClick={() => openModalAC(frentes.COD_FRENTE)} >
+                    <PersonAddAltOutlinedIcon fontSize="large"/>
+                  </button>
+                  <button className="icono" onClick={() => handleEliminacionClick(frentes.COD_FRENTE)}>
+                   <DeleteOutlineIcon fontSize="large" />
+                   </button>
+                  <button className="icono" onClick={() => handleActualizarClick(frentes.COD_FRENTE)}>
+                    <DriveFileRenameOutlineOutlinedIcon fontSize="large"/>
+                  </button>
+                    
                     </div>
                 </td>
            </tr>

@@ -120,9 +120,7 @@ const closeModalEAFP = () =>{
                   <button className="icono" onClick={() => openModalADDFP(eleccion.COD_ELECCION)}>
                     <ListAltOutlinedIcon fontSize="large"/>
                   </button>
-                  <button className="icono" onClick={() => openModalEAFP()}>
-                    <DriveFileRenameOutlineOutlinedIcon fontSize="large"/>
-                  </button>
+                  
                 </td>
            </tr>
           )

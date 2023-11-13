@@ -18,8 +18,9 @@ const CrearElecciones = () => {
     } 
   
     const [formData, setFormData] = useState(initialState);
+    const [tipoPoblacion, setTipoPoblacion] = useState(0);
     const [showModal, setShowModal] = useState(false);
-    const [modalMessage, setModalMessage] = useState("");
+
 
 
     const [facultades, setFacultades] = useState([]);
@@ -40,7 +41,10 @@ const CrearElecciones = () => {
         .then(data => setFacultades(data))
         .catch(error => console.error('Error fetching data:', error));
     }, []);
-  
+    const handleTipoPoblacionChange = (event) => {
+      const value = parseInt(event.target.value, 10);
+      setTipoPoblacion(value);
+    };
     // Función para obtener carreras por facultad
     const fetchCarrerasByFacultad = codFacultad => {
       fetch(`http://localhost:8000/carreras/${codFacultad}`)
@@ -50,24 +54,7 @@ const CrearElecciones = () => {
     };
   
     const url = "http://localhost:8000/";
-    const handleNuevoTipoEleccionChange = (e) => {
-      const nuevoTipoEleccion = e.target.value;
-      let motivoEleccion = "";
-      let motivoPersonalizado = "";
-  
-      if (nuevoTipoEleccion === "No") {
-        // Si elige "No", limpiamos los valores de motivo y motivoPersonalizado
-        motivoEleccion = "";
-        motivoPersonalizado = "";
-      }
-  
-      setFormData({
-        ...formData,
-        nuevoTipoEleccion,
-        motivoEleccion,
-        motivoPersonalizado,
-      });
-    };
+    
     const handleInputChange = (e) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
@@ -150,33 +137,7 @@ const CrearElecciones = () => {
     <div className="crear-elecciones">
       <h3>NUEVO PROCESO ELECTORAL</h3>
       <div className="NuevoCrear" >
-      <div className="form-group1">
-        <label className="LabelCrear">¿Quiere iniciar un nuevo tipo de elección?</label>
-        <select
-          className="InputCrear"
-          name="nuevoTipoEleccion"
-          value={formData.nuevoTipoEleccion}
-          onChange={handleNuevoTipoEleccionChange}
-        >
-          <option value="">Seleccione una opción</option>
-          <option value="Si">Sí</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-      {formData.nuevoTipoEleccion === "Si" && (
-        <div className="form-group">
-          <label className="LabelCrear">Motivo:</label>
-          <input
-            type="text"
-            name="motivoEleccion"
-            value={formData.motivoEleccion}
-            onChange={handleInputChange}
-            placeholder="Ingrese el motivo"
-            className="motivo-input"
-          />
-        </div>
-      )}
-      {formData.nuevoTipoEleccion === "No" && (
+    
         <div className="form-group">
           <label className="LabelCrear" >Motivo:</label>
           <select
@@ -190,35 +151,61 @@ const CrearElecciones = () => {
             <option value="universitaria">Elecciones Universitarias</option>
             <option value="facultativa">Elecciones Facultativas</option>
             <option value="carrera">Director de carrera</option>
-           
-          
+                  
           </select>
 
+        </div>
+        <div className="form-group">
+        <label className="LabelCrear">Poblacion votante:</label>
+        <select className="InputCrear" id="facultad" onChange={handleTipoPoblacionChange}>
+          <option value={0}>Seleccione una opción</option>
+          <option value={1}>Global</option>
+          <option value={2}>Facultativo</option>
+          <option value={3}>Carrera</option>
+        </select>
+      </div>
+      {tipoPoblacion === 2 && (
+        <div className="form-group">
+          <label className="LabelCrear">Seleccione una facultad:</label>
           <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
-        <option value={0}>Seleccione una facultad</option>
-        {facultades.map(facultad => (
-          <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
-            {facultad.NOMBRE_FACULTAD}
-          </option>
-        ))}
-      </select>
-
-      <label htmlFor="carrera">Selecciona una carrera:</label>
-
-      <select className="InputCrear" id="carrera" onChange={handleCarreraChange}>
-        <option value={0}>Seleccione una carrera</option>
-        {carreras.map(carrera => (
-          <option key={carrera.COD_CARRERA} value={carrera.COD_CARRERA}>
-            {carrera.NOMBRE_CARRERA}
-          </option>
-        ))}
-      </select>
+            <option value={0}>Seleccione una facultad</option>
+            {facultades.map((facultad) => (
+              <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
+                {facultad.NOMBRE_FACULTAD}
+              </option>
+            ))}
+          </select>
         </div>
       )}
 
+      {tipoPoblacion === 3 && (
+        <div>
+          <div className="form-group">
+            <label className="LabelCrear">Seleccione una facultad:</label>
+            <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
+              <option value={0}>Seleccione una facultad</option>
+              {facultades.map((facultad) => (
+                <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
+                  {facultad.NOMBRE_FACULTAD}
+                </option>
+              ))}
+            </select>
+          </div>
 
-
-
+          {/* Comenta o elimina el bloque de código a continuación si solo quieres mostrar un campo a la vez */}
+          <div className="form-group">
+            <label className="LabelCrear">Seleccione una carrera:</label>
+            <select className="InputCrear" id="carrera" onChange={handleCarreraChange}>
+              <option value={0}>Seleccione una carrera</option>
+              {carreras.map((carrera) => (
+                <option key={carrera.COD_CARRERA} value={carrera.COD_CARRERA}>
+                  {carrera.NOMBRE_CARRERA}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
       <div className="form-group">
         <label className="LabelCrear" >Fecha inicio de convocatoria:</label>
         <input
