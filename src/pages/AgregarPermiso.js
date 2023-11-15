@@ -31,7 +31,12 @@ useEffect(() => {
   }, [cod_sis, cod_comite]);
 
   const agregarPermiso = () => {
-    axios.post('http://localhost:8000/agregarPermiso', {
+
+    console.log(cod_sis);
+    console.log(cod_comite);
+    console.log(motivo);
+    console.log(comprobanteEntregado);
+    axios.post('http://localhost:8000/permisos', {
       cod_sis: cod_sis,
       cod_comite: cod_comite,
       motivo: motivo,
