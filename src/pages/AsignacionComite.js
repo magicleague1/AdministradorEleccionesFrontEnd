@@ -6,12 +6,16 @@ import axios from "axios";
 import Modal from "react-modal";
 import ListaVocalesComite from "./ListaVocalesComite";
 import Swal from 'sweetalert2';
+import SustitucionDeVocal from "./SustitucionDeVocal ";
+
+
 
 function AsignacionComite({ lista }) {
   const [proceso, setproceso] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
+  const [codComiteActualizar, setcodComiteActualizar] = useState(null);
   const url = "http://localhost:8000/";
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
@@ -63,12 +67,15 @@ function AsignacionComite({ lista }) {
       console.log("El comité existe, procediendo con la asignación...");
 
       // Realizar una solicitud PUT para asociar el comité a la elección
+      //para poblacion 
       axios
         .put(`http://localhost:8000/asignar-comite/${COD_ELECCION}`)
         .then((responseComite) => {
           console.log("Asignación de comité exitosa:", responseComite.data);
 
           // Luego, realizar una solicitud POST para asignar vocales al comité
+          //para poblacion en aqui lee y divide en docentes y estudiante y usa la tabla
+          //asociat titular suplente para guradar datos 
             axios
               .post(`http://localhost:8000/asignar-vocales/${COD_COMITE}`)
               .then((responseVocales) => {
@@ -113,6 +120,14 @@ function AsignacionComite({ lista }) {
     setModalIsOpen(true);
   };
 
+  const handleActualizar = (codComite) => {
+    // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
+    // Puedes abrir un modal o redirigir a una página para ver la lista
+    setcodComiteActualizar(codComite);
+    console.log(':-..-..',codComiteActualizar);
+    //setModalIsOpen(true);
+  };
+
   const closeModal = () => {
     setModalIsOpen(false);
   };
@@ -151,12 +166,17 @@ function AsignacionComite({ lista }) {
                     Asignacion
                   </button>{" "}
                   <button class="custom-btn btn-14" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>Ver Lista</button>
+                  <button class="custom-btn btn-14" onClick={() => handleActualizar(elemento.COD_COMITE)}>Actualizar</button>
+              
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        </div>
+        <div>
+      <SustitucionDeVocal codComite={codComiteActualizar} />
+    </div>
+         </div>
         </div>
 
       <Modal
