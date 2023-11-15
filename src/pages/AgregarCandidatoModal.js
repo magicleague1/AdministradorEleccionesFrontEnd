@@ -39,14 +39,14 @@ const AgregarCandidatoModal  = ({ isOpen, closeModal, frenteId}) =>{
               });
               return;// No continúa con la acción si no es válido
         }
-         if (!regex.test(formData.carnetIdentidad)){
-               Swal.fire({
-                 icon: 'error',
-                 title: 'Error al guardar el candidato',
-                 text: `El carnet de identidad solo debe tener números`
-               });
-               return;// No continúa con la acción si no es válido
-         } 
+        //  if (!regex.test(formData.carnetIdentidad)){
+        //        Swal.fire({
+        //          icon: 'error',
+        //          title: 'Error al guardar el candidato',
+        //          text: `El carnet de identidad solo debe tener números`
+        //        });
+        //        return;// No continúa con la acción si no es válido
+        //  } 
          if (formData.cargo == "" ) {
             Swal.fire({
                 icon: 'error',
