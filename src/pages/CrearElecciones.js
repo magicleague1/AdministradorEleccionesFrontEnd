@@ -18,7 +18,7 @@ const CrearElecciones = () => {
     } 
   
     const [formData, setFormData] = useState(initialState);
-    const [tipoPoblacion, setTipoPoblacion] = useState(0);
+    const [formData2, setFormData2] = useState(initialState);
     const [showModal, setShowModal] = useState(false);
 
 
@@ -30,6 +30,9 @@ const CrearElecciones = () => {
   const [selectedFacultad, setSelectedFacultad] = useState('');
   const [selectedCarrera, setSelectedCarrera] = useState('');
 
+  const [tipoEleccionselect, setTipoEleccionselect] = useState('');
+
+  console.log(tipoEleccionselect);
 
   console.log(selectedFacultad);
   console.log(selectedCarrera);
@@ -41,10 +44,7 @@ const CrearElecciones = () => {
         .then(data => setFacultades(data))
         .catch(error => console.error('Error fetching data:', error));
     }, []);
-    const handleTipoPoblacionChange = (event) => {
-      const value = parseInt(event.target.value, 10);
-      setTipoPoblacion(value);
-    };
+  
     // Función para obtener carreras por facultad
     const fetchCarrerasByFacultad = codFacultad => {
       fetch(`http://localhost:8000/carreras/${codFacultad}`)
@@ -54,14 +54,62 @@ const CrearElecciones = () => {
     };
   
     const url = "http://localhost:8000/";
-    
+    const handleNuevoTipoEleccionChange = (e) => {
+      const nuevoTipoEleccion = e.target.value;
+      let motivoEleccion = "";
+      let motivoPersonalizado = "";
+  
+      if (nuevoTipoEleccion === "No") {
+        // Si elige "No", limpiamos los valores de motivo y motivoPersonalizado
+        motivoEleccion = "";
+        motivoPersonalizado = "";
+      }
+  
+      setFormData({
+        ...formData,
+        nuevoTipoEleccion,
+        motivoEleccion,
+        motivoPersonalizado,
+      });
+    };
+
+
+    const opcionesMotivo = [
+      { value: 'select', label: '-----Selecciones una Eleccion-----' },
+      { value: 'universitaria', label: 'Rector, Vicerrector' },
+      { value: 'facultativa', label: 'Decano, Director Académico' },
+      { value: 'carrera', label: 'Director de carrera' },
+    ];
+
     const handleInputChange = (e) => {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
+    
+    
+      setFormData((prevData) => {
+        // Obtener el texto asociado al valor seleccionado
+        const textoSeleccionado = opcionesMotivo.find(
+          (opcion) => opcion.value === value
+        )?.label;
+
+        console.log('namesss',name);
+    
+        // Actualizar el estado de tipoEleccionselect solo si no estás cambiando la fecha
+        if (name !==  'fechaInicio' && name!=='fechaFin'&& name!=='fechaElecciones') {
+          setTipoEleccionselect(textoSeleccionado);
+        }
+         
+    
+        return {
+          ...prevData,
+          [name]: value,
+          tipoElecciones: textoSeleccionado, // Añadir el textoSeleccionado a formData
+        };
+      });
     };
-  
     const handleGuardarClick = () => {
      console.log(formData.motivoEleccion)
+     
+   
       if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
         Swal.fire({
           icon: 'error',
@@ -87,6 +135,7 @@ const CrearElecciones = () => {
         COD_TEU: 0, // Reemplaza con el código de TEU adecuado
         COD_COMITE: 0, // Reemplaza con el código de comité adecuado
         MOTIVO_ELECCION: formData.motivoEleccion,
+        TIPO_ELECCION: tipoEleccionselect,
         FECHA_ELECCION: formData.fechaElecciones,
         FECHA_INI_CONVOCATORIA: formData.fechaInicio,
         FECHA_FIN_CONVOCATORIA: formData.fechaFin,
@@ -94,6 +143,9 @@ const CrearElecciones = () => {
         cod_facultad: selectedFacultad, // Datos adicionales
         cod_carrera: selectedCarrera // Datos adicionales
       };
+
+      console.log('----->>>',nuevoProceso);
+
   
       axios.post(url + "elecciones_data", nuevoProceso)
       .then((response) => {
@@ -137,75 +189,67 @@ const CrearElecciones = () => {
     <div className="crear-elecciones">
       <h3>NUEVO PROCESO ELECTORAL</h3>
       <div className="NuevoCrear" >
+      <div className="form-group1">
+        <label className="LabelCrear">¿Quiere iniciar un nuevo tipo de elección?</label>
+       
+      </div>
     
+   
         <div className="form-group">
           <label className="LabelCrear" >Motivo:</label>
           <select
-            className="InputCrear"
-            name="motivoEleccion"
-            value={formData.motivoEleccion}
-            onChange={handleInputChange}
+  className="InputCrear"
+  name="motivoEleccion"
+  value={formData.motivoEleccion}
+  onChange={handleInputChange}
+>
+  {opcionesMotivo.map(opcion => (
+    <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
+  ))}
+</select>
 
-          >
-            <option value="">Seleccione una opción</option>
-            <option value="universitaria">Elecciones Universitarias</option>
-            <option value="facultativa">Elecciones Facultativas</option>
-            <option value="carrera">Director de carrera</option>
-                  
-          </select>
-
-        </div>
-        <div className="form-group">
-        <label className="LabelCrear">Poblacion votante:</label>
-        <select className="InputCrear" id="facultad" onChange={handleTipoPoblacionChange}>
-          <option value={0}>Seleccione una opción</option>
-          <option value={1}>Global</option>
-          <option value={2}>Facultativo</option>
-          <option value={3}>Carrera</option>
+       {formData.motivoEleccion === "facultativa" && (
+      <div>
+        <label htmlFor="facultad">Selecciona una facultad:</label>
+        <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
+          <option value={0}>Seleccione una facultad</option>
+          {facultades.map(facultad => (
+            <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
+              {facultad.NOMBRE_FACULTAD}
+            </option>
+          ))}
         </select>
       </div>
-      {tipoPoblacion === 2 && (
-        <div className="form-group">
-          <label className="LabelCrear">Seleccione una facultad:</label>
-          <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
-            <option value={0}>Seleccione una facultad</option>
-            {facultades.map((facultad) => (
-              <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
-                {facultad.NOMBRE_FACULTAD}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+    )}
 
-      {tipoPoblacion === 3 && (
-        <div>
-          <div className="form-group">
-            <label className="LabelCrear">Seleccione una facultad:</label>
-            <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
-              <option value={0}>Seleccione una facultad</option>
-              {facultades.map((facultad) => (
-                <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
-                  {facultad.NOMBRE_FACULTAD}
-                </option>
-              ))}
-            </select>
-          </div>
+    {formData.motivoEleccion === "carrera" && (
+      <div>
+        <label htmlFor="facultad">Selecciona una facultad:</label>
+        <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
+          <option value={0}>Seleccione una facultad</option>
+          {facultades.map(facultad => (
+            <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
+              {facultad.NOMBRE_FACULTAD}
+            </option>
+          ))}
+        </select>
 
-          {/* Comenta o elimina el bloque de código a continuación si solo quieres mostrar un campo a la vez */}
-          <div className="form-group">
-            <label className="LabelCrear">Seleccione una carrera:</label>
-            <select className="InputCrear" id="carrera" onChange={handleCarreraChange}>
-              <option value={0}>Seleccione una carrera</option>
-              {carreras.map((carrera) => (
-                <option key={carrera.COD_CARRERA} value={carrera.COD_CARRERA}>
-                  {carrera.NOMBRE_CARRERA}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      )}
+        <label htmlFor="carrera">Selecciona una carrera:</label>
+        <select className="InputCrear" id="carrera" onChange={handleCarreraChange}>
+          <option value={0}>Seleccione una carrera</option>
+          {carreras.map(carrera => (
+            <option key={carrera.COD_CARRERA} value={carrera.COD_CARRERA}>
+              {carrera.NOMBRE_CARRERA}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+  </div>
+
+
+
+
       <div className="form-group">
         <label className="LabelCrear" >Fecha inicio de convocatoria:</label>
         <input

@@ -12,8 +12,13 @@ import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRen
 import AgregarFrenteModal from './AgregarFrenteModal.js'; //importar el modal Agregar frente 
 import AsignarFrente from "./AsignarFrente";
 import EdicionAsigFrentes from "./EdicionAsigFrentes"
+import ConvocatoriaCrear from "./ConvocatoriaCrear.js";
+import ConvocatoriaModificar from "./ConvocatoriaModificar.js";
+import GenerarPdfPreview from "./GenerarPdfPreview.js";
+import { fa0 } from "@fortawesome/free-solid-svg-icons";
 
-const VerElecciones = ({ lista }) => {
+
+const VerConvocatoria = ({ lista }) => {
   //const numRows = 4; // Número de filas
   const navigate = useNavigate();
   const [modalIsOpen, setModalIsOpen] = useState(false); // Nuevo estado para controlar el modal
@@ -25,6 +30,15 @@ const VerElecciones = ({ lista }) => {
   const [modalAFP, setModalAFP] = useState(false);
   const [modalEAFP, setModalEAFP] = useState(false);
   const [listaElecciones,setListaElecciones] = useState([])
+
+
+  const [mostrarCrearConvocatoria, setMostrarCrearConvocatoria] = useState(false);
+
+  const [mostrarModificarConvocatoria, setModificarMostrarCrearConvocatoria] = useState(false);
+  const [eleccionMId, setEleccionMId] = useState(0);
+const [mostrarListaElecciones, setMostrarListaElecciones] = useState(true);
+const [mostrarPdfConvocatoria, setMostrarPdfConvocatoria] = useState(false);
+
 
 
   //controladores del modal frentes de elecciones activas
@@ -73,27 +87,91 @@ const closeModalEAFP = () =>{
     setSelectedEleccionId(null);
   };
 
-  const handleConvocatoriaClick = (id) => {
+ // const handleConvocatoriaClick = (id) => {
     // Redireccionar o realizar alguna acción al hacer clic en "Convocatoria"
     // Puedes usar react-router-dom o alguna otra biblioteca de enrutamiento si es necesario
-    setSelectedEleccionId(id);
-    console.log(id);
-    setModalConvo(true);
+    //setSelectedEleccionId(id);
+   // console.log(id);
+   // setModalConvo(true);
+ // };
+//convocatoria
+
+const handleConvocatoriaClick = async (id) => {
+  try {
+    // Hacer una petición al backend para obtener la información de la convocatoria
+    const response = await axios.get(`http://localhost:8000/verificar_convocatoria/${id}`);
+    const convocatoria = response.data;
+
+    console.log('------->',convocatoria);
+    if (convocatoria==true) {
+      // Ya existe una convocatoria, muestra un mensaje o realiza alguna acción
+      alert('Ya has creado una convocatoria para esta elección.');
+    } else {
+      // No existe una convocatoria, puedes proceder a mostrar el formulario de creación
+      setSelectedEleccionId(id);
+      setMostrarCrearConvocatoria(true);
+      setModificarMostrarCrearConvocatoria(false);
+      setMostrarListaElecciones(false);
+    }
+  } catch (error) {
+    console.error('Error al obtener la información de la convocatoria', error);
+    // Maneja el error según tus necesidades
+  }
+};
+
+  
+  const handleConvocatoriaModificarClick = (id) => {
+    // Redireccionar o realizar alguna acción al hacer clic en "Convocatoria"
+    // Puedes usar react-router-dom o alguna otra biblioteca de enrutamiento si es necesario
+    //setSelectedEleccionId(id);
+    //console.log(id);
+    //setModalConvo(true);
+    setEleccionMId(id); // Establecer el ID para pasarlo al componente ConvocatoriaCrear
+    setModificarMostrarCrearConvocatoria(true);
+    setMostrarCrearConvocatoria(false);
+    setMostrarListaElecciones(false);
   };
+
+  const handleConvocatoriaVerClick = (id) => {
+    // Redireccionar o realizar alguna acción al hacer clic en "Convocatoria"
+    // Puedes usar react-router-dom o alguna otra biblioteca de enrutamiento si es necesario
+    //setSelectedEleccionId(id);
+    //console.log(id);
+    //setModalConvo(true);
+    //setEleccionPDFId(id);
+
+    setSelectedEleccionId(id);
+    setModificarMostrarCrearConvocatoria(false);
+    setMostrarCrearConvocatoria(false);
+    setMostrarListaElecciones(false);
+    setMostrarPdfConvocatoria(true);
+    //navigate(`/pdf/${id}`);
+ 
+  };
+
+
+  const handleAtrasClick = () => {
+   
+    setMostrarCrearConvocatoria(false);
+    setModificarMostrarCrearConvocatoria(false);
+    setMostrarListaElecciones(true);
+    setMostrarPdfConvocatoria(false);
+  };
+
+
   return (
     <>
     <div className="ver-elecciones">
       <h3>ELECCIONES ACTIVAS</h3>
-      <div className="ContenedorTabla">
+      <div className="ContenedorTabla" style={{ display: mostrarListaElecciones ? 'block' : 'none' }}>
     <table>
       <thead>
         <tr>
-          <th>ELECCION</th>
-          <th>TIPO ELECCION</th>
+          <th>CARGO(S) A ELECCION</th>
           <th>FECHA</th>
           <th>DETALLE</th>
           <th>CONVOCATORIA</th>
-          <th>FRENTES</th>
+      
         </tr>
       </thead>
       <tbody>
@@ -102,7 +180,6 @@ const closeModalEAFP = () =>{
           return(
             <tr className="trVerEleccion" key={eleccion.COD_ELECCION}>
                 <td className="especialtd">{eleccion.MOTIVO_ELECCION}</td>
-                <td className="especialtd">{eleccion.TIPO_ELECCION}</td>
                 <td className="tdNormal">{eleccion.FECHA_ELECCION}</td>
                 <td className="tdNormal">
                       <button className ="custom-btn btn-4" onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}>
@@ -110,20 +187,20 @@ const closeModalEAFP = () =>{
                       </button>
                 
                 </td>
+
                 <td className="tdNormal">
-                      <button className="custom-btn btn-5" onClick={() => handleConvocatoriaClick(eleccion.COD_ELECCION)}>
-                            Convocatoria
+                      <button className="custom-btn btn-18" onClick={() => handleConvocatoriaClick(eleccion.COD_ELECCION)}>
+                            crear
+                      </button>
+                      <button className="custom-btn btn-18" onClick={() => handleConvocatoriaModificarClick(eleccion.COD_ELECCION)}>
+                            modificar
+                      </button>
+                      <button className="custom-btn btn-18" onClick={() => handleConvocatoriaVerClick(eleccion.COD_ELECCION)}>
+                            ver
                       </button>
                 </td>
-                <td className="tdNormal">
-                  <button className="icono" onClick={() => openModalAFP(eleccion.COD_ELECCION)} >
-                    <PersonAddAltOutlinedIcon fontSize="large"/>
-                  </button>
-                  <button className="icono" onClick={() => openModalADDFP(eleccion.COD_ELECCION)}>
-                    <ListAltOutlinedIcon fontSize="large"/>
-                  </button>
-                  
-                </td>
+                
+            
            </tr>
           )
           
@@ -131,6 +208,39 @@ const closeModalEAFP = () =>{
         
       </tbody>
     </table>
+
+   
+
+   
+    </div>
+    
+   
+
+    <div className="SegundoDivMenu" style={{ display: mostrarCrearConvocatoria ? 'block' : 'none' }}>
+    {mostrarCrearConvocatoria && (
+        <ConvocatoriaCrear eleccionId={selectedEleccionId} />
+
+      )}
+      <button onClick={handleAtrasClick}>Atrás</button>
+
+</div>
+
+<div className="SegundoDivMenu" style={{ display: mostrarModificarConvocatoria ? 'block' : 'none' }}>
+    
+
+{mostrarModificarConvocatoria && (
+        <ConvocatoriaModificar eleccionId={eleccionMId} />
+      )}
+   <button onClick={handleAtrasClick}>Atrás</button>
+
+    </div>
+
+    <div className="SegundoDivMenu" style={{ display: mostrarPdfConvocatoria ? 'block' : 'none' }}>
+      {mostrarPdfConvocatoria && (
+          <GenerarPdfPreview eleccionId={selectedEleccionId} />
+        
+      )}
+      <button onClick={handleAtrasClick}>Atrás</button>
     </div>
     </div>
     <ActualizarEleccionModal
@@ -162,4 +272,4 @@ const closeModalEAFP = () =>{
   );
 };
 
-export default VerElecciones;
+export default VerConvocatoria;
