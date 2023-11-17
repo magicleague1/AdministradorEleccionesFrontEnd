@@ -15,10 +15,13 @@ function AsignacionMesas({ lista }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
+  const [selectedEleccionId, setSelectedEleccionId] = useState(null);
+
   const url = "http://localhost:8000/";
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
       setproceso(response.data)
+    
     })
   }, [lista]);
 
@@ -47,30 +50,31 @@ function AsignacionMesas({ lista }) {
     }
   };
   
-  const handleAsociarClick = (COD_ELECCION, COD_COMITE) => {
+  const handleAsociarClick = (COD_ELECCION) => {
     // Antes de asociar el comité, verifica si existe  
     
-    verificarExistenciaComite(COD_COMITE)
-    .then((existeComite) => {
-      if (!existeComite) {
-        // Si el comité no existe, muestra un mensaje de error
-        Swal.fire({
-          icon: 'error',
-          title: 'Asignacion incorrecta',
-          text: 'Ya se asigno mesas al proceso electoral'
-        });
-        return;
-      }
+    // verificarExistenciaComite(COD_COMITE)
+    // .then((existeComite) => {
+    //   if (!existeComite) {
+    //     // Si el comité no existe, muestra un mensaje de error
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: 'Asignacion incorrecta',
+    //       text: 'Ya se asigno mesas al proceso electoral'
+    //     });
+    //     return;
+    //   }
 
-      // Realizar una solicitud PUT para asociar el comité a la elección
-      axios
-        .put(`http://localhost:8000/asignar-comite/${COD_ELECCION}`)
-        .then((responseComite) => {
-          console.log("Asignación de comité exitosa:", responseComite.data);
+    //   // Realizar una solicitud PUT para asociar el comité a la elección
+    //   axios
+    //     .put(`http://localhost:8000/asignar-comite/${COD_ELECCION}`)
+    //     .then((responseComite) => {
+    //       console.log("Asignación de comité exitosa:", responseComite.data);
 
           // Luego, realizar una solicitud POST para asignar vocales al comité
-            axios
-              .post(`http://localhost:8000/asignar-vocales/${COD_COMITE}`)
+        
+         
+          axios.post(`${url}asignar_mesas_carrera/${COD_ELECCION}`)
               .then((responseVocales) => {
                 // Muestra una alerta de éxito
                 Swal.fire({
@@ -78,7 +82,6 @@ function AsignacionMesas({ lista }) {
                   title: 'Asignación exitosa',
                   text: 'La asignación de mesas se realizó con éxito.'
                 }).then(() => {
-                  setCodComite(COD_COMITE);
                   setmodalAbrir(true);
                 });
               })
@@ -90,26 +93,28 @@ function AsignacionMesas({ lista }) {
                   text: `Ocurrió un error en la asignación de mesas: ${errorVocales}`
                 });
               });
-          })
-          .catch((errorComite) => {
-            // Muestra una alerta de error
-            Swal.fire({
-              icon: 'error',
-              title: 'Error en la asignación de mesas',
-              text: `Ocurrió un error en la asignación de mesas: ${errorComite}`
-            });
-          });
-        })
-        .catch((error) => {
+  
+      //     .catch((errorComite) => {
+      //       // Muestra una alerta de error
+      //       Swal.fire({
+      //         icon: 'error',
+      //         title: 'Error en la asignación de mesas',
+      //         text: `Ocurrió un error en la asignación de mesas: ${errorComite}`
+      //       });
+      //     });
+      //   })
+      //   .catch((error) => {
            
-      }); 
+      // }); 
       
-  };
+    };
 
-  const handleVerListaClick = (eleccionId) => {
+  const handleVerListaClick = (ideleciciones) => {
     // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
     // Puedes abrir un modal o redirigir a una página para ver la lista
-    setCodComite(eleccionId);
+    setSelectedEleccionId(ideleciciones);
+
+  
     setModalIsOpen(true);
   };
 
@@ -145,14 +150,14 @@ function AsignacionMesas({ lista }) {
                 <button
                     className="custom-btn btn-19 btn-19 d-flex align-items-center justify-content-center"
                     onClick={() =>
-                    handleAsociarClick(elemento.COD_ELECCION, elemento.COD_COMITE)
+                    handleAsociarClick(elemento.COD_ELECCION)
                     }
                 >
                     <div className="round-icon">
                          <FontAwesomeIcon icon={faPlus} className="plus-icon" /> {/* Ícono de "más" */}
                     </div>
                 </button>{" "}
-                <button class="custom-btn btn-20 d-flex align-items-center justify-content-center" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>
+                <button class="custom-btn btn-20 d-flex align-items-center justify-content-center" onClick={() => handleVerListaClick(elemento.COD_ELECCION)}>
                   <FontAwesomeIcon icon={faFile} className="add-icon" />
                 </button>
                 </div>
@@ -173,7 +178,7 @@ function AsignacionMesas({ lista }) {
       >
         <h2 className="ComiteTitulo">Lista de Asignacion de Mesas</h2>
         <div className="ContenedorVocales">
-        {codComite !== null && <ListaMesas idComite={codComite} />}
+        { <ListaMesas eleccionId={selectedEleccionId} />}
         </div>
         <button
           className="BotonComiteModal"

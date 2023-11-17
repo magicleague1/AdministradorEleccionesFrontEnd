@@ -8,12 +8,10 @@ import "../css/CreacionModal.css"
 const PartidosPoliticos = () => {
 
     const initialState = {
-      nuevoTipoEleccion: "",
-      motivoEleccion: "",
-      motivoPersonalizado: "",
-      fechaInicio: "",
-      fechaFin: "",
-      fechaElecciones: "",
+      NOMBRE_FRENTE: "", 
+      SIGLA_FRENTE: "", 
+      FECHA_INSCRIPCION: "", 
+      ARCHIVADO: "", 
     } 
   
     const [formData, setFormData] = useState(initialState);
@@ -28,8 +26,7 @@ const PartidosPoliticos = () => {
     };
   
     const handleGuardarClick = () => {
-     console.log(formData.motivoEleccion)
-      if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
+      if (!formData.NOMBRE_FRENTE || !formData.SIGLA_FRENTE|| !formData.FECHA_INSCRIPCION) {
         Swal.fire({
           icon: 'error',
           title: 'Error al crear el frente politico',
@@ -48,19 +45,15 @@ const PartidosPoliticos = () => {
         return;
       }
      
-      const nuevoProceso = {
-        COD_ADMIN: "", // Reemplaza con el código de administrador adecuado
-        COD_FRENTE: 0, // Reemplaza con el código de frente adecuado
-        COD_TEU: 0, // Reemplaza con el código de TEU adecuado
-        COD_COMITE: 0, // Reemplaza con el código de comité adecuado
-        MOTIVO_ELECCION: formData.motivoEleccion,
-        FECHA_ELECCION: formData.fechaElecciones,
-        FECHA_INI_CONVOCATORIA: formData.fechaInicio,
-        FECHA_FIN_CONVOCATORIA: formData.fechaFin,
-        ELECCION_ACTIVA: true
+      const nuevoPartido = {
+        NOMBRE_FRENTE: formData.NOMBRE_FRENTE, 
+        SIGLA_FRENTE: formData.SIGLA_FRENTE, 
+        FECHA_INSCRIPCION: formData.FECHA_INSCRIPCION, 
+        ARCHIVADO:"", 
       };
-  
-      axios.post(url + "elecciones_data", nuevoProceso)
+      console.log(nuevoPartido);
+      axios.post(url + "frentes/nuevo", nuevoPartido)
+
       .then((response) => {
         Swal.fire({
           icon: 'success',
@@ -98,8 +91,8 @@ const PartidosPoliticos = () => {
           <label className="LabelCrear">Nombre:</label>
           <input
             type="text"
-            name="motivoEleccion"
-            value={formData.motivoEleccion}
+            name="NOMBRE_FRENTE"
+            value={formData.NOMBRE_FRENTE}
             onChange={handleInputChange}
             placeholder="Ingrese el nombre del frente politico"
             className="motivo-input"
@@ -109,8 +102,8 @@ const PartidosPoliticos = () => {
           <label className="LabelCrear">Sigla:</label>
           <input
             type="text"
-            name="motivoEleccion"
-            value={formData.motivoEleccion}
+            name="SIGLA_FRENTE"
+            value={formData.SIGLA_FRENTE}
             onChange={handleInputChange}
             placeholder="Ingrese la sigla del frente politico"
             className="motivo-input"
@@ -122,19 +115,20 @@ const PartidosPoliticos = () => {
         <input
           className="InputCrear"
           type="date"
-          name="fechaInicio"
-          value={formData.fechaInicio}
+          name="FECHA_INSCRIPCION"
+          value={formData.FECHA_INSCRIPCION}
           min={new Date().toISOString().split("T")[0]}
           onChange={handleInputChange}
         />
       </div>
+ 
       <div className="form-group">
           <label className="LabelCrear">Logo:</label>
           <input
            type="file"
            accept="image/*"
            onChange={handleFileChange}
-          value={formData.motivoEleccion}
+          value={formData.ARCHIVADO}
           />
         </div>
         {selectedFile && (
@@ -142,7 +136,7 @@ const PartidosPoliticos = () => {
           <p>Archivo seleccionado: {selectedFile.name}</p>
         </div>
       )}
-      
+    
       <div className="BotonesDivCrear">
       <button className ="custom-btn btn-6" onClick={handleGuardarClick}>
         Registrar

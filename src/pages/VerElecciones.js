@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "../css/MenuVertical.css";
-import "../css/botones2.css"
+import "../css/botones2.css";
+import "../css/iconos.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import ActualizarEleccionModal from "../pages/ActualizarEleccionModal";
 import PdfConvocatoria from "./pdfConvocatoria";
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'; //importa el icono de user-plus icono
+import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined'; //importar el icono de list
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined'; //importar icono editar
+import AgregarFrenteModal from './AgregarFrenteModal.js'; //importar el modal Agregar frente 
+import AsignarFrente from "./AsignarFrente";
+import EdicionAsigFrentes from "./EdicionAsigFrentes"
+
 const VerElecciones = ({ lista }) => {
   //const numRows = 4; // Número de filas
   const navigate = useNavigate();
@@ -13,8 +21,35 @@ const VerElecciones = ({ lista }) => {
   const [selectedEleccionId, setSelectedEleccionId] = useState(null); // Nuevo estado para almacenar el ID de la elección seleccionada
   const url = "http://localhost:8000/";
 
+  const [modalAddFP, setModalADDFP] = useState(false); // Nuevo estado para controlar el modal agregar frentes politicos a elecciones activas
+  const [modalAFP, setModalAFP] = useState(false);
+  const [modalEAFP, setModalEAFP] = useState(false);
   const [listaElecciones,setListaElecciones] = useState([])
 
+
+  //controladores del modal frentes de elecciones activas
+  const openModalADDFP = (id) =>{
+    setSelectedEleccionId(id);
+      setModalADDFP(true);
+  };
+  const closeModalADDFP = () =>{
+      setModalADDFP(false);
+  };
+
+  const openModalAFP = (id) =>{
+    setSelectedEleccionId(id);
+    setModalAFP(true);
+};
+const closeModalAFP = () =>{
+    setModalAFP(false);
+};
+
+const openModalEAFP = () =>{
+  setModalEAFP(true);
+};
+const closeModalEAFP = () =>{
+  setModalEAFP(false);
+};
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
       setListaElecciones(response.data)
@@ -53,10 +88,12 @@ const VerElecciones = ({ lista }) => {
     <table>
       <thead>
         <tr>
-          <th>CARGO(S) A ELECCION</th>
+          <th>ELECCION</th>
+          <th>TIPO ELECCION</th>
           <th>FECHA</th>
           <th>DETALLE</th>
           <th>CONVOCATORIA</th>
+          <th>FRENTES</th>
         </tr>
       </thead>
       <tbody>
@@ -65,6 +102,7 @@ const VerElecciones = ({ lista }) => {
           return(
             <tr className="trVerEleccion" key={eleccion.COD_ELECCION}>
                 <td className="especialtd">{eleccion.MOTIVO_ELECCION}</td>
+                <td className="especialtd">{eleccion.TIPO_ELECCION}</td>
                 <td className="tdNormal">{eleccion.FECHA_ELECCION}</td>
                 <td className="tdNormal">
                       <button className ="custom-btn btn-4" onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}>
@@ -76,6 +114,15 @@ const VerElecciones = ({ lista }) => {
                       <button className="custom-btn btn-5" onClick={() => handleConvocatoriaClick(eleccion.COD_ELECCION)}>
                             Convocatoria
                       </button>
+                </td>
+                <td className="tdNormal">
+                  <button className="icono" onClick={() => openModalAFP(eleccion.COD_ELECCION)} >
+                    <PersonAddAltOutlinedIcon fontSize="large"/>
+                  </button>
+                  <button className="icono" onClick={() => openModalADDFP(eleccion.COD_ELECCION)}>
+                    <ListAltOutlinedIcon fontSize="large"/>
+                  </button>
+                  
                 </td>
            </tr>
           )
@@ -95,6 +142,20 @@ const VerElecciones = ({ lista }) => {
           isOpen={modalConvo}
           closeModal={closeModal1}
           eleccionId={selectedEleccionId}
+      />
+      <AgregarFrenteModal
+        isOpen={modalAddFP}
+        closeModal={closeModalADDFP}
+        eleccionId={selectedEleccionId}
+      />
+       <AsignarFrente
+        isOpen={modalAFP}
+        closeModal={closeModalAFP}
+        eleccionId={selectedEleccionId}
+      />
+       <EdicionAsigFrentes
+        isOpen={modalEAFP}
+        closeModal={closeModalEAFP}
       />
     </>
     

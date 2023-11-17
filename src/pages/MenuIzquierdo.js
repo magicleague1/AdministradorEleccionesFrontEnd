@@ -4,11 +4,13 @@ import "../css/MenuIzquierdo.css"
 import Logo from '../assets/logo.png';
 import CrearElecciones from './CrearElecciones';
 import Inicio from './Inicio';
-import VerElecciones from './VerElecciones'; 
+import VerElecciones from './VerElecciones';
 import AsignacionComite from "./AsignacionComite";
 import PartidosPoliticos from "./CrearPartidosPoliticos";
 import VerPartidosPoliticos from "./VerPartidosPoliticos";
 import AsignacionMesas from "./AsignacionMesas";
+import VerConvocatoria from "./VerConvocatoria";
+
 
 function MenuIzquierdo() {
     const [mostrarCrearEleccion, setMostrarCrearEleccion] = useState(false);
@@ -21,6 +23,8 @@ function MenuIzquierdo() {
 
     const [menuDesplegableCrearEleccion, setMenuDesplegableCrearEleccion] = useState(false);
     const [menuDesplegableCrearPartido, setMenuDesplegableCrearPartido] = useState(false);
+    const [mostrarVerConvocatoria, setMostrarVerConvocatoria] = useState(false); 
+    
     const handleCrearEleccionClick = () => {
       setMostrarCrearEleccion(true);
       setMostrarInicio(false);
@@ -29,8 +33,9 @@ function MenuIzquierdo() {
       setMostrarCrearPartido(false);  
       setMostrarVerPartido(false); 
       setMostrarAsignacion(false);
+      setMostrarVerConvocatoria(false)
     };
-  
+
     const handleInicioClick = () => {
       setMostrarCrearEleccion(false);
       setMostrarInicio(true);
@@ -39,8 +44,9 @@ function MenuIzquierdo() {
       setMostrarCrearPartido(false);
       setMostrarVerPartido(false); 
       setMostrarAsignacion(false);
+      setMostrarVerConvocatoria(false)
     };
-  
+
     const handleVerEleccionesClick = () => {
       setMostrarCrearEleccion(false);
       setMostrarInicio(false);
@@ -49,6 +55,7 @@ function MenuIzquierdo() {
       setMostrarCrearPartido(false);
       setMostrarVerPartido(false); 
       setMostrarAsignacion(false);
+      setMostrarVerConvocatoria(false);
         // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
     };
     const handleVerComiteClick = () => {
@@ -59,6 +66,7 @@ function MenuIzquierdo() {
         setMostrarCrearPartido(false);
         setMostrarVerPartido(false); 
         setMostrarAsignacion(false);
+        setMostrarVerConvocatoria(false);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
       const handleCrearPartidoClick = () => {
@@ -69,6 +77,7 @@ function MenuIzquierdo() {
         setMostrarCrearPartido(true);
         setMostrarVerPartido(false);
         setMostrarAsignacion(false); 
+        setMostrarVerConvocatoria(false);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
       const handleVerPartidoClick = () => {
@@ -78,6 +87,7 @@ function MenuIzquierdo() {
         setMostrarVerComite(false);
         setMostrarCrearPartido(false);
         setMostrarVerPartido(true); 
+        setMostrarVerConvocatoria(false);
         setMostrarAsignacion(false);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
@@ -88,9 +98,23 @@ function MenuIzquierdo() {
         setMostrarVerComite(false);
         setMostrarCrearPartido(false);
         setMostrarVerPartido(false);
+        setMostrarVerConvocatoria(false);
         setMostrarAsignacion(true); 
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
+
+      const handleVerConvocatoria = () => {
+        setMostrarCrearEleccion(false);
+        setMostrarInicio(false);
+        setMostrarVerElecciones(false);
+        setMostrarVerComite(false);
+        setMostrarCrearPartido(false);
+        setMostrarVerPartido(false); 
+        setMostrarVerConvocatoria(true);
+        setMostrarAsignacion(false);
+          // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
+      };
+
       const toggleMenuDesplegable = (opcion) => {
         switch (opcion) {
           
@@ -209,6 +233,15 @@ function MenuIzquierdo() {
                                                 <span class="item">Asignacion de Mesas</span>
                                                 
                                         </li>
+                                        <li  className="row" id={ mostrarVerConvocatoria ? "active" : ""}
+                                        onClick=
+                                            {handleVerConvocatoria}
+                                        >
+                                            
+                                                <span class="icon"><i class="fas fa-home"></i></span>
+                                                <span class="item">Crear Convocatoria</span>
+                                                
+                                        </li>
                                     
                         
                     </ul>
@@ -223,6 +256,9 @@ function MenuIzquierdo() {
                     {mostrarCrearPartido && <PartidosPoliticos/>}
                     {mostrarVerPartido && <VerPartidosPoliticos/>}
                     {mostrarAsignacion && <AsignacionMesas/>}
+                    
+                    {mostrarVerConvocatoria && <VerConvocatoria lista = {mostrarVerConvocatoria}/>} 
+                    
             </div>
         
         </div>
@@ -231,5 +267,5 @@ function MenuIzquierdo() {
 
     );
 }
-   
+
 export default MenuIzquierdo;    

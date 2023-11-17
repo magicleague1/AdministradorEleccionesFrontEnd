@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import "../css/ActualizacionEleccionModal.css"
+import "../css/ActualizacionEleccionModal.css";
 import Swal from 'sweetalert2';
 Modal.setAppElement("#root");
 

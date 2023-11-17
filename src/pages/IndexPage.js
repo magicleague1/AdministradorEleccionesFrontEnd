@@ -10,6 +10,10 @@ import partido2 from "../assets/partido2.png"
 import partido3 from "../assets/partido3.jpg"
 import ImageSlider from '../components/Sidebar'
 import scrollreveal from 'scrollreveal'
+import PublicarConvocatoriaList from './PublicarConvocatoriaList '
+
+
+
 const IndexPage = () => {
 const navLinks = document.getElementById("nav-links");
 //const menuBtnIcon = menuBtn.querySelector("i");
@@ -81,7 +85,8 @@ useEffect(() => {
         <div class="header-content">
           <h1 class="title">SISTEMA DE ELECCIONES UMSS</h1>
       </div>
-
+      
+      <PublicarConvocatoriaList />
       </div>
 
       <div class="header__image">
