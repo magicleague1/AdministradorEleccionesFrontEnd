@@ -16,7 +16,7 @@ const AgregarCandidatoModal  = ({ isOpen, closeModal, frenteId}) =>{
     const [selectedOption, setSelectedOption] = useState("Seleccionar Cargo");
     const [ci,setCi] = useState("");
     const [formData, setFormData] = useState(initialState);
-    const url = "http://localhost:8000/";
+    const url = process.env.REACT_APP_VARURL;
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value); // Actualiza el estado cuando se selecciona una opción
     };

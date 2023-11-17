@@ -19,7 +19,7 @@ const VerElecciones = ({ lista }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false); // Nuevo estado para controlar el modal
   const [modalConvo, setModalConvo] = useState(false);
   const [selectedEleccionId, setSelectedEleccionId] = useState(null); // Nuevo estado para almacenar el ID de la elección seleccionada
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
 
   const [modalAddFP, setModalADDFP] = useState(false); // Nuevo estado para controlar el modal agregar frentes politicos a elecciones activas
   const [modalAFP, setModalAFP] = useState(false);

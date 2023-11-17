@@ -10,7 +10,7 @@ const PublicarConvocatoriaList = () => {
 
   useEffect(() => {
     // Llamada a la API para obtener las publicaciones de convocatorias
-    fetch('http://localhost:8000/publicar_convocatoria_lista')
+    fetch(process.env.REACT_APP_VARURL+'publicar_convocatoria_lista')
       .then(response => response.json())
       .then(data => setPublicaciones(data))
       .catch(error => console.error('Error fetching data:', error));

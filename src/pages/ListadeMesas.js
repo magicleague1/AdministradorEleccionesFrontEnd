@@ -6,7 +6,7 @@ function ListaMesas({ eleccionId }) {
   const [Mesas, setMesas] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/listarMesasAsignadasPorEleccion/${eleccionId}`)
+    axios.get(`${process.env.REACT_APP_VARURL}listarMesasAsignadasPorEleccion/${eleccionId}`)
       .then((response) => {
         const data = response.data;
         setMesas(data);

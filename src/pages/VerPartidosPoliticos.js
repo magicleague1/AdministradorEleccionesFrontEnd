@@ -12,7 +12,7 @@ const VerPartidosPoliticos = ({ lista }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false); // Nuevo estado para controlar el modal
   const [modalConvo, setModalConvo] = useState(false);
   const [selectedFrenteId, setSelectedFrenteId] = useState(null); // Nuevo estado para almacenar el ID de la elección seleccionada
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
 
   const [listaFrentesPoliticos,setListaFrentesPoliticos] = useState([])
 

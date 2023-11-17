@@ -20,7 +20,7 @@ const PdfConvocatoria = ({ isOpen, closeModal, eleccionId }) => {
   useEffect(() => {
     const obtenerDetallesEleccion = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/obtener_id/${eleccionId}`);
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtener_id/${eleccionId}`);
         setEleccion(response.data);
       } catch (error) {
         console.error('Error al obtener los detalles de la elección:', error);

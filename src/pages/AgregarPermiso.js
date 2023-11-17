@@ -7,7 +7,7 @@ const AgregarPermiso = ({ cod_sis, cod_comite }) => {
 
   useEffect(() => {
     // Realizar una solicitud GET para obtener el estado de comprobante_entregado
-    axios.get(`http://localhost:8000/obtenerEstadoComprobante/${cod_sis}/${cod_comite}`)
+    axios.get(`${process.env.REACT_APP_VARURL}obtenerEstadoComprobante/${cod_sis}/${cod_comite}`)
       .then(response => {
         // Actualizar el estado del checkbox con el valor obtenido del servidor
         setComprobanteEntregado(response.data.comprobante_entregado === 1);
@@ -20,7 +20,7 @@ const AgregarPermiso = ({ cod_sis, cod_comite }) => {
   
 useEffect(() => {
     // Realizar una solicitud GET para obtener el estado de comprobante_entregado
-    axios.get(`http://localhost:8000/obtenerEstadoComprobanteAtiempo/${cod_sis}/${cod_comite}`)
+    axios.get(`${process.env.REACT_APP_VARURL}obtenerEstadoComprobanteAtiempo/${cod_sis}/${cod_comite}`)
       .then(response => {
         // Actualizar el estado del comprobante
         setEstadoComprobante(response.data.estado);
@@ -36,7 +36,7 @@ useEffect(() => {
     console.log(cod_comite);
     console.log(motivo);
     console.log(comprobanteEntregado);
-    axios.post('http://localhost:8000/permisos', {
+    axios.post(process.env.REACT_APP_VARURL+'permisos', {
       cod_sis: cod_sis,
       cod_comite: cod_comite,
       motivo: motivo,
@@ -56,7 +56,7 @@ useEffect(() => {
 
 
   const handleComprobanteEntregado = () => {
-    axios.post('http://localhost:8000/procesarComprobanteEntregado', {
+    axios.post(process.env.REACT_APP_VARURL+'procesarComprobanteEntregado', {
       cod_sis,
       cod_comite,
       comprobante_entregado: !comprobanteEntregado ? 1 : 0,

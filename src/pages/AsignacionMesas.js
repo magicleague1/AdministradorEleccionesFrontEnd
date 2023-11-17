@@ -18,7 +18,7 @@ function AsignacionMesas({ lista }) {
   const [codComite, setCodComite] = useState(null);
   const [selectedEleccionId, setSelectedEleccionId] = useState(null);
 
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
       setproceso(response.data)
@@ -31,7 +31,7 @@ function AsignacionMesas({ lista }) {
   const verificarExistenciaComite = async (codComite) => {
     try {
       // Realiza una solicitud GET al servidor de Laravel para verificar la existencia del comité
-      const response = await axios.get(`http://localhost:8000/verificar-comite/${codComite}`);
+      const response = await axios.get(`${process.env.REACT_APP_VARURL}verificar-comite/${codComite}`);
   
       // La respuesta debe ser un objeto JSON con el campo "existeComite"
       if (response.data.existeComite) {
@@ -68,7 +68,7 @@ function AsignacionMesas({ lista }) {
 
     //   // Realizar una solicitud PUT para asociar el comité a la elección
     //   axios
-    //     .put(`http://localhost:8000/asignar-comite/${COD_ELECCION}`)
+    //     .put(`${process.env.REACT_APP_VARURL}asignar-comite/${COD_ELECCION}`)
     //     .then((responseComite) => {
     //       console.log("Asignación de comité exitosa:", responseComite.data);
 

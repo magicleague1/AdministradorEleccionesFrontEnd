@@ -18,7 +18,7 @@ const ConvocatoriaModificar = ({ eleccionId }) => {
 
   useEffect(() => {
     // Realiza una llamada para obtener los datos de la convocatoria a modificar
-    axios.get(`http://localhost:8000/convocatorias/${eleccionId}`)
+    axios.get(`${process.env.REACT_APP_VARURL}convocatorias/${eleccionId}`)
       .then((response) => {
         setConvocatoria(response.data); // Establece los datos de la convocatoria en el estado
 
@@ -37,7 +37,7 @@ const ConvocatoriaModificar = ({ eleccionId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:8000/convocatorias/${eleccionId}`, convocatoria)
+      .put(`${process.env.REACT_APP_VARURL}convocatorias/${eleccionId}`, convocatoria)
       .then((response) => {
         // Manejar la respuesta después de actualizar la convocatoria
         console.log(response.data);

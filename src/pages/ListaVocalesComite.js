@@ -9,7 +9,7 @@ function ListaVocalesComite({ idComite }) {
 
   useEffect(() => {
     // Realizar una solicitud GET para obtener los datos de titulares y suplentes
-    axios.get(`http://localhost:8000/ver-lista-comite/${idComite}`)
+    axios.get(`${process.env.REACT_APP_VARURL}ver-lista-comite/${idComite}`)
       .then((response) => {
         console.log(response.data)
         const data = response.data;

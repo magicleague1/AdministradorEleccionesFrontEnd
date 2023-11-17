@@ -10,7 +10,7 @@ const GenerarPdfPreviewPublic = () => {
   const handleGetPDF = async () => {
     console.log('<<<<<<<<<<',id);
     //usa convocatoriaEleccionesController
-    const response = await fetch(`http://localhost:8000/generar_pdf_publicado/${id}`);
+    const response = await fetch(`${process.env.REACT_APP_VARURL}generar_pdf_publicado/${id}`);
     const data = await response.json();
 
     if (data && data.pdf) {

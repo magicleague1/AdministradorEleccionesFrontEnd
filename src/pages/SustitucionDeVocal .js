@@ -9,7 +9,7 @@ const SustitucionDeVocal = ({ codComite }) => {
   useEffect(() => {
     // Realizar una solicitud GET para obtener la lista de vocales del comité
     if (codComite) {
-      axios.get(`http://localhost:8000/ver_lista_comite_id/${codComite}`)
+      axios.get(`${process.env.REACT_APP_VARURL}ver_lista_comite_id/${codComite}`)
         .then((response) => {
           const data = response.data;
           setVocales(data.titulares);
@@ -24,13 +24,13 @@ const SustitucionDeVocal = ({ codComite }) => {
 
   const handleActualizarDatos = (vocal) => {
     // Verificar si existe un permiso para el vocal en la tabla permisos
-    axios.get(`http://localhost:8000/verificarPermiso/${vocal.COD_SIS}/${codComite}`)
+    axios.get(`${process.env.REACT_APP_VARURL}verificarPermiso/${vocal.COD_SIS}/${codComite}`)
       .then((response) => {
         const tienePermiso = response.data.tiene_permiso;
   
         if (tienePermiso) {
           // Realizar una solicitud POST para actualizar los datos
-          axios.post('http://localhost:8000/actualizarDatos', {
+          axios.post(process.env.REACT_APP_VARURL+'actualizarDatos', {
             cod_comite_actual: codComite,
             cod_sis_actual: vocal.COD_SIS,
             cod_sis_nuevo: vocal.nuevoCodSis,

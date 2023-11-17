@@ -24,7 +24,7 @@ const VerConvocatoria = ({ lista }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false); // Nuevo estado para controlar el modal
   const [modalConvo, setModalConvo] = useState(false);
   const [selectedEleccionId, setSelectedEleccionId] = useState(null); // Nuevo estado para almacenar el ID de la elección seleccionada
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
 
   const [modalAddFP, setModalADDFP] = useState(false); // Nuevo estado para controlar el modal agregar frentes politicos a elecciones activas
   const [modalAFP, setModalAFP] = useState(false);
@@ -99,7 +99,7 @@ const closeModalEAFP = () =>{
 const handleConvocatoriaClick = async (id) => {
   try {
     // Hacer una petición al backend para obtener la información de la convocatoria
-    const response = await axios.get(`http://localhost:8000/verificar_convocatoria/${id}`);
+    const response = await axios.get(`${process.env.REACT_APP_VARURL}verificar_convocatoria/${id}`);
     const convocatoria = response.data;
 
     console.log('------->',convocatoria);

@@ -16,7 +16,7 @@ function AsignacionPermiso({ lista }) {
   const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
   const [codComiteActualizar, setcodComiteActualizar] = useState(null);
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
       setproceso(response.data)

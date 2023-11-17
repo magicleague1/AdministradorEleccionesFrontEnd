@@ -19,7 +19,8 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
   const [formData, setFormData] = useState(initialState);
   const [modalMessage, setModalMessage] = useState("");
   const[modalIsOpen, setModalIsOpen] = useState(false);
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
+  console.log("Impresion" ,  process.env.REACT_APP_VARURL);
   console.log(url + `obtener_id/${eleccionId}`);
   useEffect(() => {
     const fetchData = async () => {

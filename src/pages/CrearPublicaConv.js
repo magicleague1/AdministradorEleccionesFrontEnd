@@ -18,7 +18,7 @@ const CrearPublicaConv = ({  eleccionId }) => {
 
   const obtenerIdConvocatoria = async (eleccionId) => {
     try {
-      const response = await axios.get(`http://localhost:8000/obtener_id_convocatoria/${eleccionId}`);
+      const response = await axios.get(`${process.env.REACT_APP_VARURL}obtener_id_convocatoria/${eleccionId}`);
       setData({ ...data, id_convocatoria: response.data.id_convocatoria });
     } catch (error) {
       console.error('Error al obtener la convocatoria:', error);
@@ -36,7 +36,7 @@ const CrearPublicaConv = ({  eleccionId }) => {
 
 
     try {
-      const response = await axios.post('http://localhost:8000/publicar_convocatorias_crear', data); // Reemplaza 'URL_DEL_BACKEND' con tu URL de la API
+      const response = await axios.post(process.env.REACT_APP_VARURL+'publicar_convocatorias_crear', data); // Reemplaza 'URL_DEL_BACKEND' con tu URL de la API
 
       console.log('Datos enviados:', response.data);
       // Realiza acciones adicionales según la respuesta del backend

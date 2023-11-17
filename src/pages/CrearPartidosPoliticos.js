@@ -17,7 +17,7 @@ const PartidosPoliticos = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [showModal, setShowModal] = useState(false);
   
-    const url = "http://localhost:8000/";
+    const url = process.env.REACT_APP_VARURL;
     
     const handleInputChange = (e) => {
       const { name, value } = e.target;

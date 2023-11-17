@@ -26,7 +26,7 @@ const ConvocatoriaCrear = ({ eleccionId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post('http://localhost:8000/convocatorias_crear', { ...convocatoria, id_eleccion: eleccionId })
+      .post(process.env.REACT_APP_VARURL+'convocatorias_crear', { ...convocatoria, id_eleccion: eleccionId })
       .then((response) => {
         // Manejar la respuesta después de crear la convocatoria
         console.log(response.data);

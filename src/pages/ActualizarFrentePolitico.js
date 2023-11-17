@@ -18,7 +18,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   const [formData, setFormData] = useState(initialState);
   const[modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
 
   useEffect(() => {
     const fetchData = async () => {

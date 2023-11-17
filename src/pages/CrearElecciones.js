@@ -37,7 +37,7 @@ const CrearElecciones = () => {
 
     // Obtener lista de facultades
     useEffect(() => {
-      fetch('http://localhost:8000/facultades')
+      fetch(process.env.REACT_APP_VARURL+'facultades')
         .then(response => response.json())
         .then(data => setFacultades(data))
         .catch(error => console.error('Error fetching data:', error));
@@ -45,13 +45,13 @@ const CrearElecciones = () => {
   
     // Función para obtener carreras por facultad
     const fetchCarrerasByFacultad = codFacultad => {
-      fetch(`http://localhost:8000/carreras/${codFacultad}`)
+      fetch(`${process.env.REACT_APP_VARURL}carreras/${codFacultad}`)
         .then(response => response.json())
         .then(facultades => setCarreras(facultades))
         .catch(error => console.error('Error fetching data:', error));
     };
   
-    const url = "http://localhost:8000/";
+    const url = process.env.REACT_APP_VARURL;
     const handleNuevoTipoEleccionChange = (e) => {
       const nuevoTipoEleccion = e.target.value;
       let motivoEleccion = "";

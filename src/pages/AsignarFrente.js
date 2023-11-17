@@ -14,7 +14,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId}) => {
   useEffect(() => {
     const fetchFrentes = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/frentes');
+        const response = await axios.get(process.env.REACT_APP_VARURL+'frentes');
         setListaFrentesP(response.data);
       } catch (error) {
         console.error('Error al obtener frentes:', error);
@@ -29,7 +29,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId}) => {
       try {
         if (eleccionId) {
           const response = await axios.get(
-            `http://localhost:8000/eleccionesAsignadas/${eleccionId}`
+            `${process.env.REACT_APP_VARURL}eleccionesAsignadas/${eleccionId}`
           );
           setFrentesAsignados(response.data);
         }
@@ -77,7 +77,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId}) => {
       }));
       console.log(data)
       // Realizar la petición al backend para guardar los cambios
-      await axios.post('http://localhost:8000/actualizar_frentes', data)
+      await axios.post(process.env.REACT_APP_VARURL+'actualizar_frentes', data)
       .then((response) => {
         Swal.fire({
           icon: 'success',

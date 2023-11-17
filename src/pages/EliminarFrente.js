@@ -9,7 +9,7 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   const { id } = useParams();
   
 
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
   
   const handleEliminarClick = () => {
   

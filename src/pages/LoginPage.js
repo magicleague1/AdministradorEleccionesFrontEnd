@@ -15,7 +15,7 @@ const LoginPage = () => {
     // const [nombre,setNombre] = useState()
     let errorNombre = false
     let errorContraseña = false
-    const url = 'http://localhost:8000/'
+    const url = process.env.REACT_APP_VARURL
 
     const navigate = useNavigate()
 

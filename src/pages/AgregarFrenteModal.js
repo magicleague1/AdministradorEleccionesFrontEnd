@@ -13,7 +13,7 @@ const AgregarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/obtener_frentes_por_eleccion/${eleccionId}`);
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtener_frentes_por_eleccion/${eleccionId}`);
         setListaFrentesP(response.data.frentes);
       } catch (error) {
         console.log('Error al obtener los frentes');

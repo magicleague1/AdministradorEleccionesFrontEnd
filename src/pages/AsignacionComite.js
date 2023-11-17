@@ -20,7 +20,7 @@ function AsignacionComite({ lista }) {
   const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
   const [codComiteActualizar, setcodComiteActualizar] = useState(null);
-  const url = "http://localhost:8000/";
+  const url = process.env.REACT_APP_VARURL;
   useEffect(() => {
     axios.get(url + "elecciones_index").then(response => {
       setproceso(response.data)
@@ -32,7 +32,7 @@ function AsignacionComite({ lista }) {
   const verificarExistenciaComite = async (codComite) => {
     try {
       // Realiza una solicitud GET al servidor de Laravel para verificar la existencia del comité
-      const response = await axios.get(`http://localhost:8000/verificar-comite/${codComite}`);
+      const response = await axios.get(`${process.env.REACT_APP_VARURL}verificar-comite/${codComite}`);
   
       // La respuesta debe ser un objeto JSON con el campo "existeComite"
       if (response.data.existeComite) {
@@ -73,7 +73,7 @@ function AsignacionComite({ lista }) {
       // Realizar una solicitud PUT para asociar el comité a la elección
       //para poblacion 
       axios
-        .put(`http://localhost:8000/asignar-comite/${COD_ELECCION}`)
+        .put(`${process.env.REACT_APP_VARURL}asignar-comite/${COD_ELECCION}`)
         .then((responseComite) => {
           console.log("Asignación de comité exitosa:", responseComite.data);
 
@@ -81,7 +81,7 @@ function AsignacionComite({ lista }) {
           //para poblacion en aqui lee y divide en docentes y estudiante y usa la tabla
           //asociat titular suplente para guradar datos 
             axios
-              .post(`http://localhost:8000/asignar-vocales/${COD_COMITE}`)
+              .post(`${process.env.REACT_APP_VARURL}asignar-vocales/${COD_COMITE}`)
               .then((responseVocales) => {
                 // Muestra una alerta de éxito
                 Swal.fire({
