@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from "react";
 import "../css/MenuVertical.css";
 import "../css/botones.css"
-import Modal from "./Modal";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import "../css/CreacionModal.css"
@@ -18,7 +17,6 @@ const CrearElecciones = () => {
     } 
   
     const [formData, setFormData] = useState(initialState);
-    const [formData2, setFormData2] = useState(initialState);
     const [showModal, setShowModal] = useState(false);
 
 
@@ -188,14 +186,8 @@ const CrearElecciones = () => {
     <>
     <div className="crear-elecciones">
       <h3>NUEVO PROCESO ELECTORAL</h3>
-      <div className="NuevoCrear" >
-      <div className="form-group1">
-        <label className="LabelCrear">¿Quiere iniciar un nuevo tipo de elección?</label>
-       
-      </div>
-    
-   
-        <div className="form-group">
+      <div className="NuevoCrear" > 
+    <div className="form-group1">
           <label className="LabelCrear" >Motivo:</label>
           <select
   className="InputCrear"
@@ -210,7 +202,7 @@ const CrearElecciones = () => {
 
        {formData.motivoEleccion === "facultativa" && (
       <div>
-        <label htmlFor="facultad">Selecciona una facultad:</label>
+        <label className="LabelCrear" htmlFor="facultad">Selecciona una facultad:</label>
         <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
           <option value={0}>Seleccione una facultad</option>
           {facultades.map(facultad => (
@@ -224,7 +216,7 @@ const CrearElecciones = () => {
 
     {formData.motivoEleccion === "carrera" && (
       <div>
-        <label htmlFor="facultad">Selecciona una facultad:</label>
+        <label className="LabelCrear" htmlFor="facultad">Selecciona una facultad:</label>
         <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
           <option value={0}>Seleccione una facultad</option>
           {facultades.map(facultad => (
@@ -234,7 +226,7 @@ const CrearElecciones = () => {
           ))}
         </select>
 
-        <label htmlFor="carrera">Selecciona una carrera:</label>
+        <label className="LabelCrear" htmlFor="carrera">Selecciona una carrera:</label>
         <select className="InputCrear" id="carrera" onChange={handleCarreraChange}>
           <option value={0}>Seleccione una carrera</option>
           {carreras.map(carrera => (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import CheckIcon from '@mui/icons-material/Check';
+import Swal from 'sweetalert2';
 const SustitucionDeVocal = ({ codComite }) => {
   const [vocales, setVocales] = useState([]);
   const [vocales2, setVocales2] = useState([]);
@@ -44,9 +45,19 @@ const SustitucionDeVocal = ({ codComite }) => {
                     : prevVocal
                 )
               );
+              Swal.fire({
+                icon: 'success',
+                title: 'Asignación exitosa',
+                text: 'La asignación del comité y vocales se realizó con éxito.'
+              })
             })
             .catch((error) => {
               console.error('Error al actualizar los datos:', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error en la asignación de vocales',
+                text: `Ocurrió un error en la asignación de vocales`
+              });
             });
         } else {
           // Mostrar mensaje de que no tiene permiso
@@ -59,44 +70,43 @@ const SustitucionDeVocal = ({ codComite }) => {
   };
 
   return (
-    <div>
-      <h2>Sustitución de Vocal</h2>
-      <h3>Código del Comité: {codComite}</h3>
-      
-      <h3>Vocales del Comité TiTULAR:</h3>
-      <ul>
-        {vocales.map((vocal, index) => (
-          <li key={index}>
-            {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}
+    <div className="ListaComitePadre">
             
-            <div>
-              <label>Nuevo Código SIS:</label>
-              <input
-                type="text"
-                value={vocal.nuevoCodSis || ''}
-                onChange={(e) => {
-                  const nuevoCodSis = e.target.value;
-                  setVocales((prevVocales) =>
-                    prevVocales.map((prevVocal) =>
-                      prevVocal.COD_SIS === vocal.COD_SIS
-                        ? { ...prevVocal, nuevoCodSis }
-                        : prevVocal
-                    )
-                  );
-                }}
-              />
-              <button onClick={() => handleActualizarDatos(vocal)}>Confirmar Sustitución</button>
-            </div>
-          </li>
-        ))}
+              <h3 className='H3LISTA'>Código del Comité: {codComite} </h3>
+              <h3 className='H3LISTA'>Vocales del Comité TiTULAR: </h3>
+              <ul>
+              {vocales.map((vocal, index) => (
+                <li key={index}>
+                   <span className="vocal-name">{vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'} </span>
+                  
+                  <div className="vocal-item">
+                  <span className="vocal-name">Ingrese el nuevo Código SIS: </span>
+                    <input
+                      type="text"
+                      value={vocal.nuevoCodSis || ''}
+                      onChange={(e) => {
+                        const nuevoCodSis = e.target.value;
+                        setVocales((prevVocales) =>
+                          prevVocales.map((prevVocal) =>
+                            prevVocal.COD_SIS === vocal.COD_SIS
+                              ? { ...prevVocal, nuevoCodSis }
+                              : prevVocal
+                          )
+                        );
+                      }}
+                    />
+                    <button onClick={() => handleActualizarDatos(vocal)}><CheckIcon fontSize="small" /></button>
+                  </div>
+                </li>
+              ))}
       </ul>
-      <h3>Vocales del Comité Suplentes:</h3>
+      <h3 className='H3LISTA' >Vocales del Comité Suplentes:</h3>
       <ul>
         {vocales2.map((vocal, index) => (
           <li key={index}>
-            {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}
-            <div>
-              <label>Nuevo Código SIS:</label>
+           <span className="vocal-name">{vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}</span> 
+            <div className="vocal-item">
+              <span className="vocal-name">Ingrese el nuevo Código SIS:</span>
               <input
                 type="text"
                 value={vocal.nuevoCodSis || ''}
@@ -111,11 +121,13 @@ const SustitucionDeVocal = ({ codComite }) => {
                   );
                 }}
               />
-              <button onClick={() => handleActualizarDatos(vocal)}>Confirmar Sustitución</button>
+              <button onClick={() => handleActualizarDatos(vocal)}><CheckIcon fontSize="small" /></button>
             </div>
           </li>
         ))}
       </ul>
+
+          
     </div>
   );
 };

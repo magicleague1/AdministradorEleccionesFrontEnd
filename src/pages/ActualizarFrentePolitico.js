@@ -11,7 +11,6 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   const initialState = {
     nombre: "",
     sigla: "",
-    fechaInscripcion: "",
     Logo: "",
   };
 
@@ -31,7 +30,6 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
         setFormData({
           nombre: frente.NOMBRE_FRENTE,
           sigla: frente.SIGLA_FRENTE,
-          fechaInscripcion: frente.FECHA_INSCRIPCION,
           Logo: "",
         });
         console.log(formData);
@@ -50,7 +48,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   };
 
   const handleActualizarClick = () => {
-    if (!formData.nombre || !formData.sigla || !formData.fechaInscripcion) {
+    if (!formData.nombre || !formData.sigla ) {
       Swal.fire({
         icon: 'error',
         title: 'Error al actualizar el frente politico',
@@ -71,7 +69,6 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
       .put(url + `frentes/${frenteId}`, {
         NOMBRE_FRENTE: formData.nombre,
         SIGLA_FRENTE: formData.sigla,
-        FECHA_INSCRIPCION: formData.fechaInscripcion,
         ARCHIVADO: "",
       })
       .then((response) => {
@@ -135,17 +132,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
           onChange={handleInputChange}
         />
       </div>
-      <div className="form-group">
-        <label className="LabelCrearActualizar">Fecha Inscripcion:</label>
-        <input
-          className="InputCrearActualizar"
-          type="date"
-          name="fechaFin"
-          value={formData.fechaInscripcion}
-          min={formData.fechaInicio}
-          onChange={handleInputChange}
-        />
-      </div>
+      
       <div className="form-group">
         <label className="LabelCrearActualizar">Logo:</label>
         <input
@@ -158,7 +145,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
         </div>
         {selectedFile && (
         <div>
-          <p>Archivo seleccionado: {selectedFile.name}</p>
+          <label className="LabelCrear">Archivo seleccionado: {selectedFile.name}</label>
         </div>
       )}
       <div className="BotonesDivCrearActualizar">

@@ -10,7 +10,6 @@ const PartidosPoliticos = () => {
     const initialState = {
       NOMBRE_FRENTE: "", 
       SIGLA_FRENTE: "", 
-      FECHA_INSCRIPCION: "", 
       ARCHIVADO: "", 
     } 
   
@@ -26,7 +25,7 @@ const PartidosPoliticos = () => {
     };
   
     const handleGuardarClick = () => {
-      if (!formData.NOMBRE_FRENTE || !formData.SIGLA_FRENTE|| !formData.FECHA_INSCRIPCION) {
+      if (!formData.NOMBRE_FRENTE || !formData.SIGLA_FRENTE) {
         Swal.fire({
           icon: 'error',
           title: 'Error al crear el frente politico',
@@ -47,8 +46,7 @@ const PartidosPoliticos = () => {
      
       const nuevoPartido = {
         NOMBRE_FRENTE: formData.NOMBRE_FRENTE, 
-        SIGLA_FRENTE: formData.SIGLA_FRENTE, 
-        FECHA_INSCRIPCION: formData.FECHA_INSCRIPCION, 
+        SIGLA_FRENTE: formData.SIGLA_FRENTE,  
         ARCHIVADO:"", 
       };
       console.log(nuevoPartido);
@@ -73,8 +71,8 @@ const PartidosPoliticos = () => {
       });
     };
     const handleVolverAtras = () => {
-      setShowModal(true);
           setFormData(initialState);
+          setSelectedFile(null);
     }
     const handleFileChange = (e) => {
       const file = e.target.files[0]; // Obtiene el primer archivo seleccionado
@@ -109,18 +107,6 @@ const PartidosPoliticos = () => {
             className="motivo-input"
           />
         </div>
-     
-      <div className="form-group">
-        <label className="LabelCrear" >Fecha de inscripcion:</label>
-        <input
-          className="InputCrear"
-          type="date"
-          name="FECHA_INSCRIPCION"
-          value={formData.FECHA_INSCRIPCION}
-          min={new Date().toISOString().split("T")[0]}
-          onChange={handleInputChange}
-        />
-      </div>
  
       <div className="form-group">
           <label className="LabelCrear">Logo:</label>
@@ -128,12 +114,13 @@ const PartidosPoliticos = () => {
            type="file"
            accept="image/*"
            onChange={handleFileChange}
-          value={formData.ARCHIVADO}
+           value={formData.ARCHIVADO}
+           className="motivo-input"
           />
         </div>
         {selectedFile && (
         <div>
-          <p>Archivo seleccionado: {selectedFile.name}</p>
+           <label className="LabelCrear">Archivo seleccionado: {selectedFile.name}</label>
         </div>
       )}
     

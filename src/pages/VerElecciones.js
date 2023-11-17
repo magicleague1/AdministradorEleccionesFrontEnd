@@ -8,7 +8,7 @@ import ActualizarEleccionModal from "../pages/ActualizarEleccionModal";
 import PdfConvocatoria from "./pdfConvocatoria";
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'; //importa el icono de user-plus icono
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined'; //importar el icono de list
-import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined'; //importar icono editar
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AgregarFrenteModal from './AgregarFrenteModal.js'; //importar el modal Agregar frente 
 import AsignarFrente from "./AsignarFrente";
 import EdicionAsigFrentes from "./EdicionAsigFrentes"
@@ -92,7 +92,6 @@ const closeModalEAFP = () =>{
           <th>TIPO ELECCION</th>
           <th>FECHA</th>
           <th>DETALLE</th>
-          <th>CONVOCATORIA</th>
           <th>FRENTES</th>
         </tr>
       </thead>
@@ -105,16 +104,12 @@ const closeModalEAFP = () =>{
                 <td className="especialtd">{eleccion.TIPO_ELECCION}</td>
                 <td className="tdNormal">{eleccion.FECHA_ELECCION}</td>
                 <td className="tdNormal">
-                      <button className ="custom-btn btn-4" onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}>
-                             Detalles de la Elección
+                      <button className="icono" onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}>
+                        <InfoOutlinedIcon fontSize="large"/>
                       </button>
                 
                 </td>
-                <td className="tdNormal">
-                      <button className="custom-btn btn-5" onClick={() => handleConvocatoriaClick(eleccion.COD_ELECCION)}>
-                            Convocatoria
-                      </button>
-                </td>
+                
                 <td className="tdNormal">
                   <button className="icono" onClick={() => openModalAFP(eleccion.COD_ELECCION)} >
                     <PersonAddAltOutlinedIcon fontSize="large"/>

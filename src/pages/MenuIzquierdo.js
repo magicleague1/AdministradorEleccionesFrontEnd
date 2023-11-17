@@ -163,8 +163,6 @@ function MenuIzquierdo() {
                                                   }}
 
                                             >
-                                            
-                                                <span class="icon"><i class="fas fa-home"></i></span>
                                                 <span class="item">Crear Proceso Electoral</span>
                                                 
                                         </li>
@@ -224,7 +222,7 @@ function MenuIzquierdo() {
                                         </li>
                                             </div>
                                         )}
-                                         <li  className="row" id={ mostrarVerComite ? "active" : ""}
+                                         <li  className="row" id={mostrarAsignacion ? "active" : ""}
                                         onClick=
                                             {handleAsignarMesaClick}
                                         >

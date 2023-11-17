@@ -7,8 +7,9 @@ import axios from "axios";
 import Modal from "react-modal";
 import ListaMesas from "./ListadeMesas";
 import Swal from 'sweetalert2';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faFile } from '@fortawesome/free-solid-svg-icons';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ListIcon from '@mui/icons-material/List';
+
 
 function AsignacionMesas({ lista }) {
   const [proceso, setproceso] = useState([]);
@@ -148,17 +149,15 @@ function AsignacionMesas({ lista }) {
                 <td className="tdNormalBotonM" >
                 <div className="d-flex">
                 <button
-                    className="custom-btn btn-19 btn-19 d-flex align-items-center justify-content-center"
+                    className="icono"
                     onClick={() =>
                     handleAsociarClick(elemento.COD_ELECCION)
                     }
                 >
-                    <div className="round-icon">
-                         <FontAwesomeIcon icon={faPlus} className="plus-icon" /> {/* Ícono de "más" */}
-                    </div>
+                  <AddCircleIcon fontSize="large" />
                 </button>{" "}
-                <button class="custom-btn btn-20 d-flex align-items-center justify-content-center" onClick={() => handleVerListaClick(elemento.COD_ELECCION)}>
-                  <FontAwesomeIcon icon={faFile} className="add-icon" />
+                <button className="icono" onClick={() => handleVerListaClick(elemento.COD_ELECCION)}>
+                <ListIcon fontSize="large" />
                 </button>
                 </div>
                 </td>

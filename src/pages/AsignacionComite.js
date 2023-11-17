@@ -7,12 +7,16 @@ import Modal from "react-modal";
 import ListaVocalesComite from "./ListaVocalesComite";
 import Swal from 'sweetalert2';
 import SustitucionDeVocal from "./SustitucionDeVocal ";
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import ViewListIcon from '@mui/icons-material/ViewList';  // Importa el ícono de ver lista
+import SyncIcon from '@mui/icons-material/Sync'; 
 
 
 
 function AsignacionComite({ lista }) {
   const [proceso, setproceso] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
   const [codComiteActualizar, setcodComiteActualizar] = useState(null);
@@ -124,12 +128,14 @@ function AsignacionComite({ lista }) {
     // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
     // Puedes abrir un modal o redirigir a una página para ver la lista
     setcodComiteActualizar(codComite);
-    console.log(':-..-..',codComiteActualizar);
-    //setModalIsOpen(true);
+    setModalIsOpen1(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+  const closeModal1 = () => {
+    setModalIsOpen1(false);
   };
   const handleModalClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -157,16 +163,19 @@ function AsignacionComite({ lista }) {
                 <td  className="tdNormal">{elemento.MOTIVO_ELECCION}</td>
                 <td className="tdNormalBoton" >
                   <button
-                    className="botonComite1"
-                    class="custom-btn btn-13"
+                    className="icono"
                     onClick={() =>
                       handleAsociarClick(elemento.COD_ELECCION, elemento.COD_COMITE)
                     }
                   >
-                    Asignacion
+                   <AssignmentIndIcon fontSize="large" />
                   </button>{" "}
-                  <button class="custom-btn btn-14" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>Ver Lista</button>
-                  <button class="custom-btn btn-14" onClick={() => handleActualizar(elemento.COD_COMITE)}>Actualizar</button>
+                  <button className="icono" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>
+                  <ViewListIcon fontSize="large"/>
+                    </button>
+                  <button className="icono" onClick={() => handleActualizar(elemento.COD_COMITE)}>
+                  <SyncIcon fontSize="large"/>
+                  </button>
               
                 </td>
               </tr>
@@ -174,7 +183,7 @@ function AsignacionComite({ lista }) {
           </tbody>
         </table>
         <div>
-      <SustitucionDeVocal codComite={codComiteActualizar} />
+      
     </div>
          </div>
         </div>
@@ -194,6 +203,25 @@ function AsignacionComite({ lista }) {
           className="BotonComiteModal"
           class="custom-btn btn-1"
           onClick={closeModal}
+        >
+          Cerrar
+        </button>
+      </Modal>
+      <Modal
+        isOpen={modalIsOpen1}
+        onRequestClose={closeModal1}
+        contentLabel="Reasignacion Comite"
+        className={"CuerpoComite"}
+        onClick={handleModalClick} // Cierra el modal al hacer clic fuera de él
+      >
+        <h2 className="ComiteTitulo">Reasignacion de Lista de Comite</h2>
+        <div className="ContenedorVocales">
+        {codComite !== null && <SustitucionDeVocal codComite={codComiteActualizar} />}
+        </div>
+        <button
+          className="BotonComiteModal"
+          class="custom-btn btn-1"
+          onClick={closeModal1}
         >
           Cerrar
         </button>
