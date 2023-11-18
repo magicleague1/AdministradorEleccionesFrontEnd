@@ -10,6 +10,7 @@ import PartidosPoliticos from "./CrearPartidosPoliticos";
 import VerPartidosPoliticos from "./VerPartidosPoliticos";
 import AsignacionMesas from "./AsignacionMesas";
 import VerConvocatoria from "./VerConvocatoria";
+import AsignacionPermisosC from "./AsignacionPermiso"
 
 
 function MenuIzquierdo() {
@@ -20,9 +21,11 @@ function MenuIzquierdo() {
     const [mostrarCrearPartido, setMostrarCrearPartido] = useState(false);
     const [mostrarVerPartido, setMostrarVerPartido] = useState(false);
     const [mostrarAsignacion, setMostrarAsignacion] = useState(false);
+    const [mostrarAsignacionP, setMostrarAsignacionP] = useState(false);
 
     const [menuDesplegableCrearEleccion, setMenuDesplegableCrearEleccion] = useState(false);
     const [menuDesplegableCrearPartido, setMenuDesplegableCrearPartido] = useState(false);
+    const [menuDesplegableAsinarPermisos, setMenuDesplegableAsinarPermisos] = useState(false);
     const [mostrarVerConvocatoria, setMostrarVerConvocatoria] = useState(false); 
     
     const handleCrearEleccionClick = () => {
@@ -33,7 +36,8 @@ function MenuIzquierdo() {
       setMostrarCrearPartido(false);  
       setMostrarVerPartido(false); 
       setMostrarAsignacion(false);
-      setMostrarVerConvocatoria(false)
+      setMostrarVerConvocatoria(false);
+      setMostrarAsignacionP(false);
     };
 
     const handleInicioClick = () => {
@@ -44,7 +48,8 @@ function MenuIzquierdo() {
       setMostrarCrearPartido(false);
       setMostrarVerPartido(false); 
       setMostrarAsignacion(false);
-      setMostrarVerConvocatoria(false)
+      setMostrarVerConvocatoria(false);
+      setMostrarAsignacionP(false);
     };
 
     const handleVerEleccionesClick = () => {
@@ -56,6 +61,7 @@ function MenuIzquierdo() {
       setMostrarVerPartido(false); 
       setMostrarAsignacion(false);
       setMostrarVerConvocatoria(false);
+      setMostrarAsignacionP(false);
         // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
     };
     const handleVerComiteClick = () => {
@@ -67,6 +73,7 @@ function MenuIzquierdo() {
         setMostrarVerPartido(false); 
         setMostrarAsignacion(false);
         setMostrarVerConvocatoria(false);
+        setMostrarAsignacionP(false);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
       const handleCrearPartidoClick = () => {
@@ -78,6 +85,7 @@ function MenuIzquierdo() {
         setMostrarVerPartido(false);
         setMostrarAsignacion(false); 
         setMostrarVerConvocatoria(false);
+        setMostrarAsignacionP(false);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
       const handleVerPartidoClick = () => {
@@ -89,6 +97,7 @@ function MenuIzquierdo() {
         setMostrarVerPartido(true); 
         setMostrarVerConvocatoria(false);
         setMostrarAsignacion(false);
+        setMostrarAsignacionP(false);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
       const handleAsignarMesaClick = () => {
@@ -100,6 +109,7 @@ function MenuIzquierdo() {
         setMostrarVerPartido(false);
         setMostrarVerConvocatoria(false);
         setMostrarAsignacion(true); 
+        setMostrarAsignacionP(false);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
 
@@ -112,6 +122,19 @@ function MenuIzquierdo() {
         setMostrarVerPartido(false); 
         setMostrarVerConvocatoria(true);
         setMostrarAsignacion(false);
+        setMostrarAsignacionP(false);
+          // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
+      };
+      const handleAsignarPermisos = () => {
+        setMostrarCrearEleccion(false);
+        setMostrarInicio(false);
+        setMostrarVerElecciones(false);
+        setMostrarVerComite(false);
+        setMostrarCrearPartido(false);
+        setMostrarVerPartido(false); 
+        setMostrarVerConvocatoria(false);
+        setMostrarAsignacion(false);
+        setMostrarAsignacionP(true);
           // Muestra VerElecciones al hacer clic en Ver Elecciones Activas
       };
 
@@ -123,6 +146,9 @@ function MenuIzquierdo() {
             break;
           case 'Partidos Politicos':
               setMenuDesplegableCrearPartido(!menuDesplegableCrearPartido);
+              break;
+          case 'Comite Electoral':
+            setMenuDesplegableAsinarPermisos(!menuDesplegableAsinarPermisos);
               break;
           default:
             break;
@@ -179,16 +205,36 @@ function MenuIzquierdo() {
                                         </li>
                                             </div>
                                         )}
-                                       
-                                        <li  className="row" id={ mostrarVerComite ? "active" : ""}
+                                        <li className="row nav-link dropdown-toggle" onClick={() => toggleMenuDesplegable('Comite Electoral')}>
+                                      
+                                            <span className="item">Comite Electoral</span>
+                                        </li>
+                                        {menuDesplegableAsinarPermisos && (
+                                            <div className="submenu">
+                                             <li  className="Ocultos" id={ mostrarVerComite ? "active" : ""}
                                         onClick=
-                                            {handleVerComiteClick}
+                                            {() => {handleVerComiteClick(); 
+                                                    toggleMenuDesplegable('Comite Electoral');}}
                                         >
                                             
                                                 <span class="icon"><i class="fas fa-home"></i></span>
-                                                <span class="item">Comite Electoral</span>
+                                                <span class="item">Lista de Comite Electoral</span>
                                                 
                                         </li>
+                                            <li  className="Ocultos" id={ mostrarAsignacionP ? "active" : ""}
+                                                   onClick={() => {
+                                                    handleAsignarPermisos();
+                                                    toggleMenuDesplegable('Proceso Electoral');
+                                                  }}
+
+                                            >
+                                                <span class="item">Asignacion de Permisos</span>
+                                                
+                                        </li>
+                                        
+                                            </div>
+                                        )}
+                                       
                                         <li className= "row nav-link dropdown-toggle" onClick={() => toggleMenuDesplegable('Partidos Politicos')}>
                                             <span className="icon"><i className="fas fa-home"></i></span>
                                             <span className="item">Partidos Politicos</span>
@@ -255,7 +301,7 @@ function MenuIzquierdo() {
                     {mostrarVerPartido && <VerPartidosPoliticos/>}
                     {mostrarAsignacion && <AsignacionMesas/>}
                     {mostrarVerConvocatoria && <VerConvocatoria lista = {mostrarVerConvocatoria}/>} 
-                    
+                    {mostrarAsignacionP && <AsignacionPermisosC/>}
             </div>
         
         </div>

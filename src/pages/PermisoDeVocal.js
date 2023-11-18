@@ -42,28 +42,27 @@ const PermisoDeVocal = ({ codComite }) => {
   };
 
   return (
-    <div>
-      <h2>Sustitución de Vocal</h2>
-      <h3>Código del Comité: {codComite}</h3>
-      <h3>Vocales del Comité Titular:</h3>
+    <div className="ListaComitePadre">
+      <h3 className='H3LISTA'>Código del Comité: {codComite}</h3>
+      <h3 className='H3LISTA' >Vocales del Comité Titular:</h3>
       <ul>
         {vocales.map((vocal, index) => (
           <li key={index}>
-            {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS}) {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}
-            <div>
+              <span h3 className='H3LISTA' style={{ color: 'black' }}> {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS}) {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'} </span>
+            <div className="vocal-item" >
               <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
             </div>
           </li>
         ))}
       </ul>
-      <h3>Vocales del Comité Suplentes:</h3>
+      <h3 className='H3LISTA'>Vocales del Comité Suplentes:</h3>
       <ul>
         {vocales2.map((vocal, index) => (
           <li key={index}>
-            {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}
-            <div>
+             <span className="vocal-name">  {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}</span>
+            <div className="vocal-item">
               <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
-            </div>
+            </div >
           </li>
         ))}
       </ul>

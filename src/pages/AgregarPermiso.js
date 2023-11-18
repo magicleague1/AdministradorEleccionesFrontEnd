@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CheckIcon from '@mui/icons-material/Check';
+import Swal from 'sweetalert2';
 
 const AgregarPermiso = ({ cod_sis, cod_comite }) => {
   const [motivo, setMotivo] = useState('');
@@ -32,10 +34,6 @@ useEffect(() => {
 
   const agregarPermiso = () => {
 
-    console.log(cod_sis);
-    console.log(cod_comite);
-    console.log(motivo);
-    console.log(comprobanteEntregado);
     axios.post(process.env.REACT_APP_VARURL+'permisos', {
       cod_sis: cod_sis,
       cod_comite: cod_comite,
@@ -44,9 +42,19 @@ useEffect(() => {
     })
     .then(response => {
       console.log(response.data);
+      Swal.fire({
+        icon: 'success',
+        title: 'Asignación exitosa',
+        text: 'La asignación del permiso se realizó con éxito.'
+      })
       // Aquí puedes manejar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito.
     })
     .catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en la asignación ',
+        text: `Ocurrió un error en la asignación de permisos`
+      });
       console.error('Error al agregar permiso:', error);
       // Aquí puedes manejar errores, mostrar mensajes al usuario, etc.
     });
@@ -72,26 +80,27 @@ useEffect(() => {
 
   return (
     <div>
-      <h2>Agregar Permiso</h2>
+       <h3 className="vocal-name">Agregar Permiso </h3>
       <div>
-        <label>Motivo:</label>
+        <label className="vocal-name" >Motivo:</label>
         <input type="text" value={motivo} onChange={(e) => setMotivo(e.target.value)} />
+        <button onClick={agregarPermiso}><CheckIcon fontSize="small" /></button>
       </div>
       <div>
       {/* ... (otras partes del código) */}
-      {estadoComprobante === 'entregado_a_tiempo' && <p>Comprobante entregado a tiempo</p>}
-      {estadoComprobante === 'entregado_con_retraso' && <p>Comprobante entregado con retraso</p>}
-      {estadoComprobante === 'no_entregado' && <p>Comprobante no entregado</p>}
+      {estadoComprobante === 'entregado_a_tiempo' && <p className="vocal-name">Comprobante entregado a tiempo</p>}
+      {estadoComprobante === 'entregado_con_retraso' && <p className="vocal-name">Comprobante entregado con retraso</p>}
+      {estadoComprobante === 'no_entregado' && <p className="vocal-name">Comprobante no entregado</p>}
     </div>
       <div>
-        <label>Comprobante Entregado:</label>
+        <label className="vocal-name">Comprobante Entregado:</label>
         <input
           type="checkbox"
           checked={comprobanteEntregado}
           onChange={handleComprobanteEntregado}
         />
       </div>
-      <button onClick={agregarPermiso}>Agregar Permiso</button>
+     
     </div>
   );
 };

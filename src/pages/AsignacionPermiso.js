@@ -7,13 +7,14 @@ import Modal from "react-modal";
 import ListaVocalesComite from "./ListaVocalesComite";
 import Swal from 'sweetalert2';
 import PermisoDeVocal from "./PermisoDeVocal";
-
+import ViewListIcon from '@mui/icons-material/ViewList'; 
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 
 
 function AsignacionPermiso({ lista }) {
   const [proceso, setproceso] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalAbrir, setmodalAbrir] = useState(false);
+  const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [codComite, setCodComite] = useState(null);
   const [codComiteActualizar, setcodComiteActualizar] = useState(null);
   const url = process.env.REACT_APP_VARURL;
@@ -38,12 +39,16 @@ function AsignacionPermiso({ lista }) {
     // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
     // Puedes abrir un modal o redirigir a una página para ver la lista
     setcodComiteActualizar(codComite);
+    setModalIsOpen1(true);
     console.log(':-..-..',codComiteActualizar);
     //setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+  const closeModal1 = () => {
+    setModalIsOpen1(false);
   };
   const handleModalClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -54,7 +59,7 @@ function AsignacionPermiso({ lista }) {
   return (
     <>
     <div className="divComite">
-      <h1 className="titleC"> LISTA DE VOCALES DEL COMITE ELECTORAL</h1>
+      <h1 className="titleC"> ASIGNACION DE PERMISOS</h1>
       <div className="ContenedorTabla">
         <table className="TablaComite">
           <thead >
@@ -70,9 +75,12 @@ function AsignacionPermiso({ lista }) {
                 <td className="especialtd">{elemento.COD_ELECCION}</td>
                 <td  className="tdNormal">{elemento.MOTIVO_ELECCION}</td>
                 <td className="tdNormalBoton" >
-                 {" "}
-                  <button class="custom-btn btn-14" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>Ver Lista</button>
-                  <button class="custom-btn btn-14" onClick={() => handleActualizar(elemento.COD_COMITE)}>ASIGNAR PERMISO</button>
+                 <button className="icono" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>
+                  <ViewListIcon fontSize="large"/>
+                  </button>
+                  <button className="icono" onClick={() => handleActualizar(elemento.COD_COMITE)}>
+                  <AssignmentTurnedInIcon fontSize="large" />
+                  </button>
               
                 </td>
               </tr>
@@ -80,7 +88,7 @@ function AsignacionPermiso({ lista }) {
           </tbody>
         </table>
         <div>
-      <PermisoDeVocal codComite={codComiteActualizar} />
+      
     </div>
          </div>
         </div>
@@ -104,6 +112,26 @@ function AsignacionPermiso({ lista }) {
           Cerrar
         </button>
       </Modal>
+      <Modal
+        isOpen={modalIsOpen1}
+        onRequestClose={closeModal1}
+        contentLabel="Reasignacion Comite"
+        className={"CuerpoComite"}
+        onClick={handleModalClick} // Cierra el modal al hacer clic fuera de él
+      >
+        <h2 className="ComiteTitulo">Sustitucion de Vocales</h2>
+        <div className="ContenedorVocales">
+        {codComite !== null && <PermisoDeVocal codComite={codComiteActualizar} />}
+        </div>
+        <button
+          className="BotonComiteModal"
+          class="custom-btn btn-1"
+          onClick={closeModal1}
+        >
+          Cerrar
+        </button>
+      </Modal>
+      
       
       </>
   );
