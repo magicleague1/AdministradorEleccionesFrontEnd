@@ -5,7 +5,7 @@ import axios from "axios";
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'; //importa el icono de user-plus icono
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined'; //importar icono editar
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import ActualizarFrenteModal from "../pages/ActualizarFrentePolitico";
+import ActualizarFrente from "../pages/ActualizarFrentePolitico";
 import EliminarFrente from "../pages/EliminarFrente";
 import ReasignarCandidatoModal from "./AgregarCandidatoModal";
 const VerPartidosPoliticos = ({ lista }) => {
@@ -103,7 +103,7 @@ const VerPartidosPoliticos = ({ lista }) => {
     </table>
     </div>
     </div>
-    <ActualizarFrenteModal
+    <ActualizarFrente
         isOpen={modalIsOpen}
         closeModal={closeModal}
         frenteId={selectedFrenteId} // Pasa el ID seleccionado al modal

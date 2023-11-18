@@ -29,9 +29,7 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
     const eliminacion = {
       MOTIVO: formData.motivoEliminacion,
     };
-    console.log(eliminacion)
-    axios
-      .delete(url + `frentes/${frenteId}`, eliminacion)
+    axios.put(url + `frentes/delete/${frenteId}`, eliminacion)
       .then((response) => {
         Swal.fire({
           icon: 'success',
