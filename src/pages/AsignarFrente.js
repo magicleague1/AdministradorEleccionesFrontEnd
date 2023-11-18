@@ -91,7 +91,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId}) => {
         Swal.fire({
           icon: 'error',
           title: 'Error al registrar los frente politico',
-          text: `Ocurrió un error al registrar los frente politico: ${error}`
+          text: `Nos puede registrar sin ningun cantidato`
         });
       });   
   
