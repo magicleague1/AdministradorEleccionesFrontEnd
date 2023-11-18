@@ -20,6 +20,7 @@ const GenerarPdfPreview = ({ eleccionId }) => {
 
 
     //usa convocatoriaEleccionesController
+    console.log(`${process.env.REACT_APP_VARURL}generar_pdf/${eleccionId }`)
     const response = await fetch(`${process.env.REACT_APP_VARURL}generar_pdf/${eleccionId }`);
     const data = await response.json();
 

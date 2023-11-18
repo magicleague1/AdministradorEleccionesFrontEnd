@@ -42,7 +42,7 @@ function ListaMesas({ eleccionId }) {
                     <div className="NormalConvocatoriaM">{carrera.total_mesas_por_carrera}</div>
                   </div>
                   <div>
-                    <h4 className='H4LISTA'>Mesas:</h4>
+                    <h3 className='H3LISTA'>Mesas:</h3>
                     <ul>
                       {carrera.mesas.map((mesaCarrera, idxMesa) => (
                         <li key={idxMesa}>

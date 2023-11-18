@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import "../css/ActualizacionEleccionModal.css";
 import Swal from 'sweetalert2';
 Modal.setAppElement("#root");
 
 const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
-  const { id } = useParams();
   const initialState = {
     motivoEleccion: "",
     fechaInicio: "",
@@ -17,7 +16,6 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
-  const [modalMessage, setModalMessage] = useState("");
   const[modalIsOpen, setModalIsOpen] = useState(false);
   const url = process.env.REACT_APP_VARURL;
   console.log("Impresion" ,  process.env.REACT_APP_VARURL);
@@ -93,9 +91,6 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
   const handleVolverAtras = () => {
     closeModal();
     navigate("/home");
-  };
-  const cerrarModal= () => {
-    setModalIsOpen(false);
   };
   
   return (

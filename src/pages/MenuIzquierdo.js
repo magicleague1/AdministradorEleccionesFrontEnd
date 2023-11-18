@@ -254,7 +254,6 @@ function MenuIzquierdo() {
                     {mostrarCrearPartido && <PartidosPoliticos/>}
                     {mostrarVerPartido && <VerPartidosPoliticos/>}
                     {mostrarAsignacion && <AsignacionMesas/>}
-                    
                     {mostrarVerConvocatoria && <VerConvocatoria lista = {mostrarVerConvocatoria}/>} 
                     
             </div>

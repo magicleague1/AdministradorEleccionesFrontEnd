@@ -8,11 +8,12 @@
 
     
   }
+  
   .NuevoCrear{
     
     background-color: rgba(0, 56, 116, 0.817);
     width: 50rem;
-    height: 30rem;
+    height: 80vh;
     margin: 0 auto; /* Esto centra horizontalmente el elemento */
     position: relative;
     overflow-y: auto;
@@ -97,8 +98,20 @@
   }
   
   
-  
   /*tabla de ver elecciones*/
+  .crear-Convocatoria{
+    padding: 10px;
+    background-color: #F2F3F2;
+    height: 100vh;
+
+  }
+  .crear-Convocatoria h3{
+    font-size: 2rem;
+    color: #00909E;
+    text-align: center;
+    font-weight: bold;
+    
+  }
   .ver-elecciones{
     padding: 70px;
     background-color: #F2F3F2;
