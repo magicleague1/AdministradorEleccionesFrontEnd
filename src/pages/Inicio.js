@@ -1,21 +1,27 @@
 import React from 'react';
-import "../css/inicio.css"
+import { Container, Typography } from '@mui/material';
+import BackgroundImage from '../img/fcyt.png'; // Asegúrate de importar la imagen correcta
+import "../css/inicio.css";
 
 const Inicio = () => {
+  const backgroundImageStyle = {
+    backgroundImage: `url(${BackgroundImage})`, // Cambia BackgroundImage al nombre de tu importación de la imagen
+    backgroundSize: ' 100% 100%',
+    backgroundPosition: 'center',
+    minHeight: '100vh', // Ajusta según tus necesidades
+    display: 'grid',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
   return (
-    
-         <div className="inicio-container">
-          <div className='LetrasDescripcion'>
-          <h2 className='Letras2'>Bienvenido al sistema de administracion de elecciones </h2>
-          <h2 className='Letras1'> FACULTAD DE CIENCIAS Y TECNOLOGIA</h2>
-          </div>
-            
-        </div>
-    
-    
+    <Container style={backgroundImageStyle}>
+      <div className="LetrasDescripcion">
+        <Typography variant="h2" className="Letras2" style={{alignItems: 'center', fontSize: '48px'}}>Bienvenido al sistema de administración de elecciones </Typography>
+        <Typography variant="h2" className="Letras1" style={{textAlign: 'center', fontSize: '35px'}}>FACULTAD DE CIENCIAS Y TECNOLOGÍA</Typography>
+      </div>
+    </Container>
   );
 };
-
-
 
 export default Inicio;

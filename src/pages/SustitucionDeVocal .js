@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CheckIcon from '@mui/icons-material/Check';
-import Swal from 'sweetalert2';
+import { Typography, Paper, Grid, TextField, IconButton, Box, Divider } from '@mui/material';
+import '../css/Asignacion.css';
+import ClearIcon from '@mui/icons-material/Clear';
+import Swal from "sweetalert2";
+
+
 const SustitucionDeVocal = ({ codComite }) => {
   const [vocales, setVocales] = useState([]);
   const [vocales2, setVocales2] = useState([]);
-  console.log('Vocales del comité:', codComite);
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
     // Realizar una solicitud GET para obtener la lista de vocales del comité
     if (codComite) {
@@ -14,13 +20,13 @@ const SustitucionDeVocal = ({ codComite }) => {
           const data = response.data;
           setVocales(data.titulares);
           setVocales2(data.suplentes);
-          
         })
         .catch((error) => {
           console.error('Error al obtener la lista de vocales:', error);
         });
     }
   }, [codComite]);
+
 
   const handleActualizarDatos = (vocal) => {
     // Verificar si existe un permiso para el vocal en la tabla permisos
@@ -68,67 +74,81 @@ const SustitucionDeVocal = ({ codComite }) => {
         console.error('Error al verificar el permiso:', error);
       });
   };
+  const VocalItem = ({ vocal, onUpdate }) => (
+    <Box mt={2}>
+      <Typography variant="body1">
+        {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS}){' '}
+        {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}
+      </Typography>
+      <TextField
+        label="Nuevo Código SIS"
+        variant="outlined"
+        value={vocal.nuevoCodSis || ''}
+        onChange={(e) => onUpdate(vocal.COD_SIS, e.target.value)}
+        fullWidth
+      />
+      <IconButton onClick={() => handleActualizarDatos(vocal)} style={{ marginTop: '8px' }}>
+        <CheckIcon fontSize="small" />
+      </IconButton>
+      <Divider style={{ marginTop: '10px', marginBottom: '10px' }} />
+    </Box>
+  );
+  const onUpdateVocal = (codSis, nuevoCodSis) => {
+    // Actualizar localmente la lista de vocales con el nuevo código SIS
+    setVocales((prevVocales) =>
+      prevVocales.map((prevVocal) =>
+        prevVocal.COD_SIS === codSis ? { ...prevVocal, nuevoCodSis } : prevVocal
+      )
+    );
+  };
 
+  const filterVocales = (vocalesArray) => {
+    return vocalesArray.filter(
+      (vocal) =>
+        vocal.COD_SIS.includes(searchTerm) ||
+        vocal.NOMBRE.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vocal.APELLIDO.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
   return (
-    <div className="ListaComitePadre">
-            
-              <h3 className='H3LISTA'>Código del Comité: {codComite} </h3>
-              <h3 className='H3LISTA'>Vocales del Comité TiTULAR: </h3>
-              <ul>
-              {vocales.map((vocal, index) => (
-                <li key={index}>
-                   <span className="vocal-name">{vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'} </span>
-                  
-                  <div className="vocal-item">
-                  <span className="vocal-name">Ingrese el nuevo Código SIS: </span>
-                    <input
-                      type="text"
-                      value={vocal.nuevoCodSis || ''}
-                      onChange={(e) => {
-                        const nuevoCodSis = e.target.value;
-                        setVocales((prevVocales) =>
-                          prevVocales.map((prevVocal) =>
-                            prevVocal.COD_SIS === vocal.COD_SIS
-                              ? { ...prevVocal, nuevoCodSis }
-                              : prevVocal
-                          )
-                        );
-                      }}
-                    />
-                    <button onClick={() => handleActualizarDatos(vocal)}><CheckIcon fontSize="small" /></button>
-                  </div>
-                </li>
-              ))}
-      </ul>
-      <h3 className='H3LISTA' >Vocales del Comité Suplentes:</h3>
-      <ul>
-        {vocales2.map((vocal, index) => (
-          <li key={index}>
-           <span className="vocal-name">{vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}</span> 
-            <div className="vocal-item">
-              <span className="vocal-name">Ingrese el nuevo Código SIS:</span>
-              <input
-                type="text"
-                value={vocal.nuevoCodSis || ''}
-                onChange={(e) => {
-                  const nuevoCodSis = e.target.value;
-                  setVocales2((prevVocales) =>
-                    prevVocales.map((prevVocal) =>
-                      prevVocal.COD_SIS === vocal.COD_SIS
-                        ? { ...prevVocal, nuevoCodSis }
-                        : prevVocal
-                    )
-                  );
-                }}
-              />
-              <button onClick={() => handleActualizarDatos(vocal)}><CheckIcon fontSize="small" /></button>
-            </div>
-          </li>
-        ))}
-      </ul>
+    <Paper elevation={3} className="ListaComitePadre" style={{ padding: '20px' }}>
+      <Typography variant="h5" gutterBottom>
+        Código del Comité: {codComite}
+      </Typography>
+      <TextField
+        label="Buscar por Código SIS, Nombre o Apellido"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: '20px' }}
+        InputProps={{
+          endAdornment: (
+            <IconButton
+              onClick={() => setSearchTerm('')}
+              style={{ marginRight: '-12px' }}
+            >
+              <ClearIcon />
+            </IconButton>
+          ),
+        }}
+      />
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h6">Vocales Titulares:</Typography>
+          {filterVocales(vocales).map((vocal, index) => (
+            <VocalItem key={index} vocal={vocal} onUpdate={onUpdateVocal} />
+          ))}
+        </Grid>
 
-          
-    </div>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h6">Vocales Suplentes:</Typography>
+          {filterVocales(vocales2).map((vocal, index) => (
+            <VocalItem key={index} vocal={vocal} onUpdate={onUpdateVocal} />
+          ))}
+        </Grid>
+      </Grid>
+    </Paper>
   );
 };
 

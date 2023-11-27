@@ -1,9 +1,54 @@
-import React, { useState,useEffect } from "react";
-import "../css/MenuVertical.css";
-import "../css/botones.css"
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Grid,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Button,
+  Box,
+  Paper,
+  styled,
+} from "@mui/material";
 import axios from "axios";
-import Swal from 'sweetalert2';
-import "../css/CreacionModal.css"
+import Swal from "sweetalert2";
+
+const StyledContainer = styled(Container)({
+  paddingTop: '32px',
+  paddingBottom: '32px',
+  width:'100%',
+  height:'100%',
+  backgroundColor:'rgba(0, 56, 116, 0.564)',
+});
+
+const StyledPaper = styled(Paper)({
+  padding: '32px',
+  flexDirection: 'column',
+    justifyContent: 'center',
+    margin: 'auto',
+    marginTop:'90px',
+    width:'80%'
+});
+
+const StyledFormControl = styled(FormControl)({
+  width: '100%',
+  marginBottom: '28px',
+});
+
+const StyledButtonGroup = styled(Box)({
+  display: 'flex',
+  justifyContent: 'center',
+  margin: 'auto',
+  marginLeft: '100%',
+  width:'100%'
+});
+
+const StyledButton = styled(Button)({
+  marginLeft: '20px',
+});
 
 const CrearElecciones = () => {
 
@@ -35,7 +80,7 @@ const CrearElecciones = () => {
   console.log(selectedFacultad);
   console.log(selectedCarrera);
 
-    // Obtener lista de facultades
+    
     useEffect(() => {
       fetch(process.env.REACT_APP_VARURL+'facultades')
         .then(response => response.json())
@@ -43,7 +88,7 @@ const CrearElecciones = () => {
         .catch(error => console.error('Error fetching data:', error));
     }, []);
   
-    // Función para obtener carreras por facultad
+   
     const fetchCarrerasByFacultad = codFacultad => {
       fetch(`${process.env.REACT_APP_VARURL}carreras/${codFacultad}`)
         .then(response => response.json())
@@ -52,28 +97,8 @@ const CrearElecciones = () => {
     };
   
     const url = process.env.REACT_APP_VARURL;
-    const handleNuevoTipoEleccionChange = (e) => {
-      const nuevoTipoEleccion = e.target.value;
-      let motivoEleccion = "";
-      let motivoPersonalizado = "";
-  
-      if (nuevoTipoEleccion === "No") {
-        // Si elige "No", limpiamos los valores de motivo y motivoPersonalizado
-        motivoEleccion = "";
-        motivoPersonalizado = "";
-      }
-  
-      setFormData({
-        ...formData,
-        nuevoTipoEleccion,
-        motivoEleccion,
-        motivoPersonalizado,
-      });
-    };
-
-
+   
     const opcionesMotivo = [
-      { value: 'select', label: '-----Selecciones una Eleccion-----' },
       { value: 'universitaria', label: 'Rector, Vicerrector' },
       { value: 'facultativa', label: 'Decano, Director Académico' },
       { value: 'carrera', label: 'Director de carrera' },
@@ -84,14 +109,14 @@ const CrearElecciones = () => {
     
     
       setFormData((prevData) => {
-        // Obtener el texto asociado al valor seleccionado
+        
         const textoSeleccionado = opcionesMotivo.find(
           (opcion) => opcion.value === value
         )?.label;
 
         console.log('namesss',name);
     
-        // Actualizar el estado de tipoEleccionselect solo si no estás cambiando la fecha
+        
         if (name !==  'fechaInicio' && name!=='fechaFin'&& name!=='fechaElecciones') {
           setTipoEleccionselect(textoSeleccionado);
         }
@@ -100,7 +125,7 @@ const CrearElecciones = () => {
         return {
           ...prevData,
           [name]: value,
-          tipoElecciones: textoSeleccionado, // Añadir el textoSeleccionado a formData
+          tipoElecciones: textoSeleccionado, 
         };
       });
     };
@@ -128,18 +153,18 @@ const CrearElecciones = () => {
       }
      
       const nuevoProceso = {
-        COD_ADMIN: "", // Reemplaza con el código de administrador adecuado
-        COD_FRENTE: 0, // Reemplaza con el código de frente adecuado
-        COD_TEU: 0, // Reemplaza con el código de TEU adecuado
-        COD_COMITE: 0, // Reemplaza con el código de comité adecuado
+        COD_ADMIN: "", 
+        COD_FRENTE: 0, 
+        COD_TEU: 0, 
+        COD_COMITE: 0, 
         MOTIVO_ELECCION: formData.motivoEleccion,
         TIPO_ELECCION: tipoEleccionselect,
         FECHA_ELECCION: formData.fechaElecciones,
         FECHA_INI_CONVOCATORIA: formData.fechaInicio,
         FECHA_FIN_CONVOCATORIA: formData.fechaFin,
         ELECCION_ACTIVA: true,
-        cod_facultad: selectedFacultad, // Datos adicionales
-        cod_carrera: selectedCarrera // Datos adicionales
+        cod_facultad: selectedFacultad, 
+        cod_carrera: selectedCarrera 
       };
 
       console.log('----->>>',nuevoProceso);
@@ -172,7 +197,7 @@ const CrearElecciones = () => {
     const handleFacultadChange = (e) => {
       const selectedCodFacultad = e.target.value;
       setSelectedFacultad(selectedCodFacultad);
-      setSelectedCarrera(''); // Reiniciar la selección de carrera
+      setSelectedCarrera('');
       fetchCarrerasByFacultad(selectedCodFacultad);
     };
 
@@ -182,109 +207,183 @@ const CrearElecciones = () => {
   
 
 
-  return (
-    <>
-    <div className="crear-elecciones">
-      <h3>NUEVO PROCESO ELECTORAL</h3>
-      <div className="NuevoCrear" > 
-    <div className="form-group1">
-          <label className="LabelCrear" >Motivo:</label>
-          <select
-  className="InputCrear"
-  name="motivoEleccion"
-  value={formData.motivoEleccion}
-  onChange={handleInputChange}
->
-  {opcionesMotivo.map(opcion => (
-    <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
-  ))}
-</select>
+ 
+    return (
+      <StyledContainer  >
+        <StyledPaper >
+        <Typography variant="h4" gutterBottom style={{textAlign:'center', marginBottom: '28px'}}>
+          NUEVO PROCESO ELECTORAL
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <StyledFormControl>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="motivoEleccion" >Motivo:</InputLabel>
+              <Select
+                label="Motivo:"
+                name="motivoEleccion"
+                value={formData.motivoEleccion}
+                onChange={handleInputChange}
+                inputProps={{
+                  name: 'motivoEleccion',
+                  id: 'motivoEleccion',
+                }}
+              >
+                <MenuItem value="" disabled>
+                  -----Seleccione una Eleccion-----
+                </MenuItem>
+                {opcionesMotivo.map((opcion) => (
+                  <MenuItem key={opcion.value} value={opcion.value}>
+                    {opcion.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            </StyledFormControl>
 
-       {formData.motivoEleccion === "facultativa" && (
-      <div>
-        <label className="LabelCrear" htmlFor="facultad">Selecciona una facultad:</label>
-        <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
-          <option value={0}>Seleccione una facultad</option>
-          {facultades.map(facultad => (
-            <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
-              {facultad.NOMBRE_FACULTAD}
-            </option>
-          ))}
-        </select>
-      </div>
-    )}
+            {formData.motivoEleccion === "facultativa" && (
+              <StyledFormControl>
+                <FormControl fullWidth>
+                <InputLabel>Selecciona una facultad:</InputLabel>
+                <Select
+                  label="Selecciona una facultad:"
+                  value={selectedFacultad}
+                  onChange={handleFacultadChange}
+                  fullWidth
+                >
+                  <MenuItem value={0}>Seleccione una facultad</MenuItem>
+                  {facultades.map((facultad) => (
+                    <MenuItem
+                      key={facultad.COD_FACULTAD}
+                      value={facultad.COD_FACULTAD}
+                    >
+                      {facultad.NOMBRE_FACULTAD}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-    {formData.motivoEleccion === "carrera" && (
-      <div>
-        <label className="LabelCrear" htmlFor="facultad">Selecciona una facultad:</label>
-        <select className="InputCrear" id="facultad" onChange={handleFacultadChange}>
-          <option value={0}>Seleccione una facultad</option>
-          {facultades.map(facultad => (
-            <option key={facultad.COD_FACULTAD} value={facultad.COD_FACULTAD}>
-              {facultad.NOMBRE_FACULTAD}
-            </option>
-          ))}
-        </select>
+              </StyledFormControl>
+              
+            )}
 
-        <label className="LabelCrear" htmlFor="carrera">Selecciona una carrera:</label>
-        <select className="InputCrear" id="carrera" onChange={handleCarreraChange}>
-          <option value={0}>Seleccione una carrera</option>
-          {carreras.map(carrera => (
-            <option key={carrera.COD_CARRERA} value={carrera.COD_CARRERA}>
-              {carrera.NOMBRE_CARRERA}
-            </option>
-          ))}
-        </select>
-      </div>
-    )}
-  </div>
+            {formData.motivoEleccion === "carrera" && (
+              <>
+               <StyledFormControl>
+               <FormControl fullWidth>
+                  <InputLabel>Selecciona una facultad:</InputLabel>
+                  <Select
+                    value={selectedFacultad}
+                    onChange={handleFacultadChange}
+                    fullWidth
+                  >
+                    <MenuItem value={0}>Seleccione una facultad</MenuItem>
+                    {facultades.map((facultad) => (
+                      <MenuItem
+                        key={facultad.COD_FACULTAD}
+                        value={facultad.COD_FACULTAD}
+                      >
+                        {facultad.NOMBRE_FACULTAD}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
+               </StyledFormControl>
+               <StyledFormControl>
+               <FormControl fullWidth>
+                  <InputLabel>Selecciona una carrera:</InputLabel>
+                  <Select
+                    value={selectedCarrera}
+                    onChange={handleCarreraChange}
+                    fullWidth
+                  >
+                    <MenuItem value={0}>Seleccione una carrera</MenuItem>
+                    {carreras.map((carrera) => (
+                      <MenuItem
+                        key={carrera.COD_CARRERA}
+                        value={carrera.COD_CARRERA}
+                      >
+                        {carrera.NOMBRE_CARRERA}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+               </StyledFormControl>
+                
+              </>
+            )}
+          </Grid>
 
+  
+            <Grid item xs={12} md={6}>
+            <StyledFormControl>
+              <TextField
+                label="Fecha inicio de convocatoria:"
+                type="date"
+                name="fechaInicio"
+                value={formData.fechaInicio}
+                min={new Date().toISOString().split("T")[0]}
+                onChange={handleInputChange}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </StyledFormControl>
 
+            <StyledFormControl>
+              
+              <TextField
+                label="Fecha fin de convocatoria:"
+                type="date"
+                name="fechaFin"
+                value={formData.fechaFin}
+                min={formData.fechaInicio}
+                onChange={handleInputChange}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </StyledFormControl>
 
-      <div className="form-group">
-        <label className="LabelCrear" >Fecha inicio de convocatoria:</label>
-        <input
-          className="InputCrear"
-          type="date"
-          name="fechaInicio"
-          value={formData.fechaInicio}
-          min={new Date().toISOString().split("T")[0]}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className="form-group">
-        <label className="LabelCrear" >Fecha fin de convocatoria:</label>
-        <input
-          className="InputCrear"
-          type="date"
-          name="fechaFin"
-          value={formData.fechaFin}
-          min={formData.fechaInicio}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className="form-group">
-        <label className="LabelCrear" >Fecha de las elecciones:</label>
-        <input
-        className="InputCrear"
-          type="date"
-          name="fechaElecciones"
-          value={formData.fechaElecciones}
-          min={formData.fechaFin}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className="BotonesDivCrear">
-      <button className ="custom-btn btn-6" onClick={handleGuardarClick}>
-        Guardar
-      </button>{ "    "}
-      <button className="custom-btn btn-7" onClick={handleVolverAtras}>Cancelar</button>
-      </div>
-      </div>
-    </div>
-   
-    </>
+            <StyledFormControl>
+              <TextField
+                label="Fecha de las elecciones:"
+                type="date"
+                name="fechaElecciones"
+                value={formData.fechaElecciones}
+                min={formData.fechaFin}
+                onChange={handleInputChange}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </StyledFormControl>
+            </Grid>
+            <Grid>
+            <StyledButtonGroup>
+              <StyledButton
+                variant="contained"
+                color="primary"
+                onClick={handleGuardarClick}
+              >
+                Guardar
+              </StyledButton>
+              <StyledButton
+                variant="contained"
+                color="secondary"
+                onClick={handleVolverAtras}
+              >
+                Cancelar
+              </StyledButton>
+            </StyledButtonGroup>
+            </Grid>
+        </Grid>
+      </StyledPaper>
+    </StyledContainer>
   );
 };
 

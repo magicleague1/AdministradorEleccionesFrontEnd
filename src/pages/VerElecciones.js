@@ -1,159 +1,148 @@
 import React, { useEffect, useState } from "react";
-import "../css/MenuVertical.css";
-import "../css/botones2.css";
-import "../css/iconos.css";
-import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Typography,
+  Container,
+} from "@mui/material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import ActualizarEleccionModal from "../pages/ActualizarEleccionModal";
-import PdfConvocatoria from "./pdfConvocatoria";
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined'; //importa el icono de user-plus icono
-import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined'; //importar el icono de list
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import AgregarFrenteModal from './AgregarFrenteModal.js'; //importar el modal Agregar frente 
+import AgregarFrenteModal from "./AgregarFrenteModal.js";
 import AsignarFrente from "./AsignarFrente";
-import EdicionAsigFrentes from "./EdicionAsigFrentes"
+import EdicionAsigFrentes from "./EdicionAsigFrentes";
+import axios from "axios";
 
 const VerElecciones = ({ lista }) => {
-  //const numRows = 4; // Número de filas
-  const navigate = useNavigate();
-  const [modalIsOpen, setModalIsOpen] = useState(false); // Nuevo estado para controlar el modal
-  const [modalConvo, setModalConvo] = useState(false);
-  const [selectedEleccionId, setSelectedEleccionId] = useState(null); // Nuevo estado para almacenar el ID de la elección seleccionada
-  const url = process.env.REACT_APP_VARURL;
 
-  const [modalAddFP, setModalADDFP] = useState(false); // Nuevo estado para controlar el modal agregar frentes politicos a elecciones activas
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedEleccionId, setSelectedEleccionId] = useState(null);
+  const [modalAddFP, setModalADDFP] = useState(false);
   const [modalAFP, setModalAFP] = useState(false);
   const [modalEAFP, setModalEAFP] = useState(false);
-  const [listaElecciones,setListaElecciones] = useState([])
+  const [listaElecciones, setListaElecciones] = useState([]);
+  const url = process.env.REACT_APP_VARURL;
 
-
-  //controladores del modal frentes de elecciones activas
-  const openModalADDFP = (id) =>{
+  const openModalADDFP = (id) => {
     setSelectedEleccionId(id);
-      setModalADDFP(true);
-  };
-  const closeModalADDFP = () =>{
-      setModalADDFP(false);
+    setModalADDFP(true);
   };
 
-  const openModalAFP = (id) =>{
+  const closeModalADDFP = () => {
+    setModalADDFP(false);
+  };
+
+  const openModalAFP = (id) => {
     setSelectedEleccionId(id);
     setModalAFP(true);
-};
-const closeModalAFP = () =>{
-    setModalAFP(false);
-};
+  };
 
-const openModalEAFP = () =>{
-  setModalEAFP(true);
-};
-const closeModalEAFP = () =>{
-  setModalEAFP(false);
-};
+  const closeModalAFP = () => {
+    setModalAFP(false);
+  };
+
+
+  const closeModalEAFP = () => {
+    setModalEAFP(false);
+  };
+
   useEffect(() => {
-    axios.get(url + "elecciones_index").then(response => {
-      setListaElecciones(response.data)
-    })
+    axios.get(url + "elecciones_index").then((response) => {
+      setListaElecciones(response.data);
+    });
   }, [lista]);
+
   const handleDetallesClick = (id) => {
-    // Al hacer clic en "Detalles de la Elección," establece el ID de la elección seleccionada y abre el modal.
     setSelectedEleccionId(id);
-    console.log(id);
     setModalIsOpen(true);
   };
 
   const closeModal = () => {
-    // Cierra el modal y restablece el ID de la elección seleccionada.
     setModalIsOpen(false);
     setSelectedEleccionId(null);
   };
-  const closeModal1 = () => {
-    // Cierra el modal y restablece el ID de la elección seleccionada.
-    setModalConvo(false);
-    setSelectedEleccionId(null);
-  };
 
-  const handleConvocatoriaClick = (id) => {
-    // Redireccionar o realizar alguna acción al hacer clic en "Convocatoria"
-    // Puedes usar react-router-dom o alguna otra biblioteca de enrutamiento si es necesario
-    setSelectedEleccionId(id);
-    console.log(id);
-    setModalConvo(true);
-  };
   return (
-    <>
-    <div className="ver-elecciones">
-      <h3>ELECCIONES ACTIVAS</h3>
-      <div className="ContenedorTabla">
-    <table>
-      <thead>
-        <tr>
-          <th>ELECCION</th>
-          <th>TIPO ELECCION</th>
-          <th>FECHA</th>
-          <th>DETALLE</th>
-          <th>FRENTES</th>
-        </tr>
-      </thead>
-      <tbody>
-        { listaElecciones.length > 0 &&
-        listaElecciones.map((eleccion) => {
-          return(
-            <tr className="trVerEleccion" key={eleccion.COD_ELECCION}>
-                <td className="especialtd">{eleccion.MOTIVO_ELECCION}</td>
-                <td className="especialtd">{eleccion.TIPO_ELECCION}</td>
-                <td className="tdNormal">{eleccion.FECHA_ELECCION}</td>
-                <td className="tdNormal">
-                      <button className="icono" onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}>
-                        <InfoOutlinedIcon fontSize="large"/>
-                      </button>
-                
-                </td>
-                
-                <td className="tdNormal">
-                  <button className="icono" onClick={() => openModalAFP(eleccion.COD_ELECCION)} >
-                    <PersonAddAltOutlinedIcon fontSize="large"/>
-                  </button>
-                  <button className="icono" onClick={() => openModalADDFP(eleccion.COD_ELECCION)}>
-                    <ListAltOutlinedIcon fontSize="large"/>
-                  </button>
-                  
-                </td>
-           </tr>
-          )
-          
-        })}
-        
-      </tbody>
-    </table>
-    </div>
-    </div>
-    <ActualizarEleccionModal
+    <Container>
+      <Typography variant="h4" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
+        ELECCIONES ACTIVAS
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table >
+          <TableHead>
+            <TableRow>
+              <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ELECCION</TableCell>
+              <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>TIPO ELECCION</TableCell>
+              <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FECHA</TableCell>
+              <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>DETALLE</TableCell>
+              <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FRENTES</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {listaElecciones.map((eleccion) => (
+              <TableRow key={eleccion.COD_ELECCION} className="custom-row">
+                <TableCell color="white">{eleccion.MOTIVO_ELECCION}</TableCell>
+                <TableCell>{eleccion.TIPO_ELECCION}</TableCell>
+                <TableCell>{eleccion.FECHA_ELECCION}</TableCell>
+                <TableCell style={{textAlign: 'center' }}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<InfoOutlinedIcon />}
+                    onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}
+                    className="custom-button"
+                  >
+                    Detalles
+                  </Button>
+                </TableCell>
+                <TableCell style={{width:'33%',textAlign: 'center' }}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<PersonAddAltOutlinedIcon />}
+                    onClick={() => openModalAFP(eleccion.COD_ELECCION)}
+                    style={{marginLeft: '12px', marginRight: '12px'}}
+                  >
+                    Agregar Frentes
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<ListAltOutlinedIcon />}
+                    onClick={() => openModalADDFP(eleccion.COD_ELECCION)}
+                  >
+                    Ver Frentes
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <ActualizarEleccionModal
         isOpen={modalIsOpen}
         closeModal={closeModal}
-        eleccionId={selectedEleccionId} // Pasa el ID seleccionado al modal
-      />
-      <PdfConvocatoria
-          isOpen={modalConvo}
-          closeModal={closeModal1}
-          eleccionId={selectedEleccionId}
+        eleccionId={selectedEleccionId}
       />
       <AgregarFrenteModal
         isOpen={modalAddFP}
         closeModal={closeModalADDFP}
         eleccionId={selectedEleccionId}
       />
-       <AsignarFrente
+      <AsignarFrente
         isOpen={modalAFP}
         closeModal={closeModalAFP}
         eleccionId={selectedEleccionId}
       />
-       <EdicionAsigFrentes
-        isOpen={modalEAFP}
-        closeModal={closeModalEAFP}
-      />
-    </>
-    
+      <EdicionAsigFrentes isOpen={modalEAFP} closeModal={closeModalEAFP} />
+    </Container>
   );
 };
 

@@ -1,10 +1,35 @@
 import React, { useEffect, useState } from "react";
-import Modal from "react-modal";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/system"; 
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate} from "react-router-dom";
-import "../css/ActualizacionEleccionModal.css";
-import Swal from 'sweetalert2';
-Modal.setAppElement("#root");
+import Swal from "sweetalert2";
+
+
+const ModalContainer = styled("div")({
+  position: "absolute",
+  width: 550,
+  backgroundColor: "#fff", // Puedes ajustar el color de fondo según tus preferencias
+  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+  padding: "20px",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  "& .ActualizarTitulo": {
+    color: "rgb(0,57,116)",
+    marginBottom: "40px",
+  },
+});
+
+const InputField = styled(TextField)({
+  marginBottom: "28px",
+});
+
+const CustomButton = styled(Button)({
+  marginRight: "10px",
+});
 
 const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
   const initialState = {
@@ -16,10 +41,8 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
-  const[modalIsOpen, setModalIsOpen] = useState(false);
   const url = process.env.REACT_APP_VARURL;
-  console.log("Impresion" ,  process.env.REACT_APP_VARURL);
-  console.log(url + `obtener_id/${eleccionId}`);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,27 +62,34 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
     fetchData();
   }, [eleccionId]);
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleActualizarClick = () => {
-    if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
+    if (
+      !formData.motivoEleccion ||
+      !formData.fechaInicio ||
+      !formData.fechaFin ||
+      !formData.fechaElecciones
+    ) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error al crear el proceso electoral',
-        text: `Llene correctamente los datos `
+        icon: "error",
+        title: "Error al crear el proceso electoral",
+        text: `Llene correctamente los datos `,
       });
       return;
     }
 
-    if (new Date(formData.fechaFin) <= new Date(formData.fechaInicio) || new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)) {
+    if (
+      new Date(formData.fechaFin) <= new Date(formData.fechaInicio) ||
+      new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)
+    ) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error al crear el proceso electoral',
-        text: ` Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin. `
+        icon: "error",
+        title: "Error al crear el proceso electoral",
+        text: ` Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin. `,
       });
       return;
     }
@@ -72,90 +102,98 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
       })
       .then((response) => {
         Swal.fire({
-          icon: 'success',
-          title: 'Proceso se actualizo correctamente',
-          text: `El proceso electoral se ha actualizado con éxito!`
+          icon: "success",
+          title: "Proceso se actualizó correctamente",
+          text: `El proceso electoral se ha actualizado con éxito!`,
         }).then(() => {
           handleVolverAtras();
         });
       })
       .catch((error) => {
         Swal.fire({
-          icon: 'error',
-          title: 'Error al actualizar el proceso electoral',
-          text: `Ocurrió un error al actualizar el proceso electoral`
+          icon: "error",
+          title: "Error al actualizar el proceso electoral",
+          text: `Ocurrió un error al actualizar el proceso electoral`,
         });
       });
   };
-
   const handleVolverAtras = () => {
     closeModal();
     navigate("/home");
   };
-  
+
   return (
-    <>
-     <Modal
-    className={"Cuerpo"}
-      isOpen={isOpen}
-      onRequestClose={closeModal}
-      contentLabel="Actualizar Elección"
-    >
-      <h3 className="ActualizarTitulo">Actualizar proceso electoral</h3>
-      <div className="form-group">
-        <label className="LabelCrearActualizar">Motivo de Elección:</label>
-        <input
+    <Modal open={isOpen} onClose={closeModal} aria-labelledby="Actualizar Elección">
+      <ModalContainer>
+        <h3 className="ActualizarTitulo">Actualizar proceso electoral</h3>
+        <InputField
+          label="Motivo de Elección"
+          variant="outlined"
           className="InputCrearActualizar"
-          type="text"
           name="motivoEleccion"
           value={formData.motivoEleccion}
           onChange={handleInputChange}
+          fullWidth
         />
-      </div>
-      <div className="form-group">
-        <label className="LabelCrearActualizar">Fecha inicio de convocatoria:</label>
-        <input
+        <InputField
+          label="Fecha inicio de convocatoria"
+          variant="outlined"
           className="InputCrearActualizar"
           type="date"
           name="fechaInicio"
           value={formData.fechaInicio}
-          min={new Date().toISOString().split("T")[0]}
+          InputLabelProps={{
+            shrink: true,
+          }}
           onChange={handleInputChange}
+          fullWidth
         />
-      </div>
-      <div className="form-group">
-        <label className="LabelCrearActualizar">Fecha fin de convocatoria:</label>
-        <input
+        <InputField
+          label="Fecha fin de convocatoria"
+          variant="outlined"
           className="InputCrearActualizar"
           type="date"
           name="fechaFin"
           value={formData.fechaFin}
-          min={formData.fechaInicio}
+          InputLabelProps={{
+            shrink: true,
+          }}
           onChange={handleInputChange}
+          fullWidth
         />
-      </div>
-      <div className="form-group">
-        <label className="LabelCrearActualizar">Fecha de las elecciones:</label>
-        <input
+        <InputField
+          label="Fecha de las elecciones"
+          variant="outlined"
           className="InputCrearActualizar"
           type="date"
           name="fechaElecciones"
           value={formData.fechaElecciones}
-          min={formData.fechaFin}
+          InputLabelProps={{
+            shrink: true,
+          }}
           onChange={handleInputChange}
+          fullWidth
         />
-      </div>
-      <div className="BotonesDivCrearActualizar">
-      <button className ="custom-btn btn-9" onClick={handleActualizarClick}>
-        Actualizar
-      </button>
-      <button className ="custom-btn btn-8" onClick={handleVolverAtras}>
-        Volver
-      </button>
-      </div>
+        <div className="BotonesDivCrearActualizar">
+          <CustomButton
+            variant="contained"
+            color="primary"
+            className="custom-btn btn-9"
+            onClick={handleActualizarClick}
+          >
+            Actualizar
+          </CustomButton>
+          <CustomButton
+            variant="contained"
+            color="secondary"
+            className="custom-btn btn-8"
+            onClick={handleVolverAtras}
+          >
+            Volver
+          </CustomButton>
+        </div>
+      </ModalContainer>
     </Modal>
-    </>
-   
   );
 };
 

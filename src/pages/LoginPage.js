@@ -1,123 +1,117 @@
-import React, { useEffect, useState } from 'react'
-import '../css/normalize.css'
-import '../css/estilos.css'
-import { useNavigate } from 'react-router'
-import axios from 'axios'
-
+import React, { useState } from 'react';
+import { TextField, Button, Container, Typography, Paper, CssBaseline } from '@mui/material';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
+import imagen from "../img/UMSS.png"
 const LoginPage = () => {
+  const [showErrorNombre, setshowErrorName] = useState(false);
+  const [showValorInput, setValorInput] = useState({ name: '', password: '' });
+  const [showContraseña, setContraseña] = useState(false);
 
-    const [showErrorNombre, setshowErrorName] = useState(false)
-    const [showValorInput, setValorInput] = useState({name:"",password:""})
+  const url = process.env.REACT_APP_VARURL;
+  const navigate = useNavigate();
 
-    const [showContraseña, setContraseña] = useState(false)
-    const [showValorContraseña, setValorContraseña] = useState("")
+  const LoginClick = (e) => {
+    e.preventDefault();
 
-    // const [nombre,setNombre] = useState()
-    let errorNombre = false
-    let errorContraseña = false
-    const url = process.env.REACT_APP_VARURL
-
-    const navigate = useNavigate()
-
-    const LoginClick = (e) => {
-        e.preventDefault()
-        if(showValorInput.name.length === 0)
-        {
-            setshowErrorName(true);
-            errorNombre = true
-        }else{
-            setshowErrorName(false)
-            errorNombre = false
-        }
-
-        if(showValorInput.password.length === 0)
-        {
-            setContraseña(true);
-            errorContraseña = true
-        }else{
-            setContraseña(false)
-            errorContraseña = false
-        }
-
-      if(errorNombre === false  && errorContraseña === false )
-      {
-        console.log( showValorInput.name);
-        console.log(url + "verificarAdministrador/"+ showValorInput.name);
-        axios.get(url + "verificarAdministrador/"+ showValorInput.name).then(response => {
-            console.log(response.data)
-            
-            if (response.data){
-                const administrador = response.data;
-   
-                if (showValorInput.password === administrador.CONTRASENAADMINISTRADOR){
-                    alert("administrador correcto")
-                    navigate("/home")
-                }else{
-                    alert("contraseña incorrecta")
-                }
-            }else{
-                alert("no existe administrador")
-            }
-            //navigate("/")
-        })  
-      }
+    if (showValorInput.name.length === 0) {
+      setshowErrorName(true);
+    } else {
+      setshowErrorName(false);
     }
 
-    const CapturaContenido = (e) => {
-
-        const { name, value } = e.target;
-            setValorInput({
-           ...showValorInput,
-            [name]: value,
-          });
-
-        
+    if (showValorInput.password.length === 0) {
+      setContraseña(true);
+    } else {
+      setContraseña(false);
     }
 
- 
+    if (!showErrorNombre && !showContraseña) {
+      axios.get(url + 'verificarAdministrador/' + showValorInput.name).then((response) => {
+        if (response.data) {
+          const administrador = response.data;
+
+          if (showValorInput.password === administrador.CONTRASENAADMINISTRADOR) {
+            alert('Administrador correcto');
+            navigate('/home');
+          } else {
+            alert('Contraseña incorrecta');
+          }
+        } else {
+          alert('No existe administrador');
+        }
+      });
+    }
+  };
+
+  const CapturaContenido = (e) => {
+    const { name, value } = e.target;
+    setValorInput({
+      ...showValorInput,
+      [name]: value,
+    });
+  };
 
   return (
-    <div class="body2">
-   
-
-      <div class="contenedor-formulario contenedor2">
-        <div class="imagen-formulario2">
-            
-        </div>
-
-        <form class="formulario">
-            <div class="texto-formulario">
-                <h2>Bienvenido al Sistema de Elecciones UMSS</h2>
-                {/* <!-- <p>Inicia sesión con tu cuenta</p> --> */}
-            </div>
-            <div class="input">
-                <label for="usuario">Usuario</label>
-                <input placeholder="Ingresa tu nombre" type="text" id="usuario"  name="name" onChange={CapturaContenido}/>
-
-                {showErrorNombre && <h4>Por favor ingrese un nombre</h4>}  
-                
-            </div>
-            <div class="input">
-                <label for="contraseña">Contraseña</label>
-                <input placeholder="Ingresa tu contraseña" type="password" name="password" id="contraseña" onChange={CapturaContenido}/>
-
-                {showContraseña && <h4>Por favor ingrese una contraseña</h4>}  
-            </div>
-
-
-            {/* <div class="password-olvidada">
-                <a href="#">¿Olvidaste tu contraseña?</a>
-            </div> */}
-
-            <br/>
-            <div class="input" onClick={LoginClick}>
-                <input type="submit" value="Ingresar"/>
-            </div>
+    <Container component="main" disableGutters
+    sx={{
+        backgroundImage: `url('https://img.freepik.com/fotos-premium/fondo-tecnologia-digital-proteccion-datos-ciberseguridad-tiene-pequeno-codigo-binario-fractal_371307-91.jpg')`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        width: '100%',
+      }}>
+      <CssBaseline />
+      <Paper elevation={5} sx={{ padding: 3, width: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      
+        <Typography component="h1" variant="h4" gutterBottom sx={{fontSize:'25px'}}>
+          Bienvenido al Sistema de Elecciones 
+        </Typography>
+       
+        <img src={imagen} alt="Descripción de la imagen" style={{ width: '20%', marginBottom: '20px' }} />
+        <form onSubmit={LoginClick} style={{ width: '100%' }}>
+          <TextField
+            label="Usuario"
+            variant="outlined"
+            placeholder="Ingresa tu nombre"
+            margin="normal"
+            fullWidth
+            type="text"
+            name="name"
+            onChange={CapturaContenido}
+            error={showErrorNombre}
+            helperText={showErrorNombre && 'Por favor ingrese un nombre'}
+            InputLabelProps={{
+                shrink: true,
+              }}
+          />
+          <TextField
+            label="Contraseña"
+            variant="outlined"
+            placeholder="Ingresa tu contraseña"
+            margin="normal"
+            fullWidth
+            type="password"
+            name="password"
+            onChange={CapturaContenido}
+            error={showContraseña}
+            helperText={showContraseña && 'Por favor ingrese una contraseña'}
+            InputLabelProps={{
+                shrink: true,
+              }}
+          />
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+            Ingresar
+          </Button>
         </form>
-    </div>
-
-</div>
-  )
-}
+      </Paper>
+    </Container>
+  );
+};
 
 export default LoginPage;

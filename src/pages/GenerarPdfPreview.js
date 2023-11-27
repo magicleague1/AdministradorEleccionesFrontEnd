@@ -1,28 +1,50 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import CrearPublicaConv from './CrearPublicaConv';
-import "../css/GenerarPdf.css"
+import { Button, Container, styled, Modal,Typography,Dialog,
+  DialogTitle,
+  DialogContent } from "@mui/material";
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import PublishIcon from '@mui/icons-material/Publish';
+import "../css/GenerarPdf.css";
 
 
-const GenerarPdfPreview = ({ eleccionId }) => {
-  const [pdfSrc, setPdfSrc] = useState('');
+const StyledButton = styled(Button)({
+  marginBottom: '15px',
+  fontWeight: 'bold',
+  textTransform: 'none',
+});
 
-  const { id } = useParams(); // Obteniendo el parámetro 'id' desde la URL
+const StyledIcon = styled('span')({
+  marginRight: '8px',
+});
 
-  const [mostrarModificarConvocatoria, setModificarMostrarCrearConvocatoria] = useState(false);
+const StyledPDFEmbed = styled('embed')({
+  width: '100%',
+  height: '350px',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  marginTop: '20px',
+});
+
+
+const GenerarPdfPreview = ({ isOpen, closeModal, eleccionId }) => {
+  const [pdfSrc, setPdfSrc] = useState(''); 
   const [eleccionMId, setEleccionMId] = useState(0);
+  const [modalPP, setModalPP] = useState(false);
 
+  const openModalADDFP = (id) => {
+    setEleccionMId(id);
+    setModalPP(true);
+  };
 
-
-
+  const closeModalADDFP = () => {
+    setModalPP(false);
+  };
+  const handleVolverAtras = () => {
+    closeModal();
+  };
   const handleGetPDF = async () => {
-
-
-
-
-    //usa convocatoriaEleccionesController
-    console.log(`${process.env.REACT_APP_VARURL}generar_pdf/${eleccionId }`)
-    const response = await fetch(`${process.env.REACT_APP_VARURL}generar_pdf/${eleccionId }`);
+    const response = await fetch(`${process.env.REACT_APP_VARURL}generar_pdf/${eleccionId}`);
     const data = await response.json();
 
     if (data && data.pdf) {
@@ -30,30 +52,55 @@ const GenerarPdfPreview = ({ eleccionId }) => {
     }
   };
 
-  const handleConvPublic = (id) => {   
-    setEleccionMId(id); // Establecer el ID para pasarlo al componente ConvocatoriaCrear
-    setModificarMostrarCrearConvocatoria(true);
-  
-  };
-
   return (
-    <div className="container">
-      <button className="custom-btn btn-50" onClick={handleGetPDF}>Obtener PDF</button> 
-      <button className="custom-btn btn-5" onClick={() => handleConvPublic(eleccionId )}>
-                            PUBLICAR
-        </button>
-      {pdfSrc && (
-        <embed src={`data:application/pdf;base64,${pdfSrc}`} type="application/pdf" width="100%" height="350px" />
-      )}
+    <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth="md">
+      <DialogTitle>
+      <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
+          PUBLICAR CONVOCATORIA
+        </Typography>
+      </DialogTitle>
+      <DialogContent sx={{ display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',}}>
+      <StyledButton
+          variant="contained"
+          color="primary"
+          onClick={handleGetPDF}
+          startIcon={<StyledIcon><CloudDownloadIcon /></StyledIcon>}
+          sx={{ marginRight: '13px' }}
+        >
+          Descargar PDF
+        </StyledButton>
+        <StyledButton
+          variant="contained"
+          color="secondary"
+          onClick={() => openModalADDFP(eleccionId)}
+          startIcon={<StyledIcon><PublishIcon /></StyledIcon>}
+        >
+          Publicar Convocatoria
+        </StyledButton>
 
-      <div>
-      
-        {mostrarModificarConvocatoria && (
-        <CrearPublicaConv eleccionId={eleccionMId} />
+      </DialogContent>
+       
+      {pdfSrc && (
+        <StyledPDFEmbed src={`data:application/pdf;base64,${pdfSrc}`} type="application/pdf" />
       )}
-      
-      </div>
-    </div>
+       <StyledButton variant="contained"
+            color="secondary"
+            className="custom-btn btn-8"onClick={handleVolverAtras} >
+        
+          Cerrar
+        </StyledButton>
+      <Modal open={modalPP} onClose={closeModalADDFP}>
+        
+          <CrearPublicaConv
+            isOpen={modalPP}
+            closeModal={closeModalADDFP}
+            eleccionId={eleccionMId}
+          />
+        
+      </Modal>
+    </Dialog>
   );
 };
 

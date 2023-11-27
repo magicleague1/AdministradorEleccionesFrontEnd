@@ -1,234 +1,217 @@
 import React, { useEffect, useState } from "react";
-import "../css/Comite.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "styled-components";
 import axios from "axios";
-import Modal from "react-modal";
-import ListaVocalesComite from "./ListaVocalesComite";
-import Swal from 'sweetalert2';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Typography,
+  Container,
+  Modal,
+} from "@mui/material";
 import SustitucionDeVocal from "./SustitucionDeVocal ";
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import ViewListIcon from '@mui/icons-material/ViewList';  // Importa el ícono de ver lista
-import SyncIcon from '@mui/icons-material/Sync'; 
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import SyncIcon from "@mui/icons-material/Sync";
+import Swal from "sweetalert2";
+import ListaVocalesComite from "./ListaVocalesComite";
 
 
-
-function AsignacionComite({ lista }) {
-  const [proceso, setproceso] = useState([]);
+const AsignacionComite = ({ lista }) => {
+  const [proceso, setProceso] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
-  const [modalAbrir, setmodalAbrir] = useState(false);
   const [codComite, setCodComite] = useState(null);
-  const [codComiteActualizar, setcodComiteActualizar] = useState(null);
+  const [codComiteActualizar, setCodComiteActualizar] = useState(null);
   const url = process.env.REACT_APP_VARURL;
+
   useEffect(() => {
-    axios.get(url + "elecciones_index").then(response => {
-      setproceso(response.data)
-    })
+    axios.get(`${url}elecciones_index`).then((response) => {
+      setProceso(response.data);
+    });
   }, [lista]);
 
-
-  // Función para verificar la existencia del comité
   const verificarExistenciaComite = async (codComite) => {
     try {
-      // Realiza una solicitud GET al servidor de Laravel para verificar la existencia del comité
-      const response = await axios.get(`${process.env.REACT_APP_VARURL}verificar-comite/${codComite}`);
-  
-      // La respuesta debe ser un objeto JSON con el campo "existeComite"
-      if (response.data.existeComite) {
-        // Si el comité existe, devuelve false
-        console.log("El comité existe");
-        return false;
-      } else {
-        // Si el comité no existe, devuelve true
-        console.log("El comité no existe");
-        return true;
-      }
+      const response = await axios.get(`${url}verificar-comite/${codComite}`);
+      return !response.data.existeComite;
     } catch (error) {
       console.error("Error al verificar la existencia del comité:", error);
-      // En caso de error, puedes manejarlo adecuadamente, como lanzar una excepción o manejarlo según tus necesidades.
-      // En este ejemplo, lo he dejado como un error en la consola.
-      return false; // O devolver false en caso de error si lo prefieres
+      return false;
     }
   };
-  
-  const handleAsociarClick = (COD_ELECCION, COD_COMITE) => {
-    // Antes de asociar el comité, verifica si existe  
-    
-    verificarExistenciaComite(COD_COMITE)
-    .then((existeComite) => {
+
+  const handleAsociarClick = async (COD_ELECCION, COD_COMITE) => {
+    try {
+      const existeComite = await verificarExistenciaComite(COD_COMITE);
+
       if (!existeComite) {
-        // Si el comité no existe, muestra un mensaje de error
         Swal.fire({
-          icon: 'error',
-          title: 'Asignacion incorrecta',
-          text: 'Ya se asigno Vocales de comite electoral'
+          icon: "error",
+          title: "Asignacion incorrecta",
+          text: "Ya se asigno Vocales de comité electoral",
         });
         return;
       }
 
-      // Si el comité existe, procede con la asignación
-      console.log("El comité existe, procediendo con la asignación...");
+      await axios.put(`${url}asignar-comite/${COD_ELECCION}`);
+      await axios.post(`${url}asignar-vocales/${COD_COMITE}`);
 
-      // Realizar una solicitud PUT para asociar el comité a la elección
-      //para poblacion 
-      axios
-        .put(`${process.env.REACT_APP_VARURL}asignar-comite/${COD_ELECCION}`)
-        .then((responseComite) => {
-          console.log("Asignación de comité exitosa:", responseComite.data);
-
-          // Luego, realizar una solicitud POST para asignar vocales al comité
-          //para poblacion en aqui lee y divide en docentes y estudiante y usa la tabla
-          //asociat titular suplente para guradar datos 
-            axios
-              .post(`${process.env.REACT_APP_VARURL}asignar-vocales/${COD_COMITE}`)
-              .then((responseVocales) => {
-                // Muestra una alerta de éxito
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Asignación exitosa',
-                  text: 'La asignación del comité y vocales se realizó con éxito.'
-                }).then(() => {
-                  setCodComite(COD_COMITE);
-                  setmodalAbrir(true);
-                });
-              })
-              .catch((errorVocales) => {
-                // Muestra una alerta de error
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error en la asignación de vocales',
-                  text: `Ocurrió un error en la asignación de vocales: ${errorVocales}`
-                });
-              });
-          })
-          .catch((errorComite) => {
-            // Muestra una alerta de error
-            Swal.fire({
-              icon: 'error',
-              title: 'Error en la asignación de comité',
-              text: `Ocurrió un error en la asignación de comité: ${errorComite}`
-            });
-          });
-        })
-        .catch((error) => {
-           
-      }); 
-      
+      Swal.fire({
+        icon: "success",
+        title: "Asignación exitosa",
+        text: "La asignación del comité y vocales se realizó con éxito.",
+      }).then(() => {
+        setCodComite(COD_COMITE);
+        setModalIsOpen(true);
+      });
+    } catch (error) {
+      console.error("Error en la asignación:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error en la asignación",
+        text: "Ocurrió un error en la asignación del comité y vocales.",
+      });
+    }
   };
 
   const handleVerListaClick = (eleccionId) => {
-    // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
-    // Puedes abrir un modal o redirigir a una página para ver la lista
     setCodComite(eleccionId);
     setModalIsOpen(true);
   };
 
   const handleActualizar = (codComite) => {
-    // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
-    // Puedes abrir un modal o redirigir a una página para ver la lista
-    setcodComiteActualizar(codComite);
+    setCodComiteActualizar(codComite);
     setModalIsOpen1(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
   const closeModal1 = () => {
     setModalIsOpen1(false);
   };
-  const handleModalClick = (e) => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  };
 
   return (
-    <>
-    <div className="divComite">
-      <h1 className="titleC"> LISTA DE VOCALES DEL COMITE ELECTORAL</h1>
-      <div className="ContenedorTabla">
-        <table className="TablaComite">
-          <thead >
-            <tr>
-              <th> ID </th>
-              <th> PROCESO </th>
-              <th> ACCIONES </th>
-            </tr>
-          </thead>
-          <tbody >
+    <Container>
+      <Typography variant="h4" align="center" gutterBottom style={{ marginTop: '40px', marginBottom: '30px' }}>
+         VOCALES DEL COMITE ELECTORAL
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >ACCIONES</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {proceso.map((elemento) => (
-              <tr className="trVerComite" key={elemento.COD_ELECCION}>
-                <td className="especialtd">{elemento.COD_ELECCION}</td>
-                <td  className="tdNormal">{elemento.MOTIVO_ELECCION}</td>
-                <td className="tdNormalBoton" >
-                  <button
-                    className="icono"
+              <TableRow key={elemento.COD_ELECCION}>
+                <TableCell>{elemento.COD_ELECCION}</TableCell>
+                <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
+                <TableCell style={{ width:'36%' }}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<AssignmentIndIcon />}
                     onClick={() =>
-                      handleAsociarClick(elemento.COD_ELECCION, elemento.COD_COMITE)
+                      handleAsociarClick(
+                        elemento.COD_ELECCION,
+                        elemento.COD_COMITE
+                      )
                     }
                   >
-                   <AssignmentIndIcon fontSize="large" />
-                  </button>{" "}
-                  <button className="icono" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>
-                  <ViewListIcon fontSize="large"/>
-                    </button>
-                  <button className="icono" onClick={() => handleActualizar(elemento.COD_COMITE)}>
-                  <SyncIcon fontSize="large"/>
-                  </button>
-              
-                </td>
-              </tr>
+                    Asociar
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<ViewListIcon />}
+                    onClick={() => handleVerListaClick(elemento.COD_COMITE)}
+                    style={{marginLeft:'12px'}}
+                  >
+                    Ver Lista
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<SyncIcon />}
+                    onClick={() => handleActualizar(elemento.COD_COMITE)}
+                    style={{marginLeft:'12px'}}
+                  >
+                    Actualizar
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-        <div>
-      
-    </div>
-         </div>
-        </div>
-
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Lista Comite"
-        className={"CuerpoComite"}
-        onClick={handleModalClick} // Cierra el modal al hacer clic fuera de él
+        open={modalIsOpen}
+        onClose={closeModal}
+        aria-labelledby="Lista comite"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
-        <h2 className="ComiteTitulo">Lista de Comite Electoral</h2>
-        <div className="ContenedorVocales">
-        {codComite !== null && <ListaVocalesComite idComite={codComite} />}
+        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '600px' }}>
+          <Typography variant="h5" gutterBottom>
+            Lista de Comite Electoral
+          </Typography>
+          <div className="ContenedorVocales">
+            {codComite !== null && <ListaVocalesComite idComite={codComite} />}
+          </div>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={closeModal}
+            style={{ marginTop: "20px" }}
+          >
+            Cerrar
+          </Button>
         </div>
-        <button
-          className="BotonComiteModal"
-          class="custom-btn btn-1"
-          onClick={closeModal}
-        >
-          Cerrar
-        </button>
       </Modal>
       <Modal
-        isOpen={modalIsOpen1}
-        onRequestClose={closeModal1}
-        contentLabel="Reasignacion Comite"
-        className={"CuerpoComite"}
-        onClick={handleModalClick} // Cierra el modal al hacer clic fuera de él
+        open={modalIsOpen1}
+        onClose={closeModal1}
+        aria-labelledby="Reasignacion Comite"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
-        <h2 className="ComiteTitulo">Reasignacion de Lista de Comite</h2>
-        <div className="ContenedorVocales">
-        {codComite !== null && <SustitucionDeVocal codComite={codComiteActualizar} />}
+        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '900px' }}>
+          <Typography variant="h5" gutterBottom>
+            Reasignacion de Lista de Comite
+          </Typography>
+          <div className="ContenedorVocales">
+            {codComite !== null && (
+              <SustitucionDeVocal codComite={codComiteActualizar} />
+            )}
+          </div>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={closeModal1}
+            style={{ marginTop: "20px" }}
+          >
+            Cerrar
+          </Button>
         </div>
-        <button
-          className="BotonComiteModal"
-          class="custom-btn btn-1"
-          onClick={closeModal1}
-        >
-          Cerrar
-        </button>
       </Modal>
-      
-      </>
+    </Container>
   );
-}
+};
 
 export default AsignacionComite;

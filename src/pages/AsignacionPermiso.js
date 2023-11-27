@@ -1,140 +1,165 @@
 import React, { useEffect, useState } from "react";
-import "../css/Comite.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "styled-components";
 import axios from "axios";
-import Modal from "react-modal";
-import ListaVocalesComite from "./ListaVocalesComite";
-import Swal from 'sweetalert2';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Typography,
+  Modal,
+  Container,
+} from "@mui/material";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import PermisoDeVocal from "./PermisoDeVocal";
-import ViewListIcon from '@mui/icons-material/ViewList'; 
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import ListaVocalesComite from "./ListaVocalesComite";
 
-
-function AsignacionPermiso({ lista }) {
-  const [proceso, setproceso] = useState([]);
+const AsignacionPermiso = ({ lista }) => {
+  const [proceso, setProceso] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [codComite, setCodComite] = useState(null);
-  const [codComiteActualizar, setcodComiteActualizar] = useState(null);
+  const [codComiteActualizar, setCodComiteActualizar] = useState(null);
   const url = process.env.REACT_APP_VARURL;
+
   useEffect(() => {
-    axios.get(url + "elecciones_index").then(response => {
-      setproceso(response.data)
-    })
+    axios.get(`${url}elecciones_index`).then((response) => {
+      setProceso(response.data);
+    });
   }, [lista]);
 
-
-  // Función para verificar la existencia del comité
- 
-  
   const handleVerListaClick = (eleccionId) => {
-    // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
-    // Puedes abrir un modal o redirigir a una página para ver la lista
     setCodComite(eleccionId);
     setModalIsOpen(true);
   };
 
   const handleActualizar = (codComite) => {
-    // Aquí puedes realizar una acción para ver la lista de titulares y suplentes
-    // Puedes abrir un modal o redirigir a una página para ver la lista
-    setcodComiteActualizar(codComite);
+    setCodComiteActualizar(codComite);
     setModalIsOpen1(true);
-    console.log(':-..-..',codComiteActualizar);
-    //setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
   const closeModal1 = () => {
     setModalIsOpen1(false);
-  };
-  const handleModalClick = (e) => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
   };
 
   return (
     <>
-    <div className="divComite">
-      <h1 className="titleC"> ASIGNACION DE PERMISOS</h1>
-      <div className="ContenedorTabla">
-        <table className="TablaComite">
-          <thead >
-            <tr>
-              <th> ID </th>
-              <th> PROCESO </th>
-              <th> ACCIONES </th>
-            </tr>
-          </thead>
-          <tbody >
-            {proceso.map((elemento) => (
-              <tr className="trVerComite" key={elemento.COD_ELECCION}>
-                <td className="especialtd">{elemento.COD_ELECCION}</td>
-                <td  className="tdNormal">{elemento.MOTIVO_ELECCION}</td>
-                <td className="tdNormalBoton" >
-                 <button className="icono" onClick={() => handleVerListaClick(elemento.COD_COMITE)}>
-                  <ViewListIcon fontSize="large"/>
-                  </button>
-                  <button className="icono" onClick={() => handleActualizar(elemento.COD_COMITE)}>
-                  <AssignmentTurnedInIcon fontSize="large" />
-                  </button>
-              
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div>
-      
-    </div>
-         </div>
-        </div>
-
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Lista Comite"
-        className={"CuerpoComite"}
-        onClick={handleModalClick} // Cierra el modal al hacer clic fuera de él
+      <Container>
+      <Typography variant="h4" align="center" gutterBottom style={{ marginTop: '40px', marginBottom: '30px' }}>
+        ASIGNACION DE PERMISOS
+      </Typography>
+        <div className="ContenedorTabla">
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
+                  <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
+                  <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ACCIONES</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {proceso.map((elemento) => (
+                  <TableRow key={elemento.COD_ELECCION}>
+                    <TableCell>{elemento.COD_ELECCION}</TableCell>
+                    <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
+                    <TableCell style={{ width:'36%', textAlign: 'center' }}>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        startIcon={<ViewListIcon />}
+                        onClick={() =>
+                          handleVerListaClick(elemento.COD_COMITE)
+                        }
+                        style={{ marginRight: "12px" }}
+                      >
+                        Ver Lista
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        startIcon={<AssignmentTurnedInIcon />}
+                        onClick={() =>
+                          handleActualizar(elemento.COD_COMITE)
+                        }
+                      >
+                        Actualizar
+                      </Button>
+                     
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Modal
+        open={modalIsOpen}
+        onClose={closeModal}
+        aria-labelledby="Lista comite"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
-        <h2 className="ComiteTitulo">Lista de Comite Electoral</h2>
-        <div className="ContenedorVocales">
-        {codComite !== null && <ListaVocalesComite idComite={codComite} />}
+        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '600px' }}>
+          <Typography variant="h5" gutterBottom>
+            Lista de Comite Electoral
+          </Typography>
+          <div className="ContenedorVocales">
+            {codComite !== null && <ListaVocalesComite idComite={codComite} />}
+          </div>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={closeModal}
+            style={{ marginTop: "20px" }}
+          >
+            Cerrar
+          </Button>
         </div>
-        <button
-          className="BotonComiteModal"
-          class="custom-btn btn-1"
-          onClick={closeModal}
-        >
-          Cerrar
-        </button>
       </Modal>
-      <Modal
-        isOpen={modalIsOpen1}
-        onRequestClose={closeModal1}
-        contentLabel="Reasignacion Comite"
-        className={"CuerpoComite"}
-        onClick={handleModalClick} // Cierra el modal al hacer clic fuera de él
-      >
-        <h2 className="ComiteTitulo">Sustitucion de Vocales</h2>
-        <div className="ContenedorVocales">
-        {codComite !== null && <PermisoDeVocal codComite={codComiteActualizar} />}
+          <Modal
+            open={modalIsOpen1}
+            onClose={closeModal1}
+            aria-labelledby="Reasignacion Comite"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div className="modalFrente" style={{ backgroundColor: "#fff", padding: "20px", width: "900px" }}>
+              <Typography variant="h5" gutterBottom>
+                Asignacion de Permisos
+              </Typography>
+              <div className="ContenedorVocales">
+                {codComite !== null && (
+                  <PermisoDeVocal codComite={codComiteActualizar} />
+                )}
+              </div>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={closeModal1}
+                style={{ marginTop: "20px" }}
+              >
+                Cerrar
+              </Button>
+            </div>
+          </Modal>
         </div>
-        <button
-          className="BotonComiteModal"
-          class="custom-btn btn-1"
-          onClick={closeModal1}
-        >
-          Cerrar
-        </button>
-      </Modal>
-      
-      
-      </>
+        </Container>
+    </>
   );
-}
+};
 
 export default AsignacionPermiso;

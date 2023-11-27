@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Modal from "react-modal";
-import "../css/AgregarFrenteModal.css";
+import Modal from "@mui/material/Modal";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Button from "@mui/material/Button";
 import axios from "axios";
-Modal.setAppElement("#root");
-
 
 const AgregarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
-  console.log(eleccionId)
-  const [listaFrentesP, setListaFrentesP] = useState([]); // Lista de Frentes Politicos, esto debe proporcionarlo el backend
+  const [listaFrentesP, setListaFrentesP] = useState([]);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,32 +20,36 @@ const AgregarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
     };
 
     fetchData();
-  }, [eleccionId]);
-  const toogle =()=>{
+  }, [eleccionId]);
+
+  const handleClose = () => {
     closeModal();
-  }
+  };
+
   return (
     <Modal
-      className={"modalFrente"}
-      isOpen={isOpen}
-      onRequestClose={closeModal}
-      contentLabel="Frentes politicos"
-      shouldCloseOnOverlayClick={true}
+      open={isOpen}
+      onClose={closeModal}
+      aria-labelledby="Frentes politicos"
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
-        <h3 className="tituloPfrente">FRENTES POLÍTICOS</h3>
-            {listaFrentesP.map((frente) => (
-              <li className="titulofrente" >
-                {frente.NOMBRE_FRENTE} 
-              </li>
-            ))}
-            <br/>
-        <button className ="custom-btn botonvfrente" onClick={()=> toogle()}>
+      <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '400px' }}>
+        <h3 className="tituloPfrente" style={{ color: 'black' }}>FRENTES POLÍTICOS</h3>
+        <List>
+          {listaFrentesP.map((frente, index) => (
+            <ListItem key={index} className="titulofrente">
+              <ListItemText primary={frente.NOMBRE_FRENTE} style={{ color: 'black',textAlign: 'center' }} />
+            </ListItem>
+          ))}
+        </List>
+        <Button className="botonvfrente" onClick={handleClose} variant="contained" color="primary">
           Cerrar
-        </button>
+        </Button>
+      </div>
     </Modal>
   );
-}
-export default AgregarFrenteModal;
+};
 
+export default AgregarFrenteModal;
 
 

@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AgregarPermiso from './AgregarPermiso'; // Ajusta la ruta según la ubicación real del componente
+import {
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+  Paper,
+  TextField,
+} from '@mui/material';
+import AgregarPermiso from './AgregarPermiso';
 
 const PermisoDeVocal = ({ codComite }) => {
   const [vocales, setVocales] = useState([]);
   const [vocales2, setVocales2] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (codComite) {
-      axios.get(`${process.env.REACT_APP_VARURL}ver_lista_comite_id/${codComite}`)
+      axios
+        .get(`${process.env.REACT_APP_VARURL}ver_lista_comite_id/${codComite}`)
         .then((response) => {
           const data = response.data;
           setVocales(data.titulares);
@@ -20,53 +31,99 @@ const PermisoDeVocal = ({ codComite }) => {
     }
   }, [codComite]);
 
-  const handleActualizarDatos = (vocal) => {
-    axios.post(process.env.REACT_APP_VARURL+'actualizarDatos', {
-      cod_comite_actual: codComite,
-      cod_sis_actual: vocal.COD_SIS,
-      cod_sis_nuevo: vocal.nuevoCodSis,
-    })
-      .then((response) => {
-        console.log('Datos actualizados correctamente:', response.data);
-        setVocales((prevVocales) =>
-          prevVocales.map((prevVocal) =>
-            prevVocal.COD_SIS === vocal.COD_SIS
-              ? { ...prevVocal, COD_SIS: vocal.nuevoCodSis }
-              : prevVocal
-          )
-        );
-      })
-      .catch((error) => {
-        console.error('Error al actualizar los datos:', error);
-      });
+  const filterVocales = (vocalesArray) => {
+    return vocalesArray.filter(
+      (vocal) =>
+        vocal.COD_SIS.includes(searchTerm) ||
+        vocal.NOMBRE.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vocal.APELLIDO.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   };
 
   return (
-    <div className="ListaComitePadre">
-      <h3 className='H3LISTA'>Código del Comité: {codComite}</h3>
-      <h3 className='H3LISTA' >Vocales del Comité Titular:</h3>
-      <ul>
-        {vocales.map((vocal, index) => (
-          <li key={index}>
-              <span h3 className='H3LISTA' style={{ color: 'black' }}> {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS}) {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'} </span>
-            <div className="vocal-item" >
-              <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
-            </div>
-          </li>
-        ))}
-      </ul>
-      <h3 className='H3LISTA'>Vocales del Comité Suplentes:</h3>
-      <ul>
-        {vocales2.map((vocal, index) => (
-          <li key={index}>
-             <span className="vocal-name">  {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS})  {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}</span>
-            <div className="vocal-item">
-              <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
-            </div >
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box style={{ maxHeight: '400px', overflowY: 'auto', width: '90%' }}>
+      <Typography variant="h5" gutterBottom>
+        Código del Comité: {codComite}
+      </Typography>
+
+      <TextField
+        label="Buscar por Código SIS, Nombre o Apellido"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: '20px' }}
+      />
+
+      <Paper
+        elevation={3}
+        style={{
+          marginBottom: '25px',
+          padding: '16px',
+          width: '100%',
+          backgroundColor: 'rgba(0, 56, 116, 0.564)',
+        }}
+      >
+        <Box>
+          <Typography variant="h6" style={{ color: ' #ffffff' }}>
+            Vocales Titular:
+          </Typography>
+          <List>
+            {filterVocales(vocales).map((vocal, index) => (
+              <Box key={index} mb={2}>
+                <Paper elevation={3} style={{ padding: '1px' }}>
+                  <ListItem style={{ display: 'flex', flexDirection: 'column' }}>
+                    <ListItemText
+                      primary={`${vocal.NOMBRE} ${vocal.APELLIDO} (Código SIS: ${vocal.COD_SIS}) ${
+                        vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
+                      }`}
+                      style={{ marginBottom: '8px' }}
+                    />
+
+                    <Box>
+                      <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
+                    </Box>
+                  </ListItem>
+                </Paper>
+              </Box>
+            ))}
+          </List>
+        </Box>
+      </Paper>
+
+      <Paper
+        elevation={3}
+        style={{
+          marginBottom: '16px',
+          padding: '16px',
+          width: '100%',
+          backgroundColor: 'rgba(178,218,250)',
+        }}
+      >
+        <Box>
+          <Typography variant="h6">Vocales Suplentes:</Typography>
+          <List>
+            {filterVocales(vocales2).map((vocal, index) => (
+              <Box key={index} mb={2}>
+                <Paper elevation={3} style={{ padding: '16px' }}>
+                  <ListItem style={{ display: 'flex', flexDirection: 'column' }}>
+                    <ListItemText
+                      primary={`${vocal.NOMBRE} ${vocal.APELLIDO} (Código SIS: ${vocal.COD_SIS}) ${
+                        vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
+                      }`}
+                    />
+
+                    <Box>
+                      <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
+                    </Box>
+                  </ListItem>
+                </Paper>
+              </Box>
+            ))}
+          </List>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 

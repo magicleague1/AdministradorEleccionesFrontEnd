@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import "../css/EliminacionFrente.css";
 import Swal from 'sweetalert2';
-Modal.setAppElement("#root");
 
 const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
-  const { id } = useParams();
-
   const initialState = {
     motivoEliminacion: "",
   };
@@ -29,7 +28,8 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
     const eliminacion = {
       MOTIVO: formData.motivoEliminacion,
     };
-    axios.put(url + `frentes/delete/${frenteId}`, eliminacion)
+
+    axios.put(`${url}frentes/delete/${frenteId}`, eliminacion)
       .then((response) => {
         Swal.fire({
           icon: 'success',
@@ -59,39 +59,52 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   };
 
   return (
-    <>
-      <Modal
-        className={"Cuerpo2"}
-        isOpen={isOpen}
-        onRequestClose={closeModal}
-        contentLabel="Actualizar Elección"
-      >
-        <div className="Titulopolitico">
-          <h3 className="ActualizarTituloEliminar">ELIMINACION DE FRENTE POLITICO</h3>
-        </div>
+    <Modal
+      open={isOpen}
+      onClose={closeModal}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={{ ...modalStyle, width: '500px' }}>
+        <Typography variant="h6" component="h2" sx={{ display: 'flex', justifyContent: 'center', marginBottom:'12px'}} >
+          ELIMINACION DE FRENTE POLITICO
+        </Typography>
 
-        <div className="form-group">
-          <label className="LabelCrearEliminar">¿Deseas eliminar el frente político?</label>
-        </div>
-        <label className="LabelCrear">Motivo de eliminación:</label>
-        <input
-          className="InputCrearConvocatoria"
+        <Typography variant="body1" gutterBottom sx={{ display: 'flex', justifyContent: 'center'}} >
+          ¿Deseas eliminar el frente político?
+        </Typography>
+
+        <TextField
+          label="Motivo de eliminación"
           type="text"
           name="motivoEliminacion"
           value={formData.motivoEliminacion}
           onChange={handleMotivoChange}
+          fullWidth
+          margin="normal"
         />
-        <div className="d-flex align-items-center justify-content-center">
-          <button className="custom-btn btn-17 d-flex align-items-center justify-content-center" onClick={handleEliminarClick}>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+          <Button variant="contained" color="error" onClick={handleEliminarClick} style={{marginRight:'12px'}}>
             Eliminar
-          </button>
-          <button className="custom-btn btn-18 d-flex align-items-center justify-content-center" onClick={handleVolverAtras}>
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleVolverAtras}>
             Cancelar
-          </button>
-        </div>
-      </Modal>
-    </>
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   );
+};
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
 };
 
 export default EliminarFrenteModal;

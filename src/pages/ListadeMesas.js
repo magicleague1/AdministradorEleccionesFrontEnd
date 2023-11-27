@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {
+  Card,
+  CardContent,
+  Typography,
+  List,
+  ListItem,
+  Divider,
+  Box
+} from '@mui/material';
 import "../css/Asignacion.css";
+import { color } from '@mui/system';
 
 function ListaMesas({ eleccionId }) {
   const [Mesas, setMesas] = useState([]);
@@ -17,56 +27,62 @@ function ListaMesas({ eleccionId }) {
   }, [eleccionId]);
 
   return (
-    <div className="ListaComitePadre">
+    <div style={{ overflowY: 'auto', maxHeight: '400px', width:'600px'}}>
       {Mesas.map((mesa, index) => (
-        <div key={index}>
-          <div className='ContenedorConvocatoriaTexto'>
-            <div className="LabelCrearConvocatoriaM">Facultad:</div>
-            <div className="NormalConvocatoriaM">{mesa.facultad}</div>
-          </div>
-          <div className='ContenedorConvocatoriaTexto'>
-            <div className="LabelCrearConvocatoriaM">Fecha de la eleccion:</div>
-            <div className="NormalConvocatoriaM">{mesa.fecha_eleccion}</div>
-          </div>
-          <div>
-            <h3 className='H3LISTA'>Carreras:</h3>
-            <ul>
-              {mesa.carreras.map((carrera, idx) => (
-                <li key={idx}>
-                  <div className='ContenedorConvocatoriaTexto'>
-                    <div className="LabelCrearConvocatoriaM">Nombre de la carrera:</div>
-                    <div className="NormalConvocatoriaM">{carrera.nombre_carrera}</div>
-                  </div>
-                  <div className='ContenedorConvocatoriaTexto'>
-                    <div className="LabelCrearConvocatoriaM">Total de mesas:</div>
-                    <div className="NormalConvocatoriaM">{carrera.total_mesas_por_carrera}</div>
-                  </div>
-                  <div>
-                    <h3 className='H3LISTA'>Mesas:</h3>
-                    <ul>
+        <Card key={index} style={{ marginBottom: '20px' }} elevation={3}>
+          <CardContent>
+            <Typography variant="h6" style={{ marginBottom: '10px' }}>
+              {mesa.facultad}
+            </Typography>
+            <Typography variant="body1">
+              Fecha de la elección: {mesa.fecha_eleccion}
+            </Typography>
+            <Divider style={{ margin: '10px 0' }} />
+            <div>
+              <Typography variant="h6" style={{ marginBottom: '10px' }}>
+                Carreras:
+              </Typography>
+              <List>
+                {mesa.carreras.map((carrera, idx) => (
+                  <div key={idx}>
+                    <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="body1">
+                        {carrera.nombre_carrera}
+                      </Typography>
+                      <Typography variant="body2">
+                        Total de mesas: {carrera.total_mesas_por_carrera}
+                      </Typography>
+                    </ListItem>
+                    <Divider />
+                    <Typography variant="h6" style={{ marginBottom: '10px' }}>
+                      Mesas:
+                    </Typography>
+                    <List >
                       {carrera.mesas.map((mesaCarrera, idxMesa) => (
-                        <li key={idxMesa}>
-                          <div className='ContenedorConvocatoriaTexto'>
-                            <div className="LabelCrearConvocatoriaM">Número de mesa:</div>
-                            <div className="NormalConvocatoriaM">{mesaCarrera.numero_mesa}</div>
-                          </div>
-                          <div className='ContenedorConvocatoriaTexto'>
-                            <div className="LabelCrearConvocatoriaM">Código de mesa:</div>
-                            <div className="NormalConvocatoriaM">{mesaCarrera.cod_mesa}</div>
-                          </div>
-                          <div className='ContenedorConvocatoriaTexto'>
-                            <div className="LabelCrearConvocatoriaM">Apellidos de estudiantes:</div>
-                            <div className="NormalConvocatoriaM">{mesaCarrera.apellidos_estudiantes}</div>
-                          </div>
-                        </li>
+                        <Box key={idxMesa} sx={{border:'solid rgba(0, 56, 116, 0.564)', marginBottom:'25px'}}>
+                          <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography variant="body1">
+                              Número de mesa: {mesaCarrera.numero_mesa}
+                            </Typography>
+                            <Typography variant="body2">
+                              Código de mesa: {mesaCarrera.cod_mesa}
+                            </Typography>
+                          </ListItem>
+                          <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography variant="body2">
+                              Apellidos de estudiantes: {mesaCarrera.apellidos_estudiantes}
+                            </Typography>
+                          </ListItem>
+                          
+                        </Box>
                       ))}
-                    </ul>
+                    </List>
                   </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+                ))}
+              </List>
+            </div>
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

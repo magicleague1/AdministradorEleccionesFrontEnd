@@ -1,6 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import {
+  Container,
+  Grid,
+  Typography,
+  FormControl,
+  InputLabel,
+  TextField,
+  Button,
+  Box,
+  Paper,
+  styled,
+} from "@mui/material";
 import axios from "axios";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+
+const StyledContainer = styled(Container)({
+  paddingTop: '32px',
+  paddingBottom: '32px',
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'rgba(0, 56, 116, 0.564)',
+});
+
+const StyledPaper = styled(Paper)({
+  padding: '32px',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  margin: 'auto',
+  marginTop: '90px',
+  width: '80%',
+});
+
+const StyledFormControl = styled(FormControl)({
+  width: '100%',
+  marginBottom: '8px',
+});
+
+const StyledButtonGroup = styled(Box)({
+  display: 'flex',
+  justifyContent: 'center',
+  margin: 'auto',
+  width: '100%',
+});
+
+const StyledButton = styled(Button)({
+  marginLeft: '20px',
+});
 
 const PartidosPoliticos = () => {
   const initialState = {
@@ -11,8 +56,6 @@ const PartidosPoliticos = () => {
   const [formData, setFormData] = useState(initialState);
   const [selectedFile, setSelectedFile] = useState(null);
 
-
- 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -24,7 +67,7 @@ const PartidosPoliticos = () => {
   };
 
   const handleGuardarClick = () => {
-    if (!formData.NOMBRE_FRENTE || !formData.SIGLA_FRENTE || !selectedFile ) {
+    if (!formData.NOMBRE_FRENTE || !formData.SIGLA_FRENTE || !selectedFile) {
       Swal.fire({
         icon: 'error',
         title: 'Error al crear el frente político',
@@ -38,7 +81,7 @@ const PartidosPoliticos = () => {
     data.append('SIGLA_FRENTE', formData.SIGLA_FRENTE);
     data.append('LOGO', selectedFile);
     data.append('COD_CARRERA', "");
-
+    console.log(data);
     axios.post(`${process.env.REACT_APP_VARURL}frentes/nuevo`, data)
       .then((response) => {
         Swal.fire({
@@ -63,56 +106,83 @@ const PartidosPoliticos = () => {
     setSelectedFile(null);
   };
 
-
-
   return (
-    <div className="crear-elecciones">
-      <h3>INSCRIPCIÓN DE UN FRENTE POLÍTICO</h3>
-      <div className="NuevoCrear">
-        <div className="form-group1">
-          <label className="LabelCrear">Nombre:</label>
-          <input
-            type="text"
-            name="NOMBRE_FRENTE"
-            value={formData.NOMBRE_FRENTE}
-            onChange={handleInputChange}
-            placeholder="Ingrese el nombre del frente político"
-            className="motivo-input"
-          />
-        </div>
-        <div className="form-group">
-          <label className="LabelCrear">Sigla:</label>
-          <input
-            type="text"
-            name="SIGLA_FRENTE"
-            value={formData.SIGLA_FRENTE}
-            onChange={handleInputChange}
-            placeholder="Ingrese la sigla del frente político"
-            className="motivo-input"
-          />
-        </div>
-        <div className="form-group">
-          <label className="LabelCrear" htmlFor="logo">Logo:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="motivo-input"
-          />
-        </div>
-        {selectedFile && (
-          <div>
-            <label className="LabelCrear">Archivo seleccionado: {selectedFile.name}</label>
-          </div>
-        )}
-        <div className="BotonesDivCrear">
-          <button className="custom-btn btn-6" onClick={handleGuardarClick}>
-            Registrar
-          </button>{"    "}
-          <button className="custom-btn btn-7" onClick={handleVolverAtras}>Cancelar</button>
-        </div>
-      </div>
-    </div>
+    <StyledContainer>
+      <StyledPaper>
+        <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
+          INSCRIPCIÓN DE UN FRENTE POLÍTICO
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={15} style={{display: 'flex', alignItems: 'center', }}>
+            <StyledFormControl  style={{width:'100%', marginRight:'20px'}}>
+              <TextField
+                label="Nombre:"
+                type="text"
+                name="NOMBRE_FRENTE"
+                value={formData.NOMBRE_FRENTE}
+                onChange={handleInputChange}
+                placeholder="Ingrese el nombre del frente político"
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+               
+              />
+            </StyledFormControl>
+            <StyledFormControl>
+              <TextField
+                label="Sigla:"
+                type="text"
+                name="SIGLA_FRENTE"
+                value={formData.SIGLA_FRENTE}
+                onChange={handleInputChange}
+                placeholder="Ingrese la sigla del frente político"
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </StyledFormControl>
+           
+          </Grid>
+          <Grid item xs={12} md={15}>
+         
+              <InputLabel htmlFor="logo"  style={{ marginBottom: '8px' }}>Logo:</InputLabel>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="motivo-input"
+              />
+           
+            {selectedFile && (
+              <Typography variant="body1">
+                Archivo seleccionado: {selectedFile.name}
+              </Typography>
+            )}
+          </Grid>
+          
+          <Grid item xs={12} md={15}>
+            <StyledButtonGroup>
+              <StyledButton
+                variant="contained"
+                color="primary"
+                onClick={handleGuardarClick}
+              >
+                Registrar
+              </StyledButton>
+              <StyledButton
+                variant="contained"
+                color="secondary"
+                onClick={handleVolverAtras}
+              >
+                Cancelar
+              </StyledButton>
+            </StyledButtonGroup>
+          </Grid>
+        </Grid>
+      </StyledPaper>
+    </StyledContainer>
   );
 };
 

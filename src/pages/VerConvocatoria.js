@@ -1,184 +1,137 @@
 import React, { useEffect, useState } from "react";
-import "../css/MenuVertical.css";
-import "../css/botones2.css";
-import "../css/iconos.css";
+import {
+  Button,
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import ConvocatoriaCrear from "./ConvocatoriaCrear";
+import ConvocatoriaModificar from "./ConvocatoriaModificar";
+import GenerarPdfPreview from "./GenerarPdfPreview";
 import axios from "axios";
-import ConvocatoriaCrear from "./ConvocatoriaCrear.js";
-import ConvocatoriaModificar from "./ConvocatoriaModificar.js";
-import GenerarPdfPreview from "./GenerarPdfPreview.js";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const VerConvocatoria = ({ lista }) => {
-  //const numRows = 4; // Número de filas
- 
-const [selectedEleccionId, setSelectedEleccionId] = useState(null); // Nuevo estado para almacenar el ID de la elección seleccionada
-const url = process.env.REACT_APP_VARURL;
-const [listaElecciones,setListaElecciones] = useState([])
-const [isVisible, setIsVisible] = useState(false);
-const [mostrarCrearConvocatoria, setMostrarCrearConvocatoria] = useState(false);
-const [mostrarModificarConvocatoria, setModificarMostrarCrearConvocatoria] = useState(false);
-const [eleccionMId, setEleccionMId] = useState(0);
-const [mostrarListaElecciones, setMostrarListaElecciones] = useState(true);
-const [mostrarPdfConvocatoria, setMostrarPdfConvocatoria] = useState(false);
+  const [selectedEleccionId, setSelectedEleccionId] = useState(null);
+  const [listaElecciones, setListaElecciones] = useState([]);
+  const [modalIsOpenCM, setModalIsOpenCM] = useState(false);
+  const [modalIsOpenCN, setModalIsOpenCN] = useState(false);
+  const [modalIsOpenPC, setModalIsOpenPC] = useState(false);
 
-
-  useEffect(() => {
-    axios.get(url + "elecciones_index").then(response => {
-      setListaElecciones(response.data)
-    })
-  }, [lista]);
-  
-
-const handleConvocatoriaClick = async (id) => {
-  try {
-    // Hacer una petición al backend para obtener la información de la convocatoria
-    const response = await axios.get(`${process.env.REACT_APP_VARURL}verificar_convocatoria/${id}`);
-    const convocatoria = response.data;
-
-    console.log('------->',convocatoria);
-    if (convocatoria==true) {
-      // Ya existe una convocatoria, muestra un mensaje o realiza alguna acción
-      alert('Ya has creado una convocatoria para esta elección.');
-    } else {
-      // No existe una convocatoria, puedes proceder a mostrar el formulario de creación
-      setSelectedEleccionId(id);
-      setMostrarCrearConvocatoria(true);
-      setModificarMostrarCrearConvocatoria(false);
-      setMostrarListaElecciones(false);
-    }
-  } catch (error) {
-    console.error('Error al obtener la información de la convocatoria', error);
-    // Maneja el error según tus necesidades
-  }
-};
 
   
-  const handleConvocatoriaModificarClick = (id) => {
-    setEleccionMId(id); // Establecer el ID para pasarlo al componente ConvocatoriaCrear
-    setModificarMostrarCrearConvocatoria(true);
-    setMostrarCrearConvocatoria(false);
-    setMostrarListaElecciones(false);
-  };
-
-  const handleConvocatoriaVerClick = (id) => {
-  
+  ///Modal crear convocatoria
+  const openModalCN = (id) => {
     setSelectedEleccionId(id);
-    setModificarMostrarCrearConvocatoria(false);
-    setMostrarCrearConvocatoria(false);
-    setMostrarListaElecciones(false);
-    setMostrarPdfConvocatoria(true);
-    //navigate(`/pdf/${id}`);
- 
+    setModalIsOpenCN(true);
   };
-
-
-  const handleAtrasClick = () => {
-   
-    setMostrarCrearConvocatoria(false);
-    setModificarMostrarCrearConvocatoria(false);
-    setMostrarListaElecciones(true);
-    setMostrarPdfConvocatoria(false);
-    setIsVisible(false);
+  const closeModalCN = () => {
+    setModalIsOpenCN(false);
   };
-
-  const handleMostrarAtrasClick = () => {
-    // Cambiar el estado para hacer visible el botón
-    setIsVisible(true);
+  ///Modal modificar convocatoria
+  const openModalCM = (id) => {
+    setSelectedEleccionId(id);
+    setModalIsOpenCM(true);
   };
+  const closeModalCM = () => {
+    setModalIsOpenCM(false);
+  };
+  ///Modal publicar convocatoria
+  const openModalPC = (id) => {
+    setSelectedEleccionId(id);
+    setModalIsOpenPC(true);
+  };
+  const closeModalPC = () => {
+    setModalIsOpenPC(false);
+  };
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_VARURL + "elecciones_index").then((response) => {
+      setListaElecciones(response.data);
+    });
+  }, [lista]);
+
+  
   return (
-    <>
-    <div className="ver-elecciones">
+    <Container>
      
-      {isVisible &&  <button className="icono" onClick={handleAtrasClick}>
-          <ArrowBackIcon fontSize="large" />
-        </button>}{ ""}
-      <h3>CONVOCATORIAS</h3>
-   
-      <div className="ContenedorTabla" style={{ display: mostrarListaElecciones ? 'block' : 'none' }}>
-    <table>
-      <thead>
-        <tr>
-          <th>CARGO(S) A ELECCION</th>
-          <th>FECHA</th>
-          <th>CONVOCATORIA</th>
+      <Typography variant="h3" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
+        CONVOCATORIAS
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>CARGO(S) A ELECCION</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FECHA</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>CONVOCATORIA</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+          {listaElecciones.map((eleccion) => (
+  <TableRow key={eleccion.COD_ELECCION}>
+    <TableCell>{eleccion?.MOTIVO_ELECCION}</TableCell>
+    <TableCell>{eleccion?.FECHA_ELECCION}</TableCell>
+    <TableCell style={{width:'38%',textAlign: 'center' }}>
+      <Button
+        variant="outlined"
+        size="small"
+        startIcon={ <AddCircleIcon  />}
+        onClick={() => openModalCN(eleccion?.COD_ELECCION)}
+        className="custom-button"
+        sx={{marginRight:'12px'}}
+      >
+        Crear
+      </Button>
+      <Button
+        variant="outlined"
+        size="small"
+        startIcon={ <EditIcon  />}
+        onClick={() => openModalCM(eleccion?.COD_ELECCION)}
+        className="custom-button"
+        sx={{marginRight:'12px'}}
+      >
+        Editar
+      </Button>
+      <Button
+        variant="outlined"
+        size="small"
+        startIcon={ <VisibilityIcon fontSize="large" />}
+        onClick={() => openModalPC(eleccion?.COD_ELECCION)}
+        className="custom-button"
+      >
+        Visualizar
+      </Button> 
+    </TableCell>
+  </TableRow>
+))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+        <ConvocatoriaCrear 
+        isOpen={modalIsOpenCN}
+        closeModal={closeModalCN}
+        eleccionId={selectedEleccionId} />
       
-        </tr>
-      </thead>
-      <tbody>
-        { listaElecciones.length > 0 &&
-        listaElecciones.map((eleccion) => {
-          return(
-            <tr className="trVerEleccion" key={eleccion.COD_ELECCION}>
-                <td className="especialtd">{eleccion.MOTIVO_ELECCION}</td>
-                <td className="tdNormal">{eleccion.FECHA_ELECCION}</td>
-                
-
-                <td className="tdNormal">
-                      <button className="icono" onClick={() => {
-                                                  handleConvocatoriaClick(eleccion.COD_ELECCION);
-                                                  handleMostrarAtrasClick();
-                                                }}
-                      >
-                                            <AddCircleIcon fontSize="large" />
-                      </button>
-                      <button className="icono" onClick={() => {handleConvocatoriaModificarClick(eleccion.COD_ELECCION);
-                                                                handleMostrarAtrasClick();}}>
-                      <EditIcon fontSize="large" />
-                      </button>
-                      <button className="icono" onClick={() => {handleConvocatoriaVerClick(eleccion.COD_ELECCION);
-                                                                handleMostrarAtrasClick();}}>
-                      <VisibilityIcon fontSize="large" />
-                      </button>
-                </td>
-                
-            
-           </tr>
-          )
-          
-        })}
-        
-      </tbody>
-    </table>
-
-   
-
-   
-    </div>
-    
-   
-
-    <div className="SegundoDivMenu" style={{ display: mostrarCrearConvocatoria ? 'block' : 'none' }}>
-   
-     
-    {mostrarCrearConvocatoria && (
-        <><ConvocatoriaCrear eleccionId={selectedEleccionId} />    
-        </>
-      )}
+        <ConvocatoriaModificar 
+        isOpen={modalIsOpenCM}
+        closeModal={closeModalCM}
+        eleccionId={selectedEleccionId} />
       
-       </div>
-    
-
-<div className="SegundoDivMenu" style={{ display: mostrarModificarConvocatoria ? 'block' : 'none' }}>
-    
-
-{mostrarModificarConvocatoria && (
-        <ConvocatoriaModificar eleccionId={eleccionMId} />
-      )}
-    </div>
-
-    <div className="SegundoDivMenu" style={{ display: mostrarPdfConvocatoria ? 'block' : 'none' }}>
-      {mostrarPdfConvocatoria && (
-          <GenerarPdfPreview eleccionId={selectedEleccionId} />
-        
-      )}
-    </div>
-    </div>
-    
-    </>
-    
+        <GenerarPdfPreview
+        isOpen={modalIsOpenPC}
+        closeModal={closeModalPC}
+        eleccionId={selectedEleccionId} /> 
+      
+    </Container>
   );
 };
 
