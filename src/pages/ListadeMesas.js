@@ -9,8 +9,6 @@ import {
   Divider,
   Box
 } from '@mui/material';
-import "../css/Asignacion.css";
-import { color } from '@mui/system';
 
 function ListaMesas({ eleccionId }) {
   const [Mesas, setMesas] = useState([]);
@@ -28,53 +26,67 @@ function ListaMesas({ eleccionId }) {
 
   return (
     <div style={{ overflowY: 'auto', maxHeight: '400px', width:'600px'}}>
-      {Mesas.map((mesa, index) => (
-        <Card key={index} style={{ marginBottom: '20px' }} elevation={3}>
+      {Mesas.map((eleccion, indexEleccion) => (
+        <Card key={indexEleccion} style={{ marginBottom: '20px' }} elevation={3}>
           <CardContent>
             <Typography variant="h6" style={{ marginBottom: '10px' }}>
-              {mesa.facultad}
+              {eleccion.motivo}
             </Typography>
             <Typography variant="body1">
-              Fecha de la elección: {mesa.fecha_eleccion}
+              Fecha de la elección: {eleccion.fecha_eleccion}
             </Typography>
             <Divider style={{ margin: '10px 0' }} />
             <div>
               <Typography variant="h6" style={{ marginBottom: '10px' }}>
-                Carreras:
+                Facultades:
               </Typography>
               <List>
-                {mesa.carreras.map((carrera, idx) => (
-                  <div key={idx}>
+                {eleccion.facultades.map((facultad, indexFacultad) => (
+                  <div key={indexFacultad}>
                     <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <Typography variant="body1">
-                        {carrera.nombre_carrera}
-                      </Typography>
-                      <Typography variant="body2">
-                        Total de mesas: {carrera.total_mesas_por_carrera}
+                        {facultad.nombre_facultad}
                       </Typography>
                     </ListItem>
                     <Divider />
                     <Typography variant="h6" style={{ marginBottom: '10px' }}>
-                      Mesas:
+                      Carreras:
                     </Typography>
                     <List >
-                      {carrera.mesas.map((mesaCarrera, idxMesa) => (
-                        <Box key={idxMesa} sx={{border:'solid rgba(0, 56, 116, 0.564)', marginBottom:'25px'}}>
+                      {Object.keys(facultad.carreras).map((nombreCarrera, indexCarrera) => (
+                        <div key={indexCarrera}>
                           <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography variant="body1">
-                              Número de mesa: {mesaCarrera.numero_mesa}
+                              {nombreCarrera}
                             </Typography>
                             <Typography variant="body2">
-                              Código de mesa: {mesaCarrera.cod_mesa}
+                              Total de mesas: {facultad.carreras[nombreCarrera].total_mesas_por_carrera}
                             </Typography>
                           </ListItem>
-                          <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography variant="body2">
-                              Apellidos de estudiantes: {mesaCarrera.apellidos_estudiantes}
-                            </Typography>
-                          </ListItem>
-                          
-                        </Box>
+                          <Divider />
+                          <Typography variant="h6" style={{ marginBottom: '10px' }}>
+                            Mesas:
+                          </Typography>
+                          <List >
+                            {facultad.carreras[nombreCarrera].mesas.map((mesaCarrera, indexMesa) => (
+                              <Box key={indexMesa} sx={{border:'solid rgba(0, 56, 116, 0.564)', marginBottom:'25px'}}>
+                                <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                  <Typography variant="body1">
+                                    Número de mesa: {mesaCarrera.numero_mesa}
+                                  </Typography>
+                                  <Typography variant="body2">
+                                    Código de mesa: {mesaCarrera.cod_mesa}
+                                  </Typography>
+                                </ListItem>
+                                <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                  <Typography variant="body2">
+                                    Apellidos de estudiantes: {mesaCarrera.apellidos_estudiantes}
+                                  </Typography>
+                                </ListItem>
+                              </Box>
+                            ))}
+                          </List>
+                        </div>
                       ))}
                     </List>
                   </div>
