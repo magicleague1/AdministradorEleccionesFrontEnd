@@ -7,6 +7,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import CreateIcon from "@mui/icons-material/Create";
 import BallotIcon from "@mui/icons-material/Ballot";
 import PeopleIcon from "@mui/icons-material/People";
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -22,7 +23,8 @@ import VerPartidosPoliticos from "./VerPartidosPoliticos";
 import AsignacionMesas from "./AsignacionMesas";
 import VerConvocatoria from "./VerConvocatoria";
 import AsignacionPermisosC from "./AsignacionPermiso";
-const drawerWidth = 320;
+import VerBoletasElectorales from "./VerBoletasElectorales";
+
 function MenuIzquierdo() {
   const [openProcesoElectoral, setOpenProcesoElectoral] = useState(false);
   const [openComiteElectoral, setOpenComiteElectoral] = useState(false);
@@ -39,6 +41,8 @@ function MenuIzquierdo() {
   const [mostrarAsignacion, setMostrarAsignacion] = useState(false);
   const [mostrarVerConvocatoria, setMostrarVerConvocatoria] = useState(false);
   const [mostrarAsignacionP, setMostrarAsignacionP] = useState(false);
+  const [mostrarBoletas, setMostrarBoletas] = useState(false);
+
 
   const handleDrawerItemClick = (item) => {
     switch (item) {
@@ -60,6 +64,9 @@ function MenuIzquierdo() {
       case "Crear Convocatoria":
         handleVerConvocatoria();
         break;
+      case "Boleta Electorales":
+        handleVerConvocatoria();
+        break;
       default:
         break;
       
@@ -77,6 +84,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
   };
 
   const handleDrawerItemSubClick = (subItem) => {
@@ -115,6 +123,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
   };
 
   const handleVerEleccionesClick = () => {
@@ -127,6 +136,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
   };
 
   const handleVerComiteClick = () => {
@@ -139,6 +149,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
   };
 
   const handleCrearPartidoClick = () => {
@@ -151,6 +162,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
   };
 
   const handleVerPartidoClick = () => {
@@ -163,6 +175,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
   };
 
   const handleAsignarMesaClick = () => {
@@ -175,6 +188,7 @@ function MenuIzquierdo() {
     setMostrarVerConvocatoria(false);
     setMostrarAsignacion(true);
     setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
   };
 
   const handleVerConvocatoria = () => {
@@ -187,6 +201,7 @@ function MenuIzquierdo() {
     setMostrarVerConvocatoria(true);
     setMostrarAsignacion(false);
     setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
   };
 
   const handleAsignarPermisos = () => {
@@ -199,23 +214,34 @@ function MenuIzquierdo() {
     setMostrarVerConvocatoria(false);
     setMostrarAsignacion(false);
     setMostrarAsignacionP(true);
+    setMostrarBoletas(false);
+  };
+
+  const handleBoletasElectorales = () => {
+    setMostrarCrearEleccion(false);
+    setMostrarInicio(false);
+    setMostrarVerElecciones(false);
+    setMostrarVerComite(false);
+    setMostrarCrearPartido(false);
+    setMostrarVerPartido(false);
+    setMostrarVerConvocatoria(false);
+    setMostrarAsignacion(false);
+    setMostrarAsignacionP(false);
+    setMostrarBoletas(true);
   };
 
   return (
     <div style={{ display: 'flex' }}>
-      <Drawer variant="permanent" style={{ width: drawerWidth}}>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
-          <img src={Logo} alt="profile_picture" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
-          <h3 style={{ color: 'black', fontSize: '22px', marginTop: '8px' }}>Administrador de elecciones </h3>
-          <b style={{ color: 'black', marginTop: '4px',fontSize: '22px' }}> FCyT </b>
-        </div>
-        <List>
-          <ListItem button onClick={() => handleDrawerItemClick("Inicio")} style={{ backgroundColor: mostrarInicio ? 'lightgray' : 'inherit' }}>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Inicio" />
+    <Drawer variant="permanent" style={{ width: '300px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
+        <img src={Logo} alt="profile_picture" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+        <h3 style={{ color: 'black', fontSize: '22px', marginTop: '8px' }}>Administrador de elecciones </h3>
+        <b style={{ color: 'black', marginTop: '4px', fontSize: '22px' }}> FCyT </b>
+      </div>
+      <List>
+        <ListItem button onClick={() => handleDrawerItemClick("Inicio")} style={{ backgroundColor: mostrarInicio ? 'lightgray' : 'inherit' }}>
+          <ListItemIcon><HomeIcon /></ListItemIcon>
+          <ListItemText primary="Inicio" />
           </ListItem>
           <ListItem button onClick={() => handleDrawerItemClick("Proceso Electoral")}>
             <ListItemIcon>
@@ -301,6 +327,14 @@ function MenuIzquierdo() {
             </ListItemIcon>
             <ListItemText primary="Crear Convocatoria" />
           </ListItem>
+
+          <ListItem button onClick={() => handleBoletasElectorales("Boletas Electorales")} >
+            <ListItemIcon>
+             <ReceiptIcon />
+            </ListItemIcon>
+            <ListItemText primary="Boletas Electorales" />
+          </ListItem>
+
         </List>
       </Drawer>
       <div style={{width: '100%', height: '100vh'}}>
@@ -313,6 +347,7 @@ function MenuIzquierdo() {
         {mostrarAsignacion && <AsignacionMesas />}
         {mostrarVerConvocatoria && <VerConvocatoria lista={mostrarVerConvocatoria} />}
         {mostrarAsignacionP && <AsignacionPermisosC />}
+        {mostrarBoletas && <VerBoletasElectorales/>}
       </div>
     </div>
   );

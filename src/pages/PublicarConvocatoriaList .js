@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
-
+import IconButton from '@mui/material/IconButton';
+import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
+import "../css/HomePage.css";
 
 const PublicarConvocatoriaList = () => {
   const navigate = useNavigate();
@@ -18,16 +18,6 @@ const PublicarConvocatoriaList = () => {
 
 
   const handleConvPublic = (id) => {
-    // Redireccionar o realizar alguna acción al hacer clic en "Convocatoria"
-    // Puedes usar react-router-dom o alguna otra biblioteca de enrutamiento si es necesario
-    //setSelectedEleccionId(id);
-    //console.log(id);
-    //setModalConvo(true);
-    //setEleccionPDFId(id);
-   
-   // setEleccionMId(id); // Establecer el ID para pasarlo al componente ConvocatoriaCrear
-   // setModificarMostrarCrearConvocatoria(true);
-   
    navigate(`/pdfPublicado/${id}`);
    console.log('------',id);
   
@@ -35,24 +25,26 @@ const PublicarConvocatoriaList = () => {
 
 
   return (
-    <div>
-      <h1>Lista de Publicaciones de Convocatorias</h1>
-      <ul>
+    <div class="container"  >
+
         {publicaciones.map(publicacion => (
-          <li key={publicacion.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <h3>Título: {publicacion.titulo}</h3>
-              <p>Fecha de publicación: {publicacion.fecha_publicacion}</p>
-              <p>Motivo de elección: {publicacion.motivo_eleccion}</p>
-              {/* Otros campos a mostrar */}
-            </div>
-  
-            <button className="custom-btn btn-5" onClick={() => handleConvPublic(publicacion.id_convocatoria)}>
-              Ver Convocatoria
-            </button>
-          </li>
+              
+                  <div class="card1"key={publicacion.id}>
+                    <div class="title">{publicacion.titulo}</div>
+                    
+                    <div class="content">{publicacion.motivo_eleccion}</div>
+                    <div class="date">{publicacion.fecha_publicacion} </div>
+                    <div class="buttons">
+                    <IconButton color="primary" aria-label="descargar"  onClick={() => handleConvPublic(publicacion.id_convocatoria)}>
+                    <GetAppOutlinedIcon />
+                    </IconButton>
+                    
+                    </div>
+                    
+                  </div>
+        
         ))}
-      </ul>
+     
     </div>
   );
 };

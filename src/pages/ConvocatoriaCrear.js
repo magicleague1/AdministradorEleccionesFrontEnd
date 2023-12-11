@@ -7,7 +7,6 @@ import {
   Button,
   FormControl,
   Box,
-  Paper,
   styled,
   Dialog,
   DialogTitle,

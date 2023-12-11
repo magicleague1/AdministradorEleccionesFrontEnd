@@ -3,6 +3,19 @@ import { TextField, Button, Container, Typography, Paper, CssBaseline } from '@m
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import imagen from "../img/UMSS.png"
+const styles = {
+  minHeight: '100vh',
+  width: '100vw',
+  backgroundImage: `url('https://us.123rf.com/450wm/panychev/panychev1611/panychev161100133/66317182-resumen-de-fondo-de-color-azul-oscuro-textura-plana-sitio-web-o-obras-de-arte-tel%C3%B3n-de-fondo.jpg')`,
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 0,
+};
 const LoginPage = () => {
   const [showErrorNombre, setshowErrorName] = useState(false);
   const [showValorInput, setValorInput] = useState({ name: '', password: '' });
@@ -54,20 +67,9 @@ const LoginPage = () => {
 
   return (
     <Container component="main" disableGutters
-    sx={{
-        backgroundImage: `url('https://img.freepik.com/fotos-premium/fondo-tecnologia-digital-proteccion-datos-ciberseguridad-tiene-pequeno-codigo-binario-fractal_371307-91.jpg')`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        width: '100%',
-      }}>
+    sx={styles}>
       <CssBaseline />
-      <Paper elevation={5} sx={{ padding: 3, width: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Paper elevation={5} sx={{ padding: 3, width: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
       
         <Typography component="h1" variant="h4" gutterBottom sx={{fontSize:'25px'}}>
           Bienvenido al Sistema de Elecciones 
