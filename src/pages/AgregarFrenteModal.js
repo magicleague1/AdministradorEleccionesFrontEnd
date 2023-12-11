@@ -34,7 +34,7 @@ const AgregarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
       style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
       <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '400px' }}>
-        <h3 className="tituloPfrente" style={{ color: 'black' }}>FRENTES POLÍTICOS</h3>
+        <h3 className="tituloPfrente" style={{ color: 'black' }}>FRENTES POLÍTICOS DIS</h3>
         <List>
           {listaFrentesP.map((frente, index) => (
             <ListItem key={index} className="titulofrente">

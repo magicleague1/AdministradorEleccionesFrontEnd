@@ -15,7 +15,8 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
   useEffect(() => {
     const fetchFrentes = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_VARURL}frentes`);
+        // Fetch available fronts
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}getFrentesByEleccion/${eleccionId}`);
         setListaFrentesP(response.data);
       } catch (error) {
         console.error('Error al obtener frentes:', error);
@@ -23,15 +24,14 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
     };
 
     fetchFrentes();
-  }, []);
+  }, [eleccionId]);
 
   useEffect(() => {
     const fetchFrentesAsignados = async () => {
       try {
+        // Fetch assigned fronts
         if (eleccionId) {
-          const response = await axios.get(
-            `${process.env.REACT_APP_VARURL}eleccionesAsignadas/${eleccionId}`
-          );
+          const response = await axios.get(`${process.env.REACT_APP_VARURL}eleccionesAsignadas/${eleccionId}`);
           setFrentesAsignados(response.data);
         }
       } catch (error) {
@@ -50,9 +50,11 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
     const frenteAsignado = frentesAsignados.find((f) => f.COD_FRENTE === frenteId);
 
     if (frenteAsignado) {
+      // If the front is already assigned, remove it
       const updatedFrentes = frentesAsignados.filter((f) => f.COD_FRENTE !== frenteId);
       setFrentesAsignados(updatedFrentes);
     } else {
+      // If the front is not assigned, add it
       const frenteSeleccionado = listaFrentesP.find((f) => f.COD_FRENTE === frenteId);
       if (frenteSeleccionado) {
         const updatedFrentes = [...frentesAsignados, frenteSeleccionado];
@@ -64,6 +66,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
   const validarYRegistrar = async () => {
     try {
       if (frentesAsignados.length === 0) {
+        // Show an error if no fronts are selected
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -72,11 +75,13 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
         return;
       }
 
+      // Prepare the data for the backend
       const data = frentesAsignados.map((frente) => ({
         COD_ELECCION: eleccionId,
         COD_FRENTE: frente.COD_FRENTE,
       }));
 
+      // Send a POST request to register the selected fronts
       await axios.post(`${process.env.REACT_APP_VARURL}actualizar_frentes`, data);
       Swal.fire({
         icon: 'success',
@@ -107,7 +112,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
       }}
     >
       <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '400px', borderRadius: '8px', textAlign: 'center' }}>
-        <h3 className="tituloPfrente" style={{ color: 'black', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>FRENTES POLÍTICOS</h3>
+        <h3 className="tituloPfrente" style={{ color: 'black', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>FRENTES POLÍTICOS DISPONIBLES</h3>
         <List>
           {listaFrentesP.map((frente) => (
             <ListItem key={frente.COD_FRENTE} className="titulofrente" style={{ marginBottom: '10px' }}>

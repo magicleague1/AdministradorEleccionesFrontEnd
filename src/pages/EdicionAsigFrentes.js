@@ -49,7 +49,7 @@ const AsignarFrente = ({ isOpen, closeModal }) => {
       contentLabel="Frentes políticos"
       shouldCloseOnOverlayClick={true}
     >
-      <h3 className="tituloPfrente1">FRENTES POLÍTICOS</h3>
+      <h3 className="tituloPfrente1">FRENTES POLÍTICOS DISPONIBLES</h3>
       <ul>
         {listaFrentesP.map((frente, index) => (
           <li key={index}>
