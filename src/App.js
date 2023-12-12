@@ -13,6 +13,10 @@ import SustitucionDeVocal from './pages/SustitucionDeVocal ';
 import AgregarPermiso from './pages/AgregarPermiso';
 import AsignacionPermiso from './pages/AsignacionPermiso';
 
+import ListaVotantesPDF from './pages/ListaVotantes/ListaVotantesPDF';
+
+import GenerarBoletas from './pages/Boletas/GenerarBoletas';
+
 
 
 function App() {
@@ -36,6 +40,9 @@ function App() {
 
  
 
+        <Route path="/ListaVotantesPDF" element={<ListaVotantesPDF/>}></Route>
+        <Route path="/GenerarBoletas" element={<GenerarBoletas/>}></Route> 
+     
 
       </Routes>
     </BrowserRouter>
