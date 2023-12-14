@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CrearPublicaConv from './CrearPublicaConv';
-import { Button, Container, styled, Modal,Typography,Dialog,
+import { Button, styled, Modal,Typography,Dialog,
   DialogTitle,
   DialogContent } from "@mui/material";
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import PublishIcon from '@mui/icons-material/Publish';
 import "../css/GenerarPdf.css";
+import axios from "axios";
 
 
 const StyledButton = styled(Button)({
@@ -31,6 +31,13 @@ const GenerarPdfBoletas = ({ isOpen, closeModal, eleccionId }) => {
   const [pdfSrc, setPdfSrc] = useState(''); 
   const [eleccionMId, setEleccionMId] = useState(0);
   const [modalPP, setModalPP] = useState(false);
+  const [botonesDeshabilitados, setBotonesDeshabilitados] = useState({});
+
+  const url = process.env.REACT_APP_VARURL;
+  useEffect(() => {
+    // Reiniciar el estado de botonesDeshabilitados cuando cambia la elección
+    setBotonesDeshabilitados({});
+  }, [eleccionId]);
 
   const openModalADDFP = (id) => {
     setEleccionMId(id);
@@ -44,13 +51,36 @@ const GenerarPdfBoletas = ({ isOpen, closeModal, eleccionId }) => {
     closeModal();
   };
   const handleGetPDF = async () => {
-    const response = await fetch(`${process.env.REACT_APP_VARURL}generarBoletasPDF/${eleccionId}`);
-    const data = await response.json();
-
-    if (data && data.pdf) {
-      setPdfSrc(data.pdf);
+    try {
+      console.log("PDF boletas", eleccionId)
+      const response = await axios.get(url + `generarBoletasPDF/${eleccionId}`);
+      
+      const data = response.data; 
+  
+      if (data && data.pdf) {
+        setPdfSrc(data.pdf);
+      }
+    } catch (error) {
+      console.error("Error al obtener el PDF", error);
     }
   };
+  const handleGetBoletas = async () => {
+    if (!botonesDeshabilitados[eleccionId]) {
+      // Deshabilita el botón específico para esta elección
+      setBotonesDeshabilitados(prevState => ({
+        ...prevState,
+        [eleccionId]: true
+      }));
+
+      try {
+        const response = await axios.post(url + `generar_boletas/${eleccionId}`);
+        console.log('Generación de boletas exitosa', response.data);
+      } catch (error) {
+        console.error('Error al generar boletas', error);
+      }
+    }
+  };
+
 
   return (
     <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth="md">
@@ -62,6 +92,16 @@ const GenerarPdfBoletas = ({ isOpen, closeModal, eleccionId }) => {
       <DialogContent sx={{ display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',}}>
+      <StyledButton
+          variant="contained"
+          color="primary"
+          onClick={handleGetBoletas}
+          disabled={botonesDeshabilitados[eleccionId]}
+          startIcon={<StyledIcon><CloudDownloadIcon /></StyledIcon>}
+          sx={{ marginRight: '13px' }}
+        >
+          Generar Boletas
+        </StyledButton>
       <StyledButton
           variant="contained"
           color="primary"

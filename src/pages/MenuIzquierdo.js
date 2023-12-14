@@ -28,7 +28,6 @@ import VerBoletasElectorales from "./VerBoletasElectorales";
 function MenuIzquierdo() {
   const [openProcesoElectoral, setOpenProcesoElectoral] = useState(false);
   const [openComiteElectoral, setOpenComiteElectoral] = useState(false);
-  const [openPartidosPoliticos, setOpenPartidosPoliticos] = useState(false);
 
   
 
@@ -36,7 +35,6 @@ function MenuIzquierdo() {
   const [mostrarInicio, setMostrarInicio] = useState(true);
   const [mostrarVerElecciones, setMostrarVerElecciones] = useState(false);
   const [mostrarVerComite, setMostrarVerComite] = useState(false);
-  const [mostrarCrearPartido, setMostrarCrearPartido] = useState(false);
   const [mostrarVerPartido, setMostrarVerPartido] = useState(false);
   const [mostrarAsignacion, setMostrarAsignacion] = useState(false);
   const [mostrarVerConvocatoria, setMostrarVerConvocatoria] = useState(false);
@@ -56,7 +54,7 @@ function MenuIzquierdo() {
         setOpenComiteElectoral(!openComiteElectoral);
         break;
       case "Partidos Politicos":
-        setOpenPartidosPoliticos(!openPartidosPoliticos);
+        handleVerPartidoClick();
         break;
       case "Asignacion de Mesas":
         handleAsignarMesaClick();
@@ -79,7 +77,6 @@ function MenuIzquierdo() {
     setMostrarInicio(true);
     setMostrarVerElecciones(false);
     setMostrarVerComite(false);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(false);
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
@@ -101,12 +98,6 @@ function MenuIzquierdo() {
       case "Asignacion de Permisos":
         handleAsignarPermisos();
         break;
-      case "Crear Partido Politico":
-        handleCrearPartidoClick();
-        break;
-      case "Frentes Politicos Activos":
-        handleVerPartidoClick();
-        break;
       
       default:
         break;
@@ -118,7 +109,6 @@ function MenuIzquierdo() {
     setMostrarInicio(false);
     setMostrarVerElecciones(false);
     setMostrarVerComite(false);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(false);
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
@@ -131,7 +121,6 @@ function MenuIzquierdo() {
     setMostrarInicio(false);
     setMostrarVerElecciones(true);
     setMostrarVerComite(false);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(false);
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
@@ -144,7 +133,6 @@ function MenuIzquierdo() {
     setMostrarInicio(false);
     setMostrarVerElecciones(false);
     setMostrarVerComite(true);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(false);
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
@@ -152,25 +140,12 @@ function MenuIzquierdo() {
     setMostrarBoletas(false);
   };
 
-  const handleCrearPartidoClick = () => {
-    setMostrarCrearEleccion(false);
-    setMostrarInicio(false);
-    setMostrarVerElecciones(false);
-    setMostrarVerComite(false);
-    setMostrarCrearPartido(true);
-    setMostrarVerPartido(false);
-    setMostrarAsignacion(false);
-    setMostrarVerConvocatoria(false);
-    setMostrarAsignacionP(false);
-    setMostrarBoletas(false);
-  };
 
   const handleVerPartidoClick = () => {
     setMostrarCrearEleccion(false);
     setMostrarInicio(false);
     setMostrarVerElecciones(false);
     setMostrarVerComite(false);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(true);
     setMostrarAsignacion(false);
     setMostrarVerConvocatoria(false);
@@ -183,7 +158,6 @@ function MenuIzquierdo() {
     setMostrarInicio(false);
     setMostrarVerElecciones(false);
     setMostrarVerComite(false);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacion(true);
@@ -196,7 +170,6 @@ function MenuIzquierdo() {
     setMostrarInicio(false);
     setMostrarVerElecciones(false);
     setMostrarVerComite(false);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(false);
     setMostrarVerConvocatoria(true);
     setMostrarAsignacion(false);
@@ -209,7 +182,6 @@ function MenuIzquierdo() {
     setMostrarInicio(false);
     setMostrarVerElecciones(false);
     setMostrarVerComite(false);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacion(false);
@@ -222,7 +194,6 @@ function MenuIzquierdo() {
     setMostrarInicio(false);
     setMostrarVerElecciones(false);
     setMostrarVerComite(false);
-    setMostrarCrearPartido(false);
     setMostrarVerPartido(false);
     setMostrarVerConvocatoria(false);
     setMostrarAsignacion(false);
@@ -289,29 +260,13 @@ function MenuIzquierdo() {
               </ListItem>
             </List>
           </Collapse>
-          <ListItem button onClick={() => handleDrawerItemClick("Partidos Politicos")}>
+          <ListItem button onClick={() => handleDrawerItemClick("Partidos Politicos")}  style={{ backgroundColor: mostrarVerPartido ? 'lightgray' : 'inherit' }} >
             <ListItemIcon>
               <AccountBalanceIcon />
             </ListItemIcon>
             <ListItemText primary="Partidos Politicos" />
-            {openPartidosPoliticos ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <Collapse in={openPartidosPoliticos} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem button onClick={() => handleDrawerItemSubClick("Crear Partido Politico")} className="Ocultos">
-                <ListItemIcon>
-                  <CreateIcon />
-                </ListItemIcon>
-                <ListItemText primary="Crear Partido Politico" />
-              </ListItem>
-              <ListItem button onClick={() => handleDrawerItemSubClick("Frentes Politicos Activos")} className="Ocultos">
-                <ListItemIcon>
-                  <BallotIcon />
-                </ListItemIcon>
-                <ListItemText primary="Frentes Politicos Activos" />
-              </ListItem>
-            </List>
-          </Collapse>
+          
           
           <ListItem button onClick={() => handleDrawerItemClick("Asignacion de Mesas")} style={{ backgroundColor: mostrarAsignacion ? 'lightgray' : 'inherit' }} >
             <ListItemIcon>
@@ -342,7 +297,6 @@ function MenuIzquierdo() {
         {mostrarInicio && <Inicio />}
         {mostrarVerElecciones && <VerElecciones lista={mostrarVerElecciones} />}
         {mostrarVerComite && <AsignacionComite />}
-        {mostrarCrearPartido && <PartidosPoliticos />}
         {mostrarVerPartido && <VerPartidosPoliticos />}
         {mostrarAsignacion && <AsignacionMesas />}
         {mostrarVerConvocatoria && <VerConvocatoria lista={mostrarVerConvocatoria} />}

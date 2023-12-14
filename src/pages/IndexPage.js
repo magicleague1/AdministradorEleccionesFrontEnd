@@ -27,7 +27,7 @@ const IndexPage = () => {
           <div className="navbar-links">
             <ul className='Home'>
               {/* Paso 3: Evita que los enlaces recarguen la página */}
-              <li><a href="#" onClick={() => setContentToShow("Inicio")}>Inicio</a></li>
+              <li className='HomeLI'><a href="#" onClick={() => setContentToShow("Inicio")}>Inicio</a></li>
               <li><a href="#" onClick={handleConvocatoriaClick}>Convocatorias</a></li>
               <li><a href="#" onClick={handlePublicacionClick}>Publicaciones</a></li>
               <li><a href="/Login" className="btn-request">Ingresar</a></li>

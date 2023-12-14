@@ -42,12 +42,25 @@
     align-items: center; 
 }
 
-li {
+.HomeLI {
     float: left;
     padding: 0px 15px;
 }
-
-li a {
+.HomeLI{
+  display: block;
+  color: blue;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing : 2px;
+  font-size: 16px;
+  
+  -webkit-transition: all 0.3s ease-in;
+  -moz-transition: all 0.3s ease-in;
+  -ms-transition: all 0.3s ease-in;
+  -o-transition: all 0.3s ease-in;
+  transition: all 0.3s ease-in;
+}
+ a {
     display: block;
     color: blue;
     text-align: center;
@@ -61,8 +74,10 @@ li a {
     -o-transition: all 0.3s ease-in;
     transition: all 0.3s ease-in;
 }
-
-li a:hover {
+.HomeLI:hover{
+  color: #ffcb39;
+}
+ a:hover {
     color: #ffcb39;
 }
 

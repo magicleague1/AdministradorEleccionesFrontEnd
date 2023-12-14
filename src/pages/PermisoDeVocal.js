@@ -58,7 +58,7 @@ const PermisoDeVocal = ({ codComite }) => {
       <Paper
         elevation={3}
         style={{
-          marginBottom: '25px',
+          marginBottom: '16px',
           padding: '16px',
           width: '100%',
           backgroundColor: 'rgba(0, 56, 116, 0.564)',
@@ -68,10 +68,10 @@ const PermisoDeVocal = ({ codComite }) => {
           <Typography variant="h6" style={{ color: ' #ffffff' }}>
             Vocales Titular:
           </Typography>
-          <List>
+          <List >
             {filterVocales(vocales).map((vocal, index) => (
               <Box key={index} mb={2}>
-                <Paper elevation={3} style={{ padding: '1px' }}>
+                <Paper elevation={3} style={{ padding: '16px' }}>
                   <ListItem style={{ display: 'flex', flexDirection: 'column' }}>
                     <ListItemText
                       primary={`${vocal.NOMBRE} ${vocal.APELLIDO} (Código SIS: ${vocal.COD_SIS}) ${

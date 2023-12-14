@@ -11,6 +11,7 @@ import {
   Button,
   Box
 } from '@mui/material';
+import CandidatosBoletas from './CandidatosBoleta';
 
 const StyledButton = styled(Button)({
   marginLeft: '20px',
@@ -27,20 +28,35 @@ const StyledButtonGroup = styled(Box)({
 
 const VisualizacionBoletas = ({ isOpen, closeModal, eleccionId }) => {
   const [eleccionBoleta, setEleccionBoleta] = useState([]);
+  const [frentesBoleta, setFrentesBoleta] = useState([]);
+
   const url = process.env.REACT_APP_VARURL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(url + `obtener_id/${eleccionId}`);
-        setEleccionBoleta(response.data);
+        const responseEleccion = await axios.get(url + `obtener_id/${eleccionId}`);
+        setEleccionBoleta(responseEleccion.data);
+
       } catch (error) {
-        console.error('Error al obtener datos:', error);
+        console.error('Error al obtener datos de elección:', error);
       }
     };
 
-    fetchData();
-  }, [url, eleccionId]);
+    const fetchDataFrentes = async () => {
+      try {
+        const responseFrentes = await axios.get(`${process.env.REACT_APP_VARURL}obtener_frentes_por_eleccion/${eleccionId}`);
+        setFrentesBoleta(responseFrentes.data.frentes);
+
+      } catch (error) {
+        console.error('Error al obtener los frentes:', error);
+      }
+    };
+
+    Promise.all([fetchData(), fetchDataFrentes()]).then(() => {
+
+    });
+  }, [eleccionId]);
 
   const handleVolverAtras = () => {
     closeModal();
@@ -48,106 +64,25 @@ const VisualizacionBoletas = ({ isOpen, closeModal, eleccionId }) => {
 
   return (
     <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth={"lg"}>
-      <DialogTitle style={{display: 'flex', justifyContent: 'center'}}>{eleccionBoleta?.MOTIVO_ELECCION?.toUpperCase()} </DialogTitle>
+      <DialogTitle style={{ display: 'flex', justifyContent: 'center' }}>{eleccionBoleta?.MOTIVO_ELECCION?.toUpperCase()} </DialogTitle>
       <DialogContent>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'stretch', border: '1px solid #000', width: '100%' }}>
-        <Card style={{ flex: '0 0 calc(33.33% - 2rem)', margin: '1rem', backgroundColor: '#b5bac9' }}>
-          <CardContent>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PAPITAS</Typography>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PPP</Typography>
-            <Typography>Candidatos:</Typography>
-            <div>
-              <Typography>Perez Sanchez maria jose - Rector</Typography>
-              <Typography>Perez maria jose - Vicerrector</Typography>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
-              <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}>
-                {/* Contenido del div interno */}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card style={{ flex: '0 0 calc(33.33% - 2rem)', margin: '1rem', backgroundColor: '#b5bac9' }}>
-          <CardContent>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PAPITAS</Typography>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PPP</Typography>
-            <Typography>Candidatos:</Typography>
-            <div>
-              <Typography>Perez Sanchez maria jose - Rector</Typography>
-              <Typography>Perez maria jose - Vicerrector</Typography>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
-              <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}>
-                {/* Contenido del div interno */}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card style={{ flex: '0 0 calc(33.33% - 2rem)', margin: '1rem', backgroundColor: '#b5bac9' }}>
-          <CardContent>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PAPITAS</Typography>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PPP</Typography>
-            <Typography>Candidatos:</Typography>
-            <div>
-              <Typography>Perez Sanchez maria jose - Rector</Typography>
-              <Typography>Perez maria jose - Vicerrector</Typography>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
-              <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}>
-                {/* Contenido del div interno */}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card style={{ flex: '0 0 calc(33.33% - 2rem)', margin: '1rem', backgroundColor: '#b5bac9' }}>
-          <CardContent>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PAPITAS</Typography>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PPP</Typography>
-            <Typography>Candidatos:</Typography>
-            <div>
-              <Typography>Perez Sanchez maria jose - Rector</Typography>
-              <Typography>Perez maria jose - Vicerrector</Typography>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
-              <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}>
-                {/* Contenido del div interno */}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card style={{ flex: '0 0 calc(33.33% - 2rem)', margin: '1rem', backgroundColor: '#b5bac9' }}>
-          <CardContent>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PAPITAS</Typography>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PPP</Typography>
-            <Typography>Candidatos:</Typography>
-            <div>
-              <Typography>Perez Sanchez maria jose - Rector</Typography>
-              <Typography>Perez maria jose - Vicerrector</Typography>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
-              <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}>
-                {/* Contenido del div interno */}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card style={{ flex: '0 0 calc(33.33% - 2rem)', margin: '1rem', backgroundColor: '#b5bac9' }}>
-          <CardContent>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PAPITAS</Typography>
-            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>PPP</Typography>
-            <Typography>Candidatos:</Typography>
-            <div>
-              <Typography>Perez Sanchez maria jose - Rector</Typography>
-              <Typography>Perez maria jose - Vicerrector</Typography>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
-              <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}>
-                {/* Contenido del div interno */}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'stretch', border: '1px solid #000', width: '100%' }}>
+          {frentesBoleta.map((frente, index) => (
+            <Card key={index} style={{ flex: '0 0 calc(33.33% - 2rem)', margin: '1rem', backgroundColor: '#b5bac9' }}>
+              <CardContent>
+                <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>{frente.NOMBRE_FRENTE}</Typography>
+                <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>{frente.SIGLA_FRENTE}</Typography>
+                <Typography>Candidatos:</Typography>
+                <div>
+                  <CandidatosBoletas frenteId={frente.COD_FRENTE} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
+                  <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}></div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </DialogContent>
       <StyledButtonGroup>
         <StyledButton

@@ -80,13 +80,6 @@ const SustitucionDeVocal = ({ codComite }) => {
         {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS}){' '}
         {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}
       </Typography>
-      <TextField
-        label="Nuevo Código SIS"
-        variant="outlined"
-        value={vocal.nuevoCodSis || ''}
-        onChange={(e) => onUpdate(vocal.COD_SIS, e.target.value)}
-        fullWidth
-      />
       <IconButton onClick={() => handleActualizarDatos(vocal)} style={{ marginTop: '8px' }}>
         <CheckIcon fontSize="small" />
       </IconButton>
@@ -103,12 +96,17 @@ const SustitucionDeVocal = ({ codComite }) => {
   };
 
   const filterVocales = (vocalesArray) => {
-    return vocalesArray.filter(
-      (vocal) =>
-        vocal.COD_SIS.includes(searchTerm) ||
-        vocal.NOMBRE.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        vocal.APELLIDO.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    return vocalesArray.filter((vocal) => {
+      const codSis = vocal.COD_SIS || '';
+      const nombre = vocal.NOMBRE || '';
+      const apellido = vocal.APELLIDO || '';
+      
+      return (
+        codSis.includes(searchTerm) ||
+        nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        apellido.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
   };
   return (
     <Paper elevation={3} className="ListaComitePadre" style={{ padding: '20px' }}>

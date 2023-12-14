@@ -19,15 +19,18 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ListIcon from "@mui/icons-material/List";
 import axios from "axios";
 import ListaMesas from "./ListadeMesas";
+import GenerarListaVotantesPDF from "./GenerarListaVotantesPDF";
 import Swal from "sweetalert2";
 import "../css/Comite.css";
 import "../css/AsignacionMesas.css";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function AsignacionMesas({ lista }) {
   const [proceso, setProceso] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [botonDeshabilitado, setBotonDeshabilitado] = useState(false);
   const [selectedEleccionId, setSelectedEleccionId] = useState(null);
+  const [modalIsOpenLV, setModalIsOpenLV] = useState(false);
 
   const url = process.env.REACT_APP_VARURL;
 
@@ -37,25 +40,7 @@ function AsignacionMesas({ lista }) {
     });
   }, [lista]);
 
-  const verificarExistenciaComite = async (codComite) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_VARURL}verificar-comite/${codComite}`
-      );
-
-      if (response.data.existeComite) {
-        console.log("El comité existe");
-        return false;
-      } else {
-        console.log("El comité no existe");
-        return true;
-      }
-    } catch (error) {
-      console.error("Error al verificar la existencia del comité:", error);
-      return false;
-    }
-  };
-
+  
   const handleAsociarClick = (COD_ELECCION) => {
     axios
       .post(`${url}asignar_mesas_carrera/${COD_ELECCION}`)
@@ -87,7 +72,14 @@ function AsignacionMesas({ lista }) {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
+  ///Modal mostrar Lista Votantes
+  const openModalLV = (id) => {
+    setSelectedEleccionId(id);
+    setModalIsOpenLV(true);
+  };
+  const closeModalLV = () => {
+    setModalIsOpenLV(false);
+  };
   return (
     <>
       <Container>
@@ -101,6 +93,7 @@ function AsignacionMesas({ lista }) {
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>MESAS</TableCell>
+                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>LISTA DE VOTANTES</TableCell>              
               </TableRow>
             </TableHead>
             <TableBody>
@@ -134,13 +127,30 @@ function AsignacionMesas({ lista }) {
                       </Button>
                     
                   </TableCell>
+                  <TableCell style={{ width:'18%',textAlign: 'center'  }}>
+                    
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={ <VisibilityIcon fontSize="large" />}
+                    className="custom-button"
+                    onClick={() => openModalLV()}
+                    sx={{marginRight:'12px'}}
+                >
+                    Visualizar
+                </Button>
+                    
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
         </Container>
-
+        <GenerarListaVotantesPDF
+        isOpen={modalIsOpenLV}
+        closeModal={closeModalLV}
+        eleccionId={selectedEleccionId} /> 
       <Modal open={modalIsOpen} onClose={closeModal}>
         <Card className="CuerpoComite" onClick={closeModal}>
           <CardContent>

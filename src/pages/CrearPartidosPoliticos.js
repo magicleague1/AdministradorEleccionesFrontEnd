@@ -1,34 +1,31 @@
 import React, { useState } from "react";
 import {
-  Container,
   Grid,
+  Modal,
   Typography,
   FormControl,
   InputLabel,
   TextField,
   Button,
   Box,
-  Paper,
   styled,
 } from "@mui/material";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const StyledContainer = styled(Container)({
-  paddingTop: '32px',
-  paddingBottom: '32px',
-  width: '100%',
-  height: '100%',
-  backgroundColor: 'rgba(0, 56, 116, 0.564)',
-});
-
-const StyledPaper = styled(Paper)({
-  padding: '32px',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  margin: 'auto',
-  marginTop: '90px',
-  width: '80%',
+const ModalContainer = styled("div")({
+  position: "absolute",
+  width: 600,
+  backgroundColor: "#fff",
+  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+  padding: "20px",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  "& .ActualizarTitulo": {
+    color: "rgb(0, 57, 116)",
+    marginBottom: "35px",
+  },
 });
 
 const StyledFormControl = styled(FormControl)({
@@ -47,7 +44,7 @@ const StyledButton = styled(Button)({
   marginLeft: '20px',
 });
 
-const PartidosPoliticos = () => {
+const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
   const initialState = {
     NOMBRE_FRENTE: "",
     SIGLA_FRENTE: "",
@@ -81,7 +78,8 @@ const PartidosPoliticos = () => {
     data.append('SIGLA_FRENTE', formData.SIGLA_FRENTE);
     data.append('LOGO', selectedFile);
     data.append('COD_CARRERA', "");
-    console.log(data);
+    data.append('COD_ELECCION', eleccionId);
+
     axios.post(`${process.env.REACT_APP_VARURL}frentes/nuevo`, data)
       .then((response) => {
         Swal.fire({
@@ -102,19 +100,18 @@ const PartidosPoliticos = () => {
   };
 
   const handleVolverAtras = () => {
-    setFormData(initialState);
-    setSelectedFile(null);
+    closeModal();
   };
 
   return (
-    <StyledContainer>
-      <StyledPaper>
+    <Modal open={isOpen} onClose={closeModal} aria-labelledby="Inscribir Frente">
+      <ModalContainer>
         <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
           INSCRIPCIÓN DE UN FRENTE POLÍTICO
         </Typography>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={15} style={{display: 'flex', alignItems: 'center', }}>
-            <StyledFormControl  style={{width:'100%', marginRight:'20px'}}>
+          <Grid item xs={12} md={15} style={{ display: 'flex', alignItems: 'center' }}>
+            <StyledFormControl style={{ width: '100%', marginRight: '20px' }}>
               <TextField
                 label="Nombre:"
                 type="text"
@@ -126,7 +123,6 @@ const PartidosPoliticos = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-               
               />
             </StyledFormControl>
             <StyledFormControl>
@@ -143,25 +139,21 @@ const PartidosPoliticos = () => {
                 }}
               />
             </StyledFormControl>
-           
           </Grid>
           <Grid item xs={12} md={15}>
-         
-              <InputLabel htmlFor="logo"  style={{ marginBottom: '8px' }}>Logo:</InputLabel>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="motivo-input"
-              />
-           
+            <InputLabel htmlFor="logo" style={{ marginBottom: '8px' }}>Logo:</InputLabel>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="motivo-input"
+            />
             {selectedFile && (
               <Typography variant="body1">
                 Archivo seleccionado: {selectedFile.name}
               </Typography>
             )}
           </Grid>
-          
           <Grid item xs={12} md={15}>
             <StyledButtonGroup>
               <StyledButton
@@ -174,15 +166,16 @@ const PartidosPoliticos = () => {
               <StyledButton
                 variant="contained"
                 color="secondary"
+                className="custom-btn btn-8"
                 onClick={handleVolverAtras}
               >
-                Cancelar
+                Volver
               </StyledButton>
             </StyledButtonGroup>
           </Grid>
         </Grid>
-      </StyledPaper>
-    </StyledContainer>
+      </ModalContainer>
+    </Modal>
   );
 };
 

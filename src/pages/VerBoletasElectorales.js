@@ -11,11 +11,12 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import VisualizarBoletas from "./VisualizarBoletas"
-import axios from "axios";
 import GenerarPdfBoletas from "./GenerarPdfBoletas";
+
 
 const VerBoletasElectorales = ({ lista }) => {
   const [selectedEleccionId, setSelectedEleccionId] = useState(null);
@@ -23,6 +24,7 @@ const VerBoletasElectorales = ({ lista }) => {
   const [modalIsOpenVB, setModalIsOpenVB] = useState(false);
   const [modalIsOpenGB, setModalIsOpenGB] = useState(false);
   const [isVisualizarBoletasActive, setIsVisualizarBoletasActive] = useState(false);
+  const url = process.env.REACT_APP_VARURL;
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_VARURL + "elecciones_index").then((response) => {
@@ -44,6 +46,7 @@ const VerBoletasElectorales = ({ lista }) => {
 
   ///Modal generacion de boletas
   const openModalGB = (id) => {
+    
     setSelectedEleccionId(id);
     setModalIsOpenGB(true);
   };

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Input from "@mui/material/Input";
 import { Box, styled } from "@mui/system";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -30,9 +28,7 @@ const InputField = styled(TextField)({
 const CustomButton = styled(Button)({
   marginRight: "10px",
 });
-const FileInputContainer = styled("div")({
-  marginBottom: "2rem",
-});
+
 
 const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
 
@@ -44,7 +40,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
 
 
   const [formData, setFormData] = useState(initialState);
-  const [selectedFile, setSelectedFile] = useState(null);
+
   const url = process.env.REACT_APP_VARURL;
 
   useEffect(() => {
@@ -107,10 +103,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
     closeModal();
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
-  };
+ 
 
   return (
     <Modal open={isOpen} onClose={closeModal} aria-labelledby="Actualizar Frente">
@@ -134,22 +127,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
           fullWidth
           InputLabelProps={{ shrink: true }}
         />
-         <FileInputContainer>
-          <label style={{ fontSize: "1rem", marginBottom: "1rem" }}>Logo:</label>
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            fullWidth
-          />
-        </FileInputContainer>
-        {selectedFile && (
-          <div>
-            <Typography variant="body1">
-              Archivo seleccionado: {selectedFile.name}
-            </Typography>
-          </div>
-        )}
+        
         <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
           <CustomButton
             variant="contained"
