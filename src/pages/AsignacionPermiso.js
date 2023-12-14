@@ -91,7 +91,7 @@ const AsignacionPermiso = ({ lista }) => {
                           handleActualizar(elemento.COD_COMITE)
                         }
                       >
-                        Asinar
+                        Asignar
                       </Button>
                      
                     </TableCell>

@@ -17,6 +17,7 @@ import SustitucionDeVocal from "./SustitucionDeVocal ";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import SyncIcon from "@mui/icons-material/Sync";
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import Swal from "sweetalert2";
 import ListaVocalesComite from "./ListaVocalesComite";
 
@@ -64,7 +65,7 @@ const AsignacionComite = ({ lista }) => {
       Swal.fire({
         icon: "success",
         title: "Asignación exitosa",
-        text: "La asignación del comité y vocales se realizó con éxito.",
+        text:  "La asignacion del comité y vocales se realizó con éxito",
       }).then(() => {
         setCodComite(COD_COMITE);
         setModalIsOpen(true);
@@ -96,6 +97,42 @@ const AsignacionComite = ({ lista }) => {
   const closeModal1 = () => {
     setModalIsOpen1(false);
   };
+
+ 
+  const enviarCorreo = async (COD_ELECCION, COD_COMITE) => {
+    try {
+      const existeComite = await verificarExistenciaComite(COD_COMITE);
+
+      if (!existeComite) {
+        Swal.fire({
+          icon: "error",
+          title: "Asignacion incorrecta",
+          text: "Ya se asigno Vocales de comité electoral",
+        });
+        return;
+      }
+
+      await axios.put(`${url}asignar-comite/${COD_ELECCION}`);
+      await axios.post(`${url}asignar-vocales/${COD_COMITE}`);
+
+      Swal.fire({
+        icon: "success",
+        title: "Asignación exitosa",
+        html:  "Se envió un correo a todos los vocales asignados",
+      }).then(() => {
+        setCodComite(COD_COMITE);
+        setModalIsOpen(true);
+      });
+    } catch (error) {
+      console.error("Error en la asignación:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error en la asignación",
+        text: "Ocurrió un error en la asignación del comité y vocales.",
+      });
+    }
+  };
+
 
   return (
     <Container>
@@ -147,6 +184,15 @@ const AsignacionComite = ({ lista }) => {
                     style={{marginLeft:'12px'}}
                   >
                     Actualizar
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<MailOutlineIcon/>}
+                    onClick={() => enviarCorreo()}
+                    style={{marginLeft:'12px'}}
+                  >
+                    Enviar correo
                   </Button>
                 </TableCell>
               </TableRow>

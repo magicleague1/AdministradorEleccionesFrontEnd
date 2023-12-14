@@ -175,7 +175,8 @@ const CrearElecciones = () => {
         Swal.fire({
           icon: 'success',
           title: 'Proceso registrado correctamente',
-          text: `El proceso electoral se ha creado con éxito para el motivo: ${formData.motivoEleccion}`
+          text: `Se envió un correo de la información de este proceso electoral`
+        
         }).then(() => {
           setShowModal(true);
           setFormData(initialState);
