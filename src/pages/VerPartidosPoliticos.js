@@ -7,6 +7,7 @@ import CrearPartidosPoliticos from "./CrearPartidosPoliticos";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
 import CandidatoPorFrentes from "./CandidatosPorFrentes.js";
 
@@ -95,7 +96,7 @@ const VerPartidosPoliticos = ({ lista }) => {
                   <Button
                     variant="outlined"
                     size="small"
-                    startIcon={<InfoOutlinedIcon />}
+                    startIcon={<AddIcon />}
                     onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}
                     className="custom-button"
                   >

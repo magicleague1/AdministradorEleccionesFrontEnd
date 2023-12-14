@@ -210,22 +210,22 @@ const AsignacionComite = ({ lista }) => {
           justifyContent: 'center',
         }}
       >
-        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '600px' }}>
-          <Typography variant="h5" gutterBottom>
-            Lista de Comite Electoral
-          </Typography>
-          <div className="ContenedorVocales">
-            {codComite !== null && <ListaVocalesComite idComite={codComite} />}
-          </div>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={closeModal}
-            style={{ marginTop: "20px" }}
-          >
-            Cerrar
-          </Button>
-        </div>
+        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <Typography variant="h5" gutterBottom>
+        Lista de Comite Electoral
+      </Typography>
+      <div className="ContenedorVocales" style={{width:'550px'}}>
+        {codComite !== null && <ListaVocalesComite idComite={codComite} />}
+      </div>
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={closeModal}
+        style={{ marginTop: "20px" }}
+      >
+        Cerrar
+      </Button>
+    </div>
       </Modal>
       <Modal
         open={modalIsOpen1}
@@ -237,24 +237,24 @@ const AsignacionComite = ({ lista }) => {
           justifyContent: 'center',
         }}
       >
-        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '900px' }}>
-          <Typography variant="h5" gutterBottom>
-            Reasignacion de Lista de Comite
-          </Typography>
-          <div className="ContenedorVocales">
-            {codComite !== null && (
-              <SustitucionDeVocal codComite={codComiteActualizar} />
-            )}
-          </div>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={closeModal1}
-            style={{ marginTop: "20px" }}
-          >
-            Cerrar
-          </Button>
-        </div>
+        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '900px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Typography variant="h5" gutterBottom style={{ marginBottom: '20px' }}>
+        Reasignacion de Lista de Comite
+      </Typography>
+      <div className="ContenedorVocales">
+        {codComiteActualizar !== null && (
+          <SustitucionDeVocal codComite={codComiteActualizar} />
+        )}
+      </div>
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={closeModal1}
+        style={{ marginTop: "20px" }}
+      >
+        Cerrar
+      </Button>
+    </div>
       </Modal>
     </Container>
   );

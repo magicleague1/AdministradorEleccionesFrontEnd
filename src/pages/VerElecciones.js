@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import DoneIcon from '@mui/icons-material/Done';
 import ActualizarEleccionModal from "../pages/ActualizarEleccionModal";
 import AgregarFrenteModal from "./AgregarFrenteModal.js";
 import AsignarFrente from "./AsignarFrente";
@@ -83,6 +83,7 @@ const VerElecciones = ({ lista }) => {
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FECHA</TableCell>
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>DETALLE</TableCell>
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FRENTES</TableCell>
+              <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>CONCLUSION</TableCell>            
             </TableRow>
           </TableHead>
           <TableBody>
@@ -102,7 +103,7 @@ const VerElecciones = ({ lista }) => {
                     Detalles
                   </Button>
                 </TableCell>
-                <TableCell style={{width:'33%',textAlign: 'center' }}>
+                <TableCell style={{width:'22%',textAlign: 'center' }}>
                   <Button
                     variant="outlined"
                     size="small"
@@ -112,13 +113,16 @@ const VerElecciones = ({ lista }) => {
                   >
                     Agregar Frentes
                   </Button>
+                </TableCell>
+                <TableCell style={{width:'22%',textAlign: 'center' }}>
                   <Button
                     variant="outlined"
                     size="small"
-                    startIcon={<ListAltOutlinedIcon />}
-                    onClick={() => openModalADDFP(eleccion.COD_ELECCION)}
+                    startIcon={<DoneIcon />}
+                    onClick={() => openModalAFP(eleccion.COD_ELECCION)}
+                    style={{marginLeft: '12px', marginRight: '12px'}}
                   >
-                    Ver Frentes
+                    Terminar Eleccion
                   </Button>
                 </TableCell>
               </TableRow>

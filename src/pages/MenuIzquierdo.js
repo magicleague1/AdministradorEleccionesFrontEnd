@@ -7,20 +7,16 @@ import HomeIcon from "@mui/icons-material/Home";
 import CreateIcon from "@mui/icons-material/Create";
 import BallotIcon from "@mui/icons-material/Ballot";
 import PeopleIcon from "@mui/icons-material/People";
-import ReceiptIcon from '@mui/icons-material/Receipt';
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import Diversity3Icon from '@mui/icons-material/Diversity3';
-
 import CrearElecciones from './CrearElecciones';
 import Inicio from './Inicio';
 import VerElecciones from './VerElecciones';
 import AsignacionComite from "./AsignacionComite";
-import PartidosPoliticos from "./CrearPartidosPoliticos";
 import VerPartidosPoliticos from "./VerPartidosPoliticos";
 import AsignacionMesas from "./AsignacionMesas";
 import VerConvocatoria from "./VerConvocatoria";
@@ -31,9 +27,6 @@ import JuradoElectorales from "./JuradosElectorales";
 function MenuIzquierdo() {
   const [openProcesoElectoral, setOpenProcesoElectoral] = useState(false);
   const [openComiteElectoral, setOpenComiteElectoral] = useState(false);
-
-  
-
   const [mostrarCrearEleccion, setMostrarCrearEleccion] = useState(false);
   const [mostrarInicio, setMostrarInicio] = useState(true);
   const [mostrarVerElecciones, setMostrarVerElecciones] = useState(false);
@@ -230,11 +223,11 @@ function MenuIzquierdo() {
 
   return (
     <div style={{ display: 'flex' }}>
-    <Drawer variant="permanent" style={{ width: '300px' }}>
+    <Drawer variant="permanent" style={{ width: '320px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
         <img src={Logo} alt="profile_picture" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
         <h3 style={{ color: 'black', fontSize: '22px', marginTop: '8px' }}>Administrador de elecciones </h3>
-        <b style={{ color: 'black', marginTop: '4px', fontSize: '22px' }}> FCyT </b>
+        <b style={{ color: 'black', marginTop: '4px', fontSize: '22px' }}> UMSS </b>
       </div>
       <List>
         <ListItem button onClick={() => handleDrawerItemClick("Inicio")} style={{ backgroundColor: mostrarInicio ? 'lightgray' : 'inherit' }}>
@@ -250,13 +243,13 @@ function MenuIzquierdo() {
           </ListItem>
           <Collapse in={openProcesoElectoral} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button onClick={() => handleDrawerItemSubClick("Crear Proceso Electoral")} className="Ocultos">
+              <ListItem button onClick={() => handleDrawerItemSubClick("Crear Proceso Electoral")} style={{ backgroundColor: mostrarCrearEleccion ? 'lightgray' : 'inherit' }}>
                 <ListItemIcon>
                   <CreateIcon />
                 </ListItemIcon>
                 <ListItemText primary="Crear Proceso Electoral" />
               </ListItem>
-              <ListItem button onClick={() => handleDrawerItemSubClick("Procesos Electorales Activos")} className="Ocultos">
+              <ListItem button onClick={() => handleDrawerItemSubClick("Procesos Electorales Activos")} style={{ backgroundColor: mostrarVerElecciones ? 'lightgray' : 'inherit' }}>
                 <ListItemIcon>
                   <BallotIcon />
                 </ListItemIcon>
@@ -273,13 +266,13 @@ function MenuIzquierdo() {
           </ListItem>
           <Collapse in={openComiteElectoral} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button onClick={() => handleDrawerItemSubClick("Lista de Comite Electoral")} className="Ocultos">
+              <ListItem button onClick={() => handleDrawerItemSubClick("Lista de Comite Electoral")} style={{ backgroundColor: mostrarVerComite ? 'lightgray' : 'inherit' }}>
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="Lista de Comite Electoral" />
               </ListItem>
-              <ListItem button onClick={() => handleDrawerItemSubClick("Asignacion de Permisos")} className="Ocultos">
+              <ListItem button onClick={() => handleDrawerItemSubClick("Asignacion de Permisos")} style={{ backgroundColor: mostrarAsignacionP ? 'lightgray' : 'inherit' }}>
                 <ListItemIcon>
                   <AssignmentIndIcon />
                 </ListItemIcon>
@@ -303,16 +296,16 @@ function MenuIzquierdo() {
           </ListItem>
           
           
-          <ListItem button onClick={() => handleDrawerItemClick("Crear Convocatoria")} >
+          <ListItem button onClick={() => handleDrawerItemClick("Crear Convocatoria")} style={{ backgroundColor: mostrarVerConvocatoria ? 'lightgray' : 'inherit' }}>
             <ListItemIcon>
               <CreateIcon />
             </ListItemIcon>
             <ListItemText primary="Crear Convocatoria" />
           </ListItem>
 
-          <ListItem button onClick={() => handleBoletasElectorales("Boletas Electorales")} >
+          <ListItem button onClick={() => handleBoletasElectorales("Boletas Electorales")} style={{ backgroundColor: mostrarBoletas ? 'lightgray' : 'inherit' }}>
             <ListItemIcon>
-             <ReceiptIcon />
+             <HowToVoteIcon />
             </ListItemIcon>
             <ListItemText primary="Boletas Electorales" />
           </ListItem>
@@ -326,7 +319,7 @@ function MenuIzquierdo() {
 
         </List>
       </Drawer>
-      <div style={{width: '100%', height: '100vh'}}>
+      <div className="contentContainer">
         {mostrarCrearEleccion && <CrearElecciones />}
         {mostrarInicio && <Inicio />}
         {mostrarVerElecciones && <VerElecciones lista={mostrarVerElecciones} />}

@@ -8,97 +8,25 @@
 	/*box-sizing: border-box;*/
 	font-family: 'Open Sans', sans-serif;
 }
-.wrapper{
-  display: flex; 
-  flex-direction: row;
-  height: 100%;
-}
-.wrapper .sidebar{
-	background: rgb(0,57,116);
-	top: 0;
-	left: 0;
-	width: 355px;
-	height: 100vh;
-	padding: 20px 0;
-	transition: all 0.5s ease;
+::-webkit-scrollbar {
+  width: 12px; /* ancho del scrollbar */
 }
 
-.wrapper .sidebar .profile{
-	margin-bottom: 30px;
-	text-align: center;
+/* Manija (pulgar) del scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: #3498db; /* color del pulgar */
+  border-radius: 6px; /* esquinas redondeadas del pulgar */
 }
 
-.wrapper .sidebar .profile img{
-	display: block;
-	width: 100px;
-	height: 120px;
-	margin: 0 auto;
+/* Track (fondo) del scrollbar */
+::-webkit-scrollbar-track {
+  background-color: transparent; /* color del fondo */
 }
 
-.wrapper .sidebar .profile h3{
-	color: #ffffff;
-	margin: 5px 5px 3px;
+/* Cambios al hover del scrollbar */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #2980b9; /* color del pulgar al pasar el mouse */
 }
-.wrapper .sidebar .profile b{
-    color: #ffffff;
-    font-size: 24px;
-}
-
-.listaSidebar {
-    
-    width: 105%;
-    height: 293px;
-    padding-left: 0;
-    margin-top: 12px;
-  }
-  
-  .listaSidebar .row {
-    width: 99%;
-    height: 8vh;
-    border: 1px solid #10558d;
-    list-style: none;
-    flex-direction: row;
-    display: flex;
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-    color: #ffffff;
-    text-align: center;
-  
-  }
-  .Ocultos{
-    width: 99%;
-    height: 8vh;
-    border: 1px solid  #10558d;
-    list-style: none;
-    flex-direction: row;
-    display: flex;
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-    color:#fafafa;
-    background-color: #a7a7a7;
-    text-align: center;
-  }
-  .Ocultos:hover {
-    background-color: #082338; /* Cambia el color de fondo en hover */
-    color: #ffffff; /* Cambia el color del texto en hover */
-    cursor: pointer;
-    border: 1px solid #ffffff;
-    font-style: bold;
-  }
-  
-  .listaSidebar .row:hover {
-    cursor: pointer;
-    background-color: #ffffff;
-    font-style: bold;
-    color: rgb(0,57,116);
-  }
-  
-  .listaSidebar #active {
-    background-color: #ffffff;
-    font-weight: bold;
-    color: rgb(0,57,116);
-  }
-  
   .SegundoDivMenu{
     width: 100%;
     height: auto;
@@ -110,3 +38,8 @@
     
   }
   
+  .contentContainer {
+    overflow-y: auto; /* Hace que el scrollbar aparezca solo cuando es necesario */
+    height: 100vh;
+    width: 100%;
+  }

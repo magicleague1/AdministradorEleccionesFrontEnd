@@ -41,9 +41,10 @@ const StyledFormControl = styled(FormControl)({
 const StyledButtonGroup = styled(Box)({
   display: 'flex',
   justifyContent: 'center',
-  margin: 'auto',
-  marginLeft: '100%',
-  width:'100%'
+  alignItems: 'center',  // Agrega esta línea para centrar verticalmente
+  textAlign: 'center',
+  width: '100%',
+ 
 });
 
 const StyledButton = styled(Button)({
@@ -229,6 +230,9 @@ const CrearElecciones = () => {
                   name: 'motivoEleccion',
                   id: 'motivoEleccion',
                 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               >
                 <MenuItem value="" disabled>
                   -----Seleccione una Eleccion-----
@@ -251,6 +255,9 @@ const CrearElecciones = () => {
                   value={selectedFacultad}
                   onChange={handleFacultadChange}
                   fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 >
                   <MenuItem value={0}>Seleccione una facultad</MenuItem>
                   {facultades.map((facultad) => (
@@ -274,9 +281,13 @@ const CrearElecciones = () => {
                <FormControl fullWidth>
                   <InputLabel>Selecciona una facultad:</InputLabel>
                   <Select
+                   label="Selecciona una facultad:"
                     value={selectedFacultad}
                     onChange={handleFacultadChange}
                     fullWidth
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                   >
                     <MenuItem value={0}>Seleccione una facultad</MenuItem>
                     {facultades.map((facultad) => (
@@ -295,9 +306,14 @@ const CrearElecciones = () => {
                <FormControl fullWidth>
                   <InputLabel>Selecciona una carrera:</InputLabel>
                   <Select
+                    label="Selecciona una carrera:"
                     value={selectedCarrera}
                     onChange={handleCarreraChange}
                     fullWidth
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    
                   >
                     <MenuItem value={0}>Seleccione una carrera</MenuItem>
                     {carreras.map((carrera) => (
@@ -364,7 +380,7 @@ const CrearElecciones = () => {
               />
             </StyledFormControl>
             </Grid>
-            <Grid>
+            
             <StyledButtonGroup>
               <StyledButton
                 variant="contained"
@@ -382,7 +398,7 @@ const CrearElecciones = () => {
               </StyledButton>
             </StyledButtonGroup>
             </Grid>
-        </Grid>
+        
       </StyledPaper>
     </StyledContainer>
   );

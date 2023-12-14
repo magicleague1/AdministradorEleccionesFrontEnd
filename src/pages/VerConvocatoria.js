@@ -62,7 +62,7 @@ const VerConvocatoria = ({ lista }) => {
   return (
     <Container>
      
-      <Typography variant="h3" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
+      <Typography variant="h4" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
         CONVOCATORIAS
       </Typography>
       <TableContainer component={Paper}>

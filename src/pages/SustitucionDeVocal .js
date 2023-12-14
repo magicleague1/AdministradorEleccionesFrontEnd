@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CheckIcon from '@mui/icons-material/Check';
+import CachedIcon from '@mui/icons-material/Cached';
 import { Typography, Paper, Grid, TextField, IconButton, Box, Divider } from '@mui/material';
 import '../css/Asignacion.css';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -79,10 +79,14 @@ const SustitucionDeVocal = ({ codComite }) => {
       <Typography variant="body1">
         {vocal.NOMBRE} {vocal.APELLIDO} (Código SIS: {vocal.COD_SIS}){' '}
         {vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'}
+        <IconButton
+      onClick={() => handleActualizarDatos(vocal)}
+      style={{  color: 'green' }} // Agrega el estilo de color verde
+    >
+      <CachedIcon fontSize="small" />
+    </IconButton>
       </Typography>
-      <IconButton onClick={() => handleActualizarDatos(vocal)} style={{ marginTop: '8px' }}>
-        <CheckIcon fontSize="small" />
-      </IconButton>
+      
       <Divider style={{ marginTop: '10px', marginBottom: '10px' }} />
     </Box>
   );
