@@ -63,7 +63,7 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
           className="modalFrente"
           style={{ backgroundColor: "#fff", padding: "20px", width: "400px" }}
         >
-          <h3 className="tituloPfrente" style={{ color: "black" }}>
+          <h3 className="tituloPfrente" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>
             FRENTES POLÍTICOS
           </h3>
           <List>
@@ -87,6 +87,7 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
               </ListItem>
             ))}
           </List>
+          <div style={{ textAlign: "center" }}>
           <Button
             className="botonvfrente"
             onClick={handleClose}
@@ -95,6 +96,7 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
           >
             Cerrar
           </Button>
+          </div>
         </div>
       </Modal>
       <ListaCandidatos

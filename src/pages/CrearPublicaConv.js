@@ -65,9 +65,18 @@ const CrearPublicaConv = ({ isOpen, closeModal, eleccionId }) => {
         process.env.REACT_APP_VARURL + "publicar_convocatorias_crear",
         data
       );
-
+      Swal.fire({
+        icon: "success",
+        title: "Publicacion exitosa",
+        text: "La publicacion de la convocatoria se realizó con éxito.",
+      })
       console.log("Datos enviados:", response.data);
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error en la publicacion",
+        text: "Ocurrió un error en la publicacion de la convocatoria.",
+      });
       console.error("Error al enviar datos:", error);
     }
   };
@@ -76,7 +85,7 @@ const CrearPublicaConv = ({ isOpen, closeModal, eleccionId }) => {
     <Modal open={isOpen}  onClose={closeModal} aria-labelledby="Crear Convocatoria">
       <ModalContainer>
         <Typography variant="h6" gutterBottom>
-          CREAR CONVOCATORIA
+          PUBLICAR CONVOCATORIA
         </Typography>
         <form onSubmit={handleSubmit}>
           <InputField

@@ -48,8 +48,8 @@ const ListaCandidatos = ({ isOpen, closeModal, frenteId}) => {
           className="modalFrente"
           style={{ backgroundColor: "#fff", padding: "20px", width: "400px" }}
         >
-          <h3 className="tituloPfrente" style={{ color: "black" }}>
-            Lista de candidatos
+          <h3 className="tituloPfrente" style={{ color: "black",textAlign: "center", marginBottom: "15px" }}>
+            LISTA DE CANDIDATOS
           </h3>
           <List>
             {listaCandidatos.map((candidato, index) => (
@@ -61,6 +61,7 @@ const ListaCandidatos = ({ isOpen, closeModal, frenteId}) => {
               </ListItem>
             ))}
           </List>
+          <div style={{ textAlign: "center" }}>
           <Button
             className="botonvfrente"
             onClick={handleClose}
@@ -69,6 +70,7 @@ const ListaCandidatos = ({ isOpen, closeModal, frenteId}) => {
           >
             Cerrar
           </Button>
+          </div>
         </div>
       </Modal>
       
