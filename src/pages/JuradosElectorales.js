@@ -18,8 +18,6 @@ import {
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import SyncIcon from "@mui/icons-material/Sync";
-import ReasiganarJurados from "./ReasignarJurados";
 import AsignacionJurados from "./AsignacionJurados";
 
 function AsignacionJuradosEl({ lista }) {
@@ -27,6 +25,7 @@ function AsignacionJuradosEl({ lista }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpenRea, setModalIsOpenRea] = useState(false);
   const [modalIsOpenAsi, setModalIsOpenAsi] = useState(false);
+  const [selectedEleccionId, setSelectedEleccionId] = useState(null);
 
   const url = process.env.REACT_APP_VARURL;
 
@@ -48,7 +47,8 @@ function AsignacionJuradosEl({ lista }) {
     setModalIsOpenRea(false);
   };
 
-  const openModalAsi = () => {
+  const openModalAsi = (id) => {
+    setSelectedEleccionId(id);
     setModalIsOpenAsi(true);
   };
   const closeModalAsi = () => {
@@ -66,38 +66,25 @@ function AsignacionJuradosEl({ lista }) {
               <TableRow>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>MESA</TableCell>
-                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ASIGNACION</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>LISTA</TableCell>              
               </TableRow>
             </TableHead>
             <TableBody>
               {proceso.map((elemento) => (
-                <TableRow key={elemento.MOTIVO_ELECCION}>
+                <TableRow key={elemento.COD_ELECCION}>
                   <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
-                  <TableCell style={{ width:'28%',textAlign: 'center'  }}></TableCell> 
-                  <TableCell style={{ width:'18%',textAlign: 'center'  }}>
+                  <TableCell style={{ width:'28%',textAlign: 'center'  }}>
                   <Button
                     variant="outlined"
                     size="small"
                     startIcon={<PersonAddAltOutlinedIcon />}
                     className="custom-button"
-                    onClick={() => openModalAsi()}
+                    onClick={() => openModalAsi(elemento.COD_ELECCION)}
                     sx={{marginRight:'12px'}}
                 >
-                    Asignar
+                    Ver Lista Mesas
                 </Button>
-                <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<SyncIcon />}
-                    className="custom-button"
-                    onClick={() => openModalRea()}
-                    sx={{marginRight:'12px'}}
-                >
-                    Reasignar
-                </Button>
-                    
-                     </TableCell>
+                    </TableCell> 
                  
                 </TableRow>
               ))}
@@ -105,18 +92,24 @@ function AsignacionJuradosEl({ lista }) {
           </Table>
         </TableContainer>
         </Container>
-        <ReasiganarJurados
-        isOpen={modalIsOpenRea}
-        closeModal={closeModalRea} /> 
-      <Modal open={modalIsOpen} onClose={closeModal}>
-        <Card className="CuerpoComite" onClick={closeModal}> </Card>
-      </Modal>
-      <AsignacionJurados
-        isOpen={modalIsOpenAsi}
-        closeModal={closeModalAsi} /> 
-      <Modal open={modalIsOpen} onClose={closeModal}>
-        <Card className="CuerpoComite" onClick={closeModal}> </Card>
-      </Modal>
+        
+      <Modal open={modalIsOpenAsi} onClose={closeModalAsi}>
+        <Card className="JuradoElectorales" onClick={closeModalAsi}>
+          <CardContent>
+            <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>LISTA DE ASIGNACION DE MESAS</Typography>
+            <AsignacionJurados eleccionId={selectedEleccionId}/>
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+              <Button
+                variant="outlined"
+                className="BotonComiteModal"
+                onClick={closeModalAsi}
+              >
+                Cerrar
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+      </Modal> 
     </>
   );
 }

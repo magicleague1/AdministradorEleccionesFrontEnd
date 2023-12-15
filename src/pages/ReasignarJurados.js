@@ -31,7 +31,7 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
       CARNETIDENTIDAD: formData.carnetIdentidad
     };
 
-    axios.post(`${url}frentes/asignarCandidatos`, nuevoCandidato)
+    axios.post(`${url}mesa/{cod_mesa}/jurado}`)
       .then((response) => {
         Swal.fire({
           icon: 'success',
@@ -78,15 +78,17 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
           name="carnetIdentidad"
           value={formData.carnetIdentidad}
           onChange={handleInputChange}
+          onClick={(e) => e.stopPropagation()}
           fullWidth
           margin="normal"
         />
         <TextField
           label="Motivo"
           type="text"
-          name="Motivo"
+          name="motivo"
           value={formData.motivo}
           onChange={handleInputChange}
+          onClick={(e) => e.stopPropagation()}
           fullWidth
           margin="normal"
         />

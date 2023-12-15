@@ -13,6 +13,8 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
 import CrearElecciones from './CrearElecciones';
 import Inicio from './Inicio';
 import VerElecciones from './VerElecciones';
