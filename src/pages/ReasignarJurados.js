@@ -27,9 +27,6 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
       return;
     }
 
-    const nuevoCandidato = {
-      CARNETIDENTIDAD: formData.carnetIdentidad
-    };
 
     axios.put(`${url}jurado/${formData.carnetIdentidad}`, formData)
       .then((response) => {
@@ -56,7 +53,8 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (event) => {
+    event.stopPropagation();
     closeModal();
     setFormData(initialState);
   };
@@ -96,7 +94,7 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
         <Button variant="contained" color="primary" onClick={handleGuardar} style={{marginRight:'12px'}}>
           Guardar
         </Button>
-        <Button variant="contained" color="secondary" onClick={handleCloseModal}>
+        <Button variant="contained" color="secondary" onClick={(event) =>{handleCloseModal(event)}}>
           Cancelar
         </Button>
         </Box>

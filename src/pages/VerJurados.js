@@ -12,42 +12,65 @@ import {
 } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 
-function VerJuradosE({ idComite }) {
+function VerJuradosE({ codMesa }) {
   const [jurados, setJurados] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Realizar una solicitud GET para obtener los datos de los jurados
+    setLoading(true);
+
     axios
-      .get(`${process.env.REACT_APP_VARURL}ver-lista-comite/${idComite}`)
+      .get(`${process.env.REACT_APP_VARURL}obtenerJuradosPorMesa/${codMesa}`)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
-        setJurados(data?.jurados || []); // Ensure data.jurados is defined, otherwise default to an empty array
+        setJurados(data?.resultados || []);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error al obtener la lista de comité:', error);
+        setError(error);
+        setLoading(false);
       });
-  }, [idComite]);
+  }, [codMesa]);
 
-  // Ensure jurados is defined before filtering
-  const filteredJurados = jurados ? jurados.filter((jurado) =>
+  const handleClearSearch = () => {
+    setSearchTerm('');
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  const filteredJurados = jurados.filter((jurado) =>
     jurado.CARNETIDENTIDAD.toLowerCase().includes(searchTerm.toLowerCase())
-  ) : [];
+  );
 
   return (
-    <Paper className="ListaComitePadre" elevation={3} style={{ padding: '10px', textAlign: 'center' }}>
+    <Paper
+      className="ListaComitePadre"
+      elevation={3}
+      style={{ padding: '10px', textAlign: 'center' }}
+      onClick={(e) => e.stopPropagation()}
+    >
       <TextField
         label="Buscar por carnet de identidad"
         variant="outlined"
         fullWidth
         margin="normal"
         onChange={(e) => setSearchTerm(e.target.value)}
+        value={searchTerm}
         style={{ width: '70%', marginLeft: 'auto', marginRight: 'auto' }}
         InputProps={{
           endAdornment: (
             <IconButton
-              onClick={() => setSearchTerm('')}
+              onClick={handleClearSearch}
               style={{ marginRight: '-12px' }}
             >
               <ClearIcon />
@@ -59,21 +82,25 @@ function VerJuradosE({ idComite }) {
         <Typography variant="h5" style={{ marginLeft: '10px' }}>
           Jurados:
         </Typography>
-        <List>
-          {filteredJurados.map((jurado, index) => (
-            <div key={jurado.CARNETIDENTIDAD}>
-              <ListItem>
-                <ListItemText
-                  primary={`${jurado.NOMBRE} ${jurado.APELLIDO}`}
-                  secondary={`CI: ${jurado.CARNETIDENTIDAD} - ${
-                    jurado.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
-                  }`}
-                />
-              </ListItem>
-              {index !== filteredJurados.length - 1 && <Divider />}
-            </div>
-          ))}
-        </List>
+        {filteredJurados.length === 0 ? (
+          <Typography>Aún no se asignaron jurados en esta mesa</Typography>
+        ) : (
+          <List>
+            {filteredJurados.map((jurado, index) => (
+              <div key={jurado.CARNETIDENTIDAD}>
+                <ListItem>
+                  <ListItemText
+                    primary={`${jurado.NOMBRE} ${jurado.APELLIDO}`}
+                    secondary={`CI: ${jurado.CARNETIDENTIDAD} - ${
+                      jurado.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
+                    }`}
+                  />
+                </ListItem>
+                {index !== filteredJurados.length - 1 && <Divider />}
+              </div>
+            ))}
+          </List>
+        )}
       </div>
     </Paper>
   );

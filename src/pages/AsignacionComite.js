@@ -80,15 +80,16 @@ const AsignacionComite = ({ lista }) => {
     }
   };
   const enviarCorreo = async (COD_COMITE) => {
-    await axios.post(`${url}mensajeComiteElectoral/${COD_COMITE}`);
+    await axios.post(`${url}mensajeComiteElectoral`, { idComite: COD_COMITE });
+
     Swal.fire({
       icon: "success",
-      title: "Asignación exitosa",
+      title: "Envio de correo exitoso",
       html:  "Se envió un correo a todos los vocales asignados",
     }).then(() => {
       Swal.fire({
         icon: "error",
-        title: "Error en la asignación",
+        title: "Error en el envio",
         text: "Ocurrió un error al enviar el correo.",
       });
       setModalIsOpen(true);
@@ -173,7 +174,7 @@ const AsignacionComite = ({ lista }) => {
                     variant="outlined"
                     size="small"
                     startIcon={<MailOutlineIcon/>}
-                    onClick={() => enviarCorreo(elemento.codComite)}
+                    onClick={() => enviarCorreo(elemento.COD_COMITE)}
                     style={{marginLeft:'12px'}}
                   >
                     Enviar correo

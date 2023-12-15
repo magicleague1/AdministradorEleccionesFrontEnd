@@ -50,7 +50,8 @@ const AsignacionDeJurados = ({ eleccionId }) => {
     setOpenModalVJ(true);
   };
 
-  const closeModalVJ = () => {
+  const closeModalVJ = (event) => {
+    event.stopPropagation();
     setSelectedCodMesa(null);
     setOpenModalVJ(false);
   };
@@ -173,6 +174,7 @@ const AsignacionDeJurados = ({ eleccionId }) => {
                                       onClick={(event) => openModalVerJ(mesaCarrera.cod_mesa, event)}
                                       style={{
                                         width: '150px',
+                                        height:'60px',
                                         backgroundColor: '#3498db',
                                         color: 'white',
                                         marginRight: '5px',
@@ -219,7 +221,7 @@ const AsignacionDeJurados = ({ eleccionId }) => {
           <Button
             variant="outlined"
             color="primary"
-            onClick={closeModalVJ}
+            onClick={(event) =>{closeModalVJ(event)}}
             style={{ marginTop: '20px' }}
           >
             Cerrar
