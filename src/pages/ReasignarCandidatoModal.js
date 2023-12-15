@@ -1,54 +1,57 @@
-import React, { useEffect, useState } from "react";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Modal, Box, Typography, TextField, Button, Snackbar } from '@mui/material';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const ReasiganarCandidatoModal = ({ isOpen, closeModal }) => {
+const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   const initialState = {
-   carnetIdentidad:"",
-    motivo: ""
+    carnetIdentidadAntiguo: '',
+    carnetIdentidadNuevo: '',
+    motivo: '',
   };
 
   const [formData, setFormData] = useState(initialState);
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const url = process.env.REACT_APP_VARURL;
 
-  const handleGuardar = () => {
-    if (formData.carnetIdentidad === "" || formData.motivo === "") {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al reasignar CANDIDATO',
-        text: `Complete correctamente los datos.`,
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleReasignarCandidato = async () => {
+    try {
+      const response = await axios.put(`${url}reasignarCandidato`, {
+        carnetIdentidadAntiguo: formData.carnetIdentidadAntiguo,
+        carnetIdentidadNuevo: formData.carnetIdentidadNuevo,
+        motivo: formData.motivo,
       });
-      return;
-    }
 
-    const nuevoCandidato = {
-      CARNETIDENTIDAD: formData.carnetIdentidad
-    };
-
-    axios.post(`${url}mesa/{cod_mesa}/jurado}`)
-      .then((response) => {
+      if (response.data.success) {
         Swal.fire({
           icon: 'success',
-          title: 'Candidato guardado correctamente',
-          text: `El candidato se ha actualizado con éxito!`
-        }).then(() => {
-          closeModal();
-          setFormData(initialState);
+          title: 'Candidato reasignado correctamente',
+          text: response.data.success,
+          onClose: () => {
+            closeModal();
+            setFormData(initialState);
+          },
         });
-      })
-      .catch((error) => {
+      } else {
         Swal.fire({
           icon: 'error',
-          title: 'Error al agregar un candidato',
-          text: `Ocurrió un error al reasignar un candidato al frente político: ${error}`
+          title: 'Error al reasignar candidato',
+          text: response.data.error,
         });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al reasignar candidato',
+        text: `Ocurrió un error al reasignar el candidato: ${error}`,
       });
+    }
   };
 
   const handleInputChange = (e) => {
@@ -73,12 +76,20 @@ const ReasiganarCandidatoModal = ({ isOpen, closeModal }) => {
           REASIGNAR CANDIDATOS
         </Typography>
         <TextField
-          label="Carnet de Identidad"
+          label="Carnet de Identidad Antiguo"
           type="text"
-          name="carnetIdentidad"
-          value={formData.carnetIdentidad}
+          name="carnetIdentidadAntiguo"
+          value={formData.carnetIdentidadAntiguo}
           onChange={handleInputChange}
-          onClick={(e) => e.stopPropagation()}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Carnet de Identidad Nuevo"
+          type="text"
+          name="carnetIdentidadNuevo"
+          value={formData.carnetIdentidadNuevo}
+          onChange={handleInputChange}
           fullWidth
           margin="normal"
         />
@@ -88,19 +99,23 @@ const ReasiganarCandidatoModal = ({ isOpen, closeModal }) => {
           name="motivo"
           value={formData.motivo}
           onChange={handleInputChange}
-          onClick={(e) => e.stopPropagation()}
           fullWidth
           margin="normal"
         />
         <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
-        <Button variant="contained" color="primary" onClick={handleGuardar} style={{marginRight:'12px'}}>
-          Guardar
-        </Button>
-        <Button variant="contained" color="secondary" onClick={handleCloseModal}>
-          Cancelar
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleReasignarCandidato}
+            style={{ marginRight: '12px' }}
+          >
+            Guardar
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleCloseModal}>
+            Cancelar
+          </Button>
         </Box>
-        
+        <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose} message={snackbarMessage} />
       </Box>
     </Modal>
   );
@@ -116,4 +131,4 @@ const modalStyle = {
   p: 4,
 };
 
-export default ReasiganarCandidatoModal;
+export default ReasignarCandidatoModal;

@@ -80,7 +80,7 @@ const AsignacionComite = ({ lista }) => {
     }
   };
   const enviarCorreo = async (COD_COMITE) => {
-    await axios.post(`${url}'/mensajeComiteElectoral/{$COD_COMITE}`);
+    await axios.post(`${url}mensajeComiteElectoral/${COD_COMITE}`);
     Swal.fire({
       icon: "success",
       title: "Asignación exitosa",

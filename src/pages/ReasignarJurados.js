@@ -31,7 +31,7 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
       CARNETIDENTIDAD: formData.carnetIdentidad
     };
 
-    axios.post(`${url}mesa/{cod_mesa}/jurado}`)
+    axios.put(`${url}jurado/${formData.carnetIdentidad}`, formData)
       .then((response) => {
         Swal.fire({
           icon: 'success',
