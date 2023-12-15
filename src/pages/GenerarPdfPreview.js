@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import CrearPublicaConv from './CrearPublicaConv';
-import { Button, Container, styled, Modal,Typography,Dialog,
-  DialogTitle,
-  DialogContent } from "@mui/material";
+import { Button,styled, Modal,Typography,Dialog,DialogTitle,DialogContent } from "@mui/material";
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import PublishIcon from '@mui/icons-material/Publish';
 import "../css/GenerarPdf.css";

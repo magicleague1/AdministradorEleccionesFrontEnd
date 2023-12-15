@@ -62,36 +62,41 @@ const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
     }
   };
 
-  const verificarExistenciaLista = async (eleccionId) => {
+  const verificarExistenciaLista = async (codMesa) => {
     try {
-      const response = await axios.get(url + `obtenerDatosPorMesaYGenerarPDF/${codMesa}`);
-      return response.data.existeLista; // Ajusta esto según la estructura de tu respuesta
+      const response = await axios.get(`${url}obtenerDatosPorMesaYGenerarPDF/${codMesa}`);
+      return response.data.hasData; // Ajusta esto según la estructura de tu respuesta
     } catch (error) {
       console.error("Error al verificar la existencia de la boleta:", error);
-      return false;
+      throw error; // Lanza el error para que pueda ser manejado por la función que llama a esta
     }
   };
-
+  
   const handleGetListaVotantes = async (event) => {
     event.stopPropagation();
     try {
       const existeBoleta = await verificarExistenciaLista(codMesa);
-
-      if (!existeBoleta) {
-        setSnackbarSeverity("error");
-        setSnackbarMessage("Ya se generó Lista de Votantes, solo haz clic en descargar");
-        setSnackbarOpen(true);
-        return;
+      console.log(existeBoleta);
+        if (existeBoleta) {
+           setSnackbarSeverity("error");
+           setSnackbarMessage("Ya se generó Lista de Votantes, solo haz clic en descargar");
+           setSnackbarOpen(true);
+      return;
       }
-
-      await axios.post(url + `/generarListasVotantes/${codMesa}`);
-
+  
+      await axios.post(`${url}generarListasVotantes/${codMesa}`);
+  
       setSnackbarSeverity("success");
       setSnackbarMessage("La generación de Lista de votantes se realizó con éxito.");
       setSnackbarOpen(true);
-
     } catch (error) {
       console.error("Error en la Generación:", error);
+  
+      if (axios.isCancel(error)) {
+        // El request fue cancelado, no es necesario mostrar un mensaje de error
+        return;
+      }
+  
       setSnackbarSeverity("error");
       setSnackbarMessage("Ocurrió un error en la generación de Lista de votantes.");
       setSnackbarOpen(true);
@@ -146,8 +151,8 @@ const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
         </StyledButton>
       </Dialog>
 
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity}>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
           {snackbarMessage}
         </MuiAlert>
       </Snackbar>

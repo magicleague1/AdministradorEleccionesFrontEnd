@@ -65,25 +65,22 @@ const ConvocatoriaModificar = ({ isOpen, closeModal, eleccionId }) => {
     setConvocatoria({ ...convocatoria, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .put(`${process.env.REACT_APP_VARURL}convocatorias/${eleccionId}`, convocatoria)
-      .then((response) => {
-        console.log(response.data);
-        setSnackbarSeverity('success');
-        setSnackbarMessage('Actualización de convocatoria correctamente');
-        setSnackbarOpen(true);
-        closeModal();
-      })
-      .catch((error) => {
-        setSnackbarSeverity('error');
-        setSnackbarMessage('Error al actualizar la convocatoria');
-        setSnackbarOpen(true);
-        console.error(error);
-      });
+    try {
+      await axios.put(`${process.env.REACT_APP_VARURL}convocatorias/${eleccionId}`, convocatoria);
+      setSnackbarSeverity('success');
+      setSnackbarMessage('Actualización de convocatoria correctamente');
+      setSnackbarOpen(true);
+    } catch (error) {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Error al actualizar la convocatoria');
+      setSnackbarOpen(true);
+      console.error(error);
+    }
   };
-
+  
+  
   const handleVolverAtras = () => {
     closeModal();
   };
@@ -246,12 +243,14 @@ const ConvocatoriaModificar = ({ isOpen, closeModal, eleccionId }) => {
           open={snackbarOpen}
           autoHideDuration={6000}
           onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <MuiAlert
             elevation={6}
             variant="filled"
             onClose={() => setSnackbarOpen(false)}
             severity={snackbarSeverity}
+            sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
           >
             {snackbarMessage}
           </MuiAlert>

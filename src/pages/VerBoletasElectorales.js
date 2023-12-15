@@ -64,7 +64,7 @@ const VerBoletasElectorales = ({ lista }) => {
         <Table>
           <TableHead style={{backgroundColor:'#3E5F8A'}}>
             <TableRow>
-              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>CARGO(S) A ELECCION</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}> ELECCION</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FECHA ELECCIONES</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ACCIONES</TableCell>
             </TableRow>

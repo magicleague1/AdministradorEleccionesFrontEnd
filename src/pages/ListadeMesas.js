@@ -14,13 +14,6 @@ import {
 import GenerarPdfListaVotantes from './GenerarPdfListaVotantes';
 import GenerarPdfActaCierre from './GenerarPdfActaCierre';
 import GenerarPdfActaApertura from './GenerarPdfActaApertura';
-import { hover } from '@testing-library/user-event/dist/hover';
-
-const buttonStyle = {
-  backgroundColor: hover ? '#ff4081' : '', // Cambia el color de fondo al pasar el mouse sobre el botón
-  color: hover ? '#ffffff' : '', // Cambia el color del texto al pasar el mouse sobre el botón
-  // Otros estilos adicionales cuando el cursor está sobre el botón
-};
 
 function ListaMesas({ eleccionId }) {
   const [Mesas, setMesas] = useState([]);
@@ -74,6 +67,13 @@ function ListaMesas({ eleccionId }) {
     setSelectedCodMesa(null);
     setOpenModalACL(false);
   };
+  if (Mesas.length === 0) {
+    return (
+      <Typography variant="h6" style={{ margin: '20px', textAlign:'center' }}>
+        No hay mesas Asignadas.
+      </Typography>
+    );
+  }
 
   return (
     <div style={{ overflowY: 'auto', maxHeight: '400px', width: '600px' }}>

@@ -163,8 +163,17 @@ function AsignacionMesas({ lista }) {
         </TableContainer>
       </Container>
 
-      <Modal open={modalListaMesasIsOpen} onClose={() => {}}>
-        <Card className="CuerpoComite" onClick={closeModalListaMesas}>
+      <Modal open={modalListaMesasIsOpen} onClose={() => {}}  style={{
+         display: 'flex',
+         alignItems: 'center',
+         justifyContent: 'center',
+       }}
+       BackdropProps={{
+         style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+         invisible: false,  
+       }}>
+      <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '700px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        
           <CardContent>
             <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>LISTA DE ASIGNACION DE MESAS</Typography>
             <ListaMesas eleccionId={selectedEleccionId} />
@@ -179,7 +188,7 @@ function AsignacionMesas({ lista }) {
               </Button>
             </Box>
           </CardContent>
-        </Card>
+        </div>
       </Modal>
 
       <PublicacionListaVotantes isOpen={modalPublicacionIsOpen} closeModal={closeModalPublicacion} eleccionId={selectedEleccionId}/>
@@ -190,7 +199,7 @@ function AsignacionMesas({ lista }) {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarType}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbarType} sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>

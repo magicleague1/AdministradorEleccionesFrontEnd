@@ -206,13 +206,15 @@ const ConvocatoriaCrear = ({  isOpen, closeModal ,eleccionId,}) => {
           <Snackbar
           open={snackbarOpen}
           autoHideDuration={6000}
-          onClose={() => setSnackbarOpen(false)}
+          onClose={() => handleVolverAtras()}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <MuiAlert
             elevation={6}
             variant="filled"
-            onClose={() => setSnackbarOpen(false)}
+            onClose={() => handleVolverAtras()}
             severity={snackbarSeverity}
+            sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
           >
             {snackbarMessage}
           </MuiAlert>

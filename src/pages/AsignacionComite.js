@@ -53,25 +53,25 @@ const AsignacionComite = ({ lista }) => {
   const handleAsociarClick = async (COD_ELECCION, COD_COMITE) => {
     try {
       const existeComite = await verificarExistenciaComite(COD_COMITE);
-
+  
       if (!existeComite) {
         setSnackbarType('error');
         setSnackbarMessage('Ya se asignaron vocales de comité electoral.');
         setSnackbarOpen(true);
         return;
       }
-
+  
       await axios.put(`${url}asignar-comite/${COD_ELECCION}`);
       await axios.post(`${url}asignar-vocales/${COD_COMITE}`);
-
+  
+      // Mover la actualización del estado aquí
+      setCodComite(COD_COMITE);
       setSnackbarType('success');
-      setSnackbarMessage('La asignación del comité y vocales se realizó con éxito.');
+      setSnackbarMessage('La asignación del comité con sus vocales se realizó con éxito.');
       setSnackbarOpen(true);
 
-      setCodComite(COD_COMITE);
-      setModalIsOpen(true);
     } catch (error) {
-      console.error("Error en la asignación:", error);
+
       setSnackbarType('error');
       setSnackbarMessage('Ocurrió un error en la asignación del comité y vocales.');
       setSnackbarOpen(true);
@@ -123,7 +123,7 @@ const AsignacionComite = ({ lista }) => {
           <TableHead style={{backgroundColor:'#3E5F8A'}}>
             <TableRow >
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
-              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ELECCION</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >ACCIONES</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >CORREO ELECTRONICO</TableCell>
             </TableRow>

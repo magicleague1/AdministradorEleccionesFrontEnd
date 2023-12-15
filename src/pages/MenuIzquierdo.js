@@ -302,7 +302,7 @@ function MenuIzquierdo() {
             <ListItemIcon>
               <CreateIcon />
             </ListItemIcon>
-            <ListItemText primary="Crear Convocatoria" />
+            <ListItemText primary="Convocatoria" />
           </ListItem>
 
           <ListItem button onClick={() => handleBoletasElectorales("Boletas Electorales")} style={{ backgroundColor: mostrarBoletas ? 'lightgray' : 'inherit' }}>

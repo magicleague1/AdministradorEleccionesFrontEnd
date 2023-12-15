@@ -207,7 +207,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
         <MuiAlert
           onClose={handleSnackbarClose}
           severity={snackbarType}
-          sx={{ width: "100%" }}
+          sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
         >
           {snackbarMessage}
         </MuiAlert>

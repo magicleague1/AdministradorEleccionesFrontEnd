@@ -110,7 +110,7 @@ const VerPartidosPoliticos = ({ lista }) => {
                     onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}
                     className="custom-button"
                   >
-                    Registro de Partido
+                    Registro de Frente
                   </Button>
                 </TableCell>
                 <TableCell style={{ width: '12%', textAlign: 'center' }}>
@@ -131,7 +131,7 @@ const VerPartidosPoliticos = ({ lista }) => {
                 onClick={() => openModalAC(eleccion.COD_ELECCION)}
                 sx={{ marginRight: '15px' }}
               >
-                Asignar
+                Registrar
               </Button>
               <Button
                 variant="outlined"
@@ -140,7 +140,7 @@ const VerPartidosPoliticos = ({ lista }) => {
                 onClick={() => openModalVC(eleccion.COD_ELECCION)}
                 sx={{ marginRight: '15px' }}
               >
-                Ver Candidatos
+                Ver 
               </Button>
               <Button
                 variant="outlined"

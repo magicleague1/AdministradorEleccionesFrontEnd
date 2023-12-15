@@ -89,7 +89,7 @@ const VerElecciones = ({ lista }) => {
           <TableBody>
             {listaElecciones.map((eleccion) => (
               <TableRow key={eleccion.COD_ELECCION} className="custom-row">
-                <TableCell color="white">{eleccion.MOTIVO_ELECCION}</TableCell>
+                <TableCell style={{textAlign: 'center' }}color="white">{eleccion.MOTIVO_ELECCION}</TableCell>
                 <TableCell style={{textAlign: 'center' }}>{eleccion.TIPO_ELECCION}</TableCell>
                 <TableCell style={{textAlign: 'center' }}>{eleccion.FECHA_ELECCION}</TableCell>
                 <TableCell style={{textAlign: 'center' }}>

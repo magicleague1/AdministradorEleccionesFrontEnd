@@ -111,7 +111,7 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
             variant="filled"
             onClose={closeSnackbar}
             severity={snackbarType}
-            sx={{ width: "100%", maxWidth: "400px", fontSize: "1rem" }}
+            sx={{ width: "100%", maxWidth: "600px", fontSize: "1rem" }}
           >
             {snackbarMessage}
           </MuiAlert>

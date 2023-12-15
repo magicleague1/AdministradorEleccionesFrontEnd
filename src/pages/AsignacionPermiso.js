@@ -62,8 +62,8 @@ const AsignacionPermiso = ({ lista }) => {
               <TableHead style={{backgroundColor:'#3E5F8A'}}>
                 <TableRow>
                   <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
-                  <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
-                  <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ACCIONES</TableCell>
+                  <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ELECCION</TableCell>
+                  <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PERMISOS</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

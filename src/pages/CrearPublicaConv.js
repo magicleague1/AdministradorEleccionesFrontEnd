@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Box, styled, Snackbar } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { Box, styled } from "@mui/system";
 import axios from "axios";
+
 
 const ModalContainer = styled("div")({
   position: "absolute",
@@ -40,23 +42,8 @@ const CrearPublicaConv = ({ isOpen, closeModal, eleccionId }) => {
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  useEffect(() => {
-    obtenerIdConvocatoria(eleccionId);
-  }, [eleccionId]);
-
   const handleVolverAtras = () => {
     closeModal();
-  };
-
-  const obtenerIdConvocatoria = async (eleccionId) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_VARURL}obtener_id_convocatoria/${eleccionId}`
-      );
-      setData({ ...data, id_convocatoria: response.data.id_convocatoria });
-    } catch (error) {
-      console.error("Error al obtener la convocatoria:", error);
-    }
   };
 
   const handleChange = (e) => {
@@ -94,6 +81,7 @@ const CrearPublicaConv = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   return (
+    <div>
     <Modal open={isOpen}  onClose={closeModal} aria-labelledby="Crear Convocatoria">
       <ModalContainer>
         <Typography variant="h6" gutterBottom>
@@ -140,12 +128,14 @@ const CrearPublicaConv = ({ isOpen, closeModal, eleccionId }) => {
         </form>
       </ModalContainer>
 
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity}>
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
     </Modal>
+    
+    <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+    <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
+      {snackbarMessage}
+    </MuiAlert>
+  </Snackbar>
+  </div>
   );
 };
 
