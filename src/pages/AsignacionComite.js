@@ -19,6 +19,7 @@ import SustitucionDeVocal from "./SustitucionDeVocal ";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import SyncIcon from "@mui/icons-material/Sync";
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import ListaVocalesComite from "./ListaVocalesComite";
 
 
@@ -76,6 +77,19 @@ const AsignacionComite = ({ lista }) => {
       setSnackbarOpen(true);
     }
   };
+  const enviarCorreo = async (COD_COMITE) => {
+    try{
+      await axios.post(`${url}mensajeComiteElectoral/${COD_COMITE}`);
+      setSnackbarType('success');
+        setSnackbarMessage('Se envió un correo a todos los vocales asignados');
+        setSnackbarOpen(true);
+    } catch(error){
+   
+      setSnackbarType('error');
+      setSnackbarMessage('Ocurrió un error al enviar el correo');
+      setSnackbarOpen(true);
+    }
+};
 
   const handleVerListaClick = (eleccionId) => {
     setCodComite(eleccionId);
@@ -111,6 +125,7 @@ const AsignacionComite = ({ lista }) => {
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >ACCIONES</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >CORREO ELECTRONICO</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -150,6 +165,17 @@ const AsignacionComite = ({ lista }) => {
                   >
                     Actualizar
                   </Button>
+                </TableCell>
+                <TableCell style={{ width:'36%' }}>
+                <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<MailOutlineIcon/>}
+                    onClick={() => enviarCorreo(elemento.codComite)}
+                    style={{marginLeft:'12px'}}
+                  >
+                    Enviar correo
+                 </Button>
                 </TableCell>
               </TableRow>
             ))}
