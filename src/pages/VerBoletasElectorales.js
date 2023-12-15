@@ -62,7 +62,7 @@ const VerBoletasElectorales = ({ lista }) => {
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead style={{backgroundColor:'#3E5F8A'}}>
             <TableRow>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>CARGO(S) A ELECCION</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FECHA ELECCIONES</TableCell>
@@ -72,8 +72,8 @@ const VerBoletasElectorales = ({ lista }) => {
           <TableBody>
           {listaElecciones.map((eleccion) => (
             <TableRow key={eleccion.COD_ELECCION}>
-                <TableCell>{eleccion?.MOTIVO_ELECCION}</TableCell>
-                <TableCell>{eleccion?.FECHA_ELECCION}</TableCell>
+                <TableCell style={{  textAlign: 'center' }}>{eleccion?.MOTIVO_ELECCION}</TableCell>
+                <TableCell style={{  textAlign: 'center' }}>{eleccion?.FECHA_ELECCION}</TableCell>
                 <TableCell style={{width:'28%',textAlign: 'center' }}>
                 <Button
                     variant="outlined"

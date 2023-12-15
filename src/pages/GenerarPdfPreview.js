@@ -53,7 +53,10 @@ const GenerarPdfPreview = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth="md">
+    <Dialog open={isOpen} onClose={() => {}} fullWidth maxWidth="md" BackdropProps={{
+      style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+      invisible: false,  
+    }}>
       <DialogTitle>
       <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
           PUBLICAR CONVOCATORIA

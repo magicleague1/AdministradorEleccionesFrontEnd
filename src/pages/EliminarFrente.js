@@ -4,8 +4,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
-import Swal from 'sweetalert2';
 
 const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   const initialState = {
@@ -13,15 +14,25 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   };
 
   const [formData, setFormData] = useState(initialState);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const url = process.env.REACT_APP_VARURL;
+
+  const handleSnackbarOpen = (severity, message) => {
+    setSnackbarSeverity(severity);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleEliminarClick = () => {
     if (!formData.motivoEliminacion) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al eliminar frente político',
-        text: `Ingrese un motivo`,
-      });
+      handleSnackbarOpen("error", "Ingrese un motivo");
       return;
     }
 
@@ -29,23 +40,15 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
       MOTIVO: formData.motivoEliminacion,
     };
 
-    axios.put(`${url}frentes/delete/${frenteId}`, eliminacion)
+    axios
+      .put(`${url}frentes/delete/${frenteId}`, eliminacion)
       .then((response) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Frente político eliminado',
-          text: `El frente político se ha eliminado correctamente!`,
-        }).then(() => {
-          handleVolverAtras();
-          setFormData(initialState);
-        });
+        handleSnackbarOpen("success", "Frente político eliminado correctamente");
+        handleVolverAtras();
+        setFormData(initialState);
       })
       .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de eliminación frente político',
-          text: `Ocurrió un error al eliminar el frente político`,
-        });
+        handleSnackbarOpen("error", "Ocurrió un error al eliminar el frente político");
       });
   };
 
@@ -59,50 +62,62 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   };
 
   return (
-    <Modal
-      open={isOpen}
-      onClose={closeModal}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={{ ...modalStyle, width: '500px' }}>
-        <Typography variant="h6" component="h2" sx={{ display: 'flex', justifyContent: 'center', marginBottom:'12px'}} >
-          ELIMINACION DE FRENTE POLITICO
-        </Typography>
+    <>
+      <Modal
+        open={isOpen}
+        onClose={() => {}}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+          invisible: false,
+        }}
+      >
+        <Box sx={{ ...modalStyle, width: "500px" }}>
+          <Typography variant="h6" component="h2" sx={{ display: "flex", justifyContent: "center", marginBottom: "12px" }}>
+            ELIMINACION DE FRENTE POLITICO
+          </Typography>
 
-        <Typography variant="body1" gutterBottom sx={{ display: 'flex', justifyContent: 'center'}} >
-          ¿Deseas eliminar el frente político?
-        </Typography>
+          <Typography variant="body1" gutterBottom sx={{ display: "flex", justifyContent: "center" }}>
+            ¿Deseas eliminar el frente político?
+          </Typography>
 
-        <TextField
-          label="Motivo de eliminación"
-          type="text"
-          name="motivoEliminacion"
-          value={formData.motivoEliminacion}
-          onChange={handleMotivoChange}
-          fullWidth
-          margin="normal"
-        />
+          <TextField
+            label="Motivo de eliminación"
+            type="text"
+            name="motivoEliminacion"
+            value={formData.motivoEliminacion}
+            onChange={handleMotivoChange}
+            fullWidth
+            margin="normal"
+          />
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
-          <Button variant="contained" color="error" onClick={handleEliminarClick} style={{marginRight:'12px'}}>
-            Eliminar
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleVolverAtras}>
-            Cancelar
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "center", marginTop: "16px" }}>
+            <Button variant="contained" color="error" onClick={handleEliminarClick} style={{ marginRight: "12px" }}>
+              Eliminar
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleVolverAtras}>
+              Cancelar
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
+      </Modal>
+
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 };
 
 const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
 };

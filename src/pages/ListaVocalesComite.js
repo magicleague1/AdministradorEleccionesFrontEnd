@@ -62,46 +62,62 @@ function ListaVocalesComite({ idComite }) {
         ),
       }}
     />
-    <div>
-      <Typography variant="h5" style={{ marginLeft: '10px' }}>
-        Titulares:
-      </Typography>
-      <List>
-        {filteredTitulares.map((titular, index) => (
-          <div key={titular.CARNETIDENTIDAD}>
-            <ListItem>
-              <ListItemText
-                primary={`${titular.NOMBRE} ${titular.APELLIDO}`}
-                secondary={`CI: ${titular.CARNETIDENTIDAD} - ${
-                  titular.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
-                }`}
-              />
-            </ListItem>
-            {index !== filteredTitulares.length - 1 && <Divider />}
-          </div>
-        ))}
-      </List>
-    </div>
+   <div>
+      {filteredTitulares.length > 0 ? (
+        <div>
+          <Typography variant="h5" style={{ marginLeft: '10px' }}>
+            Titulares:
+          </Typography>
+          <List>
+            {filteredTitulares.map((titular, index) => (
+              <div key={titular.CARNETIDENTIDAD}>
+                <ListItem>
+                  <ListItemText
+                    primary={`${titular.NOMBRE} ${titular.APELLIDO}`}
+                    secondary={`CI: ${titular.CARNETIDENTIDAD} - ${
+                      titular.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
+                    }`}
+                  />
+                </ListItem>
+                {index !== filteredTitulares.length - 1 && <Divider />}
+              </div>
+            ))}
+          </List>
+        </div>
+      ) : (
+        
+        <Typography variant="body1" style={{ marginLeft: '10px' }}>
+          Titulares:
+          No hay titulares asignados.
+        </Typography>
+      )}
 
-    <div>
-      <Typography variant="h5" style={{ marginLeft: '10px' }}>
-        Suplentes:
-      </Typography>
-      <List>
-        {filteredSuplentes.map((suplente, index) => (
-          <div key={suplente.CARNETIDENTIDAD}>
-            <ListItem>
-              <ListItemText
-                primary={`${suplente.NOMBRE} ${suplente.APELLIDO}`}
-                secondary={`CI: ${suplente.CARNETIDENTIDAD} - ${
-                  suplente.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
-                }`}
-              />
-            </ListItem>
-            {index !== filteredSuplentes.length - 1 && <Divider />}
-          </div>
-        ))}
-      </List>
+      {filteredSuplentes.length > 0 ? (
+        <div>
+          <Typography variant="h5" style={{ marginLeft: '10px' }}>
+            Suplentes:
+          </Typography>
+          <List>
+            {filteredSuplentes.map((suplente, index) => (
+              <div key={suplente.CARNETIDENTIDAD}>
+                <ListItem>
+                  <ListItemText
+                    primary={`${suplente.NOMBRE} ${suplente.APELLIDO}`}
+                    secondary={`CI: ${suplente.CARNETIDENTIDAD} - ${
+                      suplente.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
+                    }`}
+                  />
+                </ListItem>
+                {index !== filteredSuplentes.length - 1 && <Divider />}
+              </div>
+            ))}
+          </List>
+        </div>
+      ) : (
+        <Typography variant="body1" style={{ marginLeft: '10px' }}>
+         Suplentes:  No hay suplentes asignados.
+        </Typography>
+      )}
     </div>
   </Paper>
   );

@@ -10,6 +10,9 @@ import {
   TextField,
 } from '@mui/material';
 import AgregarPermiso from './AgregarPermiso';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const PermisoDeVocal = ({ codComite }) => {
   const [vocales, setVocales] = useState([]);
@@ -45,7 +48,6 @@ const PermisoDeVocal = ({ codComite }) => {
       <Typography variant="h5" gutterBottom>
         Código del Comité: {codComite}
       </Typography>
-
       <TextField
         label="Buscar por Código SIS, Nombre o Apellido"
         variant="outlined"
@@ -53,8 +55,17 @@ const PermisoDeVocal = ({ codComite }) => {
         margin="normal"
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ marginBottom: '20px' }}
+        InputProps={{
+          endAdornment: (
+            <IconButton
+              onClick={() => setSearchTerm('')}
+              style={{ marginRight: '-12px' }}
+            >
+              <ClearIcon />
+            </IconButton>
+          ),
+        }}
       />
-
       <Paper
         elevation={3}
         style={{

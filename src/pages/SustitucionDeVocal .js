@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CachedIcon from '@mui/icons-material/Cached';
-import { Typography, Paper, Grid, TextField, IconButton, Box, Divider } from '@mui/material';
-import '../css/Asignacion.css';
+import { Typography, Paper, Grid, TextField, IconButton, Box, Divider, Snackbar } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
 import ClearIcon from '@mui/icons-material/Clear';
 import Swal from "sweetalert2";
 
@@ -11,6 +11,9 @@ const SustitucionDeVocal = ({ codComite }) => {
   const [vocales, setVocales] = useState([]);
   const [vocales2, setVocales2] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     // Realizar una solicitud GET para obtener la lista de vocales del comité
@@ -29,21 +32,18 @@ const SustitucionDeVocal = ({ codComite }) => {
 
 
   const handleActualizarDatos = (vocal) => {
-    // Verificar si existe un permiso para el vocal en la tabla permisos
     axios.get(`${process.env.REACT_APP_VARURL}verificarPermiso/${vocal.COD_SIS}/${codComite}`)
       .then((response) => {
         const tienePermiso = response.data.tiene_permiso;
-  
+
         if (tienePermiso) {
-          // Realizar una solicitud POST para actualizar los datos
-          axios.post(process.env.REACT_APP_VARURL+'actualizarDatos', {
+          axios.post(process.env.REACT_APP_VARURL + 'actualizarDatos', {
             cod_comite_actual: codComite,
             cod_sis_actual: vocal.COD_SIS,
             cod_sis_nuevo: vocal.nuevoCodSis,
           })
             .then((response) => {
               console.log('Datos actualizados correctamente:', response.data);
-              // Actualizar localmente la lista de vocales con el nuevo código SIS
               setVocales((prevVocales) =>
                 prevVocales.map((prevVocal) =>
                   prevVocal.COD_SIS === vocal.COD_SIS
@@ -51,28 +51,33 @@ const SustitucionDeVocal = ({ codComite }) => {
                     : prevVocal
                 )
               );
-              Swal.fire({
-                icon: 'success',
-                title: 'Asignación exitosa',
-                text: 'La asignación del comité y vocales se realizó con éxito.'
-              })
+              showSnackbar('success', 'Asignación exitosa', 'La asignación del comité y vocales se realizó con éxito.');
             })
             .catch((error) => {
               console.error('Error al actualizar los datos:', error);
-              Swal.fire({
-                icon: 'error',
-                title: 'Error en la asignación de vocales',
-                text: `Ocurrió un error en la asignación de vocales`
-              });
+              showSnackbar('error', 'Error en la asignación de vocales', 'Ocurrió un error en la asignación de vocales');
             });
         } else {
-          // Mostrar mensaje de que no tiene permiso
           alert('No tiene permiso para realizar esta acción.');
         }
       })
       .catch((error) => {
         console.error('Error al verificar el permiso:', error);
       });
+  };
+
+  const showSnackbar = (severity, message, text) => {
+    setSnackbarSeverity(severity);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+
+    if (text) {
+      Swal.fire({
+        icon: severity,
+        title: message,
+        text,
+      });
+    }
   };
   const VocalItem = ({ vocal, onUpdate }) => (
     <Box mt={2}>
@@ -150,6 +155,11 @@ const SustitucionDeVocal = ({ codComite }) => {
           ))}
         </Grid>
       </Grid>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+        <MuiAlert elevation={6} variant="filled" onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Paper>
   );
 };

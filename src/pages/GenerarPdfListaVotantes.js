@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, styled, Typography, Dialog, DialogTitle, DialogContent } from "@mui/material";
+import { Button, styled, Typography, Dialog, DialogTitle, DialogContent, Snackbar } from "@mui/material";
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import axios from "axios";
-import Swal from "sweetalert2";
+import MuiAlert from '@mui/material/Alert';
 
 const StyledButton = styled(Button)({
   marginBottom: '15px',
@@ -25,6 +25,9 @@ const StyledPDFEmbed = styled('embed')({
 const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
   const [pdfSrc, setPdfSrc] = useState('');
   const [modalPP, setModalPP] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [botonesDeshabilitados, setBotonesDeshabilitados] = useState({});
 
   const url = process.env.REACT_APP_VARURL;
@@ -33,7 +36,6 @@ const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
     setBotonesDeshabilitados({});
     setModalPP(isOpen);
   }, [isOpen, codMesa]);
-
 
   const closeModalADDFP = () => {
     setModalPP(false);
@@ -59,6 +61,7 @@ const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
       console.error("Error al obtener el PDF", error);
     }
   };
+
   const verificarExistenciaLista = async (eleccionId) => {
     try {
       const response = await axios.get(url + `obtenerDatosPorMesaYGenerarPDF/${codMesa}`);
@@ -68,103 +71,87 @@ const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
       return false;
     }
   };
+
   const handleGetListaVotantes = async (event) => {
     event.stopPropagation();
     try {
       const existeBoleta = await verificarExistenciaLista(codMesa);
-  
+
       if (!existeBoleta) {
-        Swal.fire({
-          icon: "error",
-          title: "Generacion incorrecta",
-          text: "Ya se genero Lista de Votantes, solo haga click en descargar",
-          customClass: {
-            container: 'swal-container',
-          },
-          onOpen: (modalElement) => {
-            document.body.appendChild(modalElement);
-            modalElement.style.zIndex = 100000; // Establecer un valor alto para el z-index
-          },
-        });
+        setSnackbarSeverity("error");
+        setSnackbarMessage("Ya se generó Lista de Votantes, solo haz clic en descargar");
+        setSnackbarOpen(true);
         return;
       }
-  
+
       await axios.post(url + `/generarListasVotantes/${codMesa}`);
-  
-      Swal.fire({
-        icon: "success",
-        title: "Generacion exitosa",
-        text: "La generacion de Lista de votantes se realizó con éxito.",
-        customClass: {
-          container: 'swal-container',
-        },
-        onOpen: (modalElement) => {
-          document.body.appendChild(modalElement);
-          modalElement.style.zIndex = 100001; // Ajustar según sea necesario
-        },
-      });
-  
+
+      setSnackbarSeverity("success");
+      setSnackbarMessage("La generación de Lista de votantes se realizó con éxito.");
+      setSnackbarOpen(true);
+
     } catch (error) {
-      console.error("Error en la Generacion:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error en la generacion",
-        text: "Ocurrió un error en la generacion de Lista de votantes.",
-        customClass: {
-          container: 'swal-container',
-        },
-        onOpen: (modalElement) => {
-          document.body.appendChild(modalElement);
-          modalElement.style.zIndex = 100002; // Ajustar según sea necesario
-        },
-      });
+      console.error("Error en la Generación:", error);
+      setSnackbarSeverity("error");
+      setSnackbarMessage("Ocurrió un error en la generación de Lista de votantes.");
+      setSnackbarOpen(true);
     }
-   
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
-    <Dialog open={modalPP} onClose={closeModalADDFP} fullWidth maxWidth="md">
-      <DialogTitle>
-        <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
-          LISTA VOTANTES- CODIGO MESA: {codMesa}
-        </Typography>
-      </DialogTitle>
-      <DialogContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <StyledButton
-          variant="contained"
-          color="primary"
-          onClick={(event) => handleGetListaVotantes(event)}
-          disabled={botonesDeshabilitados[codMesa]}
-          startIcon={<StyledIcon><CloudDownloadIcon /></StyledIcon>}
-          sx={{ marginRight: '13px' }}
-        >
-          Generar Boletas
-        </StyledButton>
-        <StyledButton
-          variant="contained"
-          color="primary"
-          onClick={(event) => handleGetPDF(event)}
-          startIcon={<StyledIcon><CloudDownloadIcon /></StyledIcon>}
-          sx={{ marginRight: '13px' }}
-        >
-          Descargar PDF
-        </StyledButton>
-       
-      </DialogContent>
+    <>
+      <Dialog open={modalPP} onClose={closeModalADDFP} fullWidth maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
+            LISTA VOTANTES- CODIGO MESA: {codMesa}
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <StyledButton
+            variant="contained"
+            color="primary"
+            onClick={(event) => handleGetListaVotantes(event)}
+            disabled={botonesDeshabilitados[codMesa]}
+            startIcon={<StyledIcon><CloudDownloadIcon /></StyledIcon>}
+            sx={{ marginRight: '13px' }}
+          >
+            Generar Boletas
+          </StyledButton>
+          <StyledButton
+            variant="contained"
+            color="primary"
+            onClick={(event) => handleGetPDF(event)}
+            startIcon={<StyledIcon><CloudDownloadIcon /></StyledIcon>}
+            sx={{ marginRight: '13px' }}
+          >
+            Descargar PDF
+          </StyledButton>
 
-      {pdfSrc && (
-        <StyledPDFEmbed src={`data:application/pdf;base64,${pdfSrc}`} type="application/pdf" />
-      )}
-      <StyledButton
-        variant="contained"
-        color="secondary"
-        className="custom-btn btn-8"
-        onClick={(event) => handleVolverAtras(event)}
-      >
-        Cerrar
-      </StyledButton>
-      
-    </Dialog>
+        </DialogContent>
+
+        {pdfSrc && (
+          <StyledPDFEmbed src={`data:application/pdf;base64,${pdfSrc}`} type="application/pdf" />
+        )}
+        <StyledButton
+          variant="contained"
+          color="secondary"
+          className="custom-btn btn-8"
+          onClick={(event) => handleVolverAtras(event)}
+        >
+          Cerrar
+        </StyledButton>
+      </Dialog>
+
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 };
 

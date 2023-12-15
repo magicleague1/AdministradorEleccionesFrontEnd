@@ -17,8 +17,7 @@ const Inicio = () => {
   return (
     <Container style={backgroundImageStyle}>
       <div className="LetrasDescripcion">
-        <Typography variant="h2" className="Letras2" style={{alignItems: 'center', fontSize: '48px'}}>Bienvenido al sistema de administración de elecciones </Typography>
-        <Typography variant="h2" className="Letras1" style={{textAlign: 'center', fontSize: '35px'}}>UNIVERSIDAD MAYOR DE SAN SIMON</Typography>
+        <Typography variant="h2" className="Letras2" style={{alignItems: 'center', fontSize: '48px'}}>SISTEMA DE ADMINISTRACION DE ELECCIONES </Typography>   
       </div>
     </Container>
   );

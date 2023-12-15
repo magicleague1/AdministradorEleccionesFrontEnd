@@ -13,18 +13,16 @@ import {
   TableRow,
   Modal,
   Container,
-  Box
+  Box,
+  Snackbar,
+  Alert
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ListIcon from "@mui/icons-material/List";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from "axios";
 import ListaMesas from "./ListadeMesas";
-import Swal from "sweetalert2";
-import "../css/Comite.css";
-import "../css/AsignacionMesas.css";
 import PublicacionListaVotantes from "./PublicacionListaVotantes";
-
 
 function AsignacionMesas({ lista }) {
   const [proceso, setProceso] = useState([]);
@@ -32,6 +30,9 @@ function AsignacionMesas({ lista }) {
   const [selectedEleccionId, setSelectedEleccionId] = useState(null);
   const [modalListaMesasIsOpen, setModalListaMesasIsOpen] = useState(false);
   const [modalPublicacionIsOpen, setModalPublicacionIsOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState('success');
 
   const url = process.env.REACT_APP_VARURL;
 
@@ -54,32 +55,26 @@ function AsignacionMesas({ lista }) {
   const handleAsociarClick = async (COD_ELECCION) => {
     try {
       const existeAsignacion = await verificarAsociacionMesas(COD_ELECCION);
-      console.log("Soy comprobacion", existeAsignacion);
+
       if (existeAsignacion) {
-        Swal.fire({
-          icon: "error",
-          title: "Asignación incorrecta",
-          text: "Ya se asignaron mesas a ese proceso electoral",
-        });
+        setSnackbarType('error');
+        setSnackbarMessage('Ya se asignaron mesas a ese proceso electoral');
+        setSnackbarOpen(true);
         return;
       }
   
       await axios.post(`${url}asignar_mesas_carrera/${COD_ELECCION}`);
   
-      Swal.fire({
-        icon: "success",
-        title: "Asignación exitosa",
-        text: "La asignación de mesas se realizó con éxito.",
-      }).then(() => {
-        setModalIsOpen(true);
-      });
+      setSnackbarType('success');
+      setSnackbarMessage('La asignación de mesas se realizó con éxito.');
+      setSnackbarOpen(true);
+      
+      setModalIsOpen(true);
     } catch (error) {
       console.error("Error en la Generación:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error en la asignación de mesas",
-        text: `Ocurrió un error en la asignación de mesas: ${error.message}`,
-      });
+      setSnackbarType('error');
+      setSnackbarMessage(`Ocurrió un error en la asignación de mesas: ${error.message}`);
+      setSnackbarOpen(true);
     }
   };
 
@@ -100,15 +95,20 @@ function AsignacionMesas({ lista }) {
   const closeModalPublicacion = () => {
     setModalPublicacionIsOpen(false);
   };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <>
       <Container>
-      <Typography variant="h4" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
-        ASIGNACION DE MESAS
-      </Typography>
+        <Typography variant="h4" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
+          ASIGNACION DE MESAS
+        </Typography>
         <TableContainer component={Paper} className="TablaAsignacion">
           <Table>
-            <TableHead>
+            <TableHead style={{backgroundColor:'#3E5F8A'}}>
               <TableRow>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
@@ -122,60 +122,57 @@ function AsignacionMesas({ lista }) {
                   <TableCell>{elemento.COD_ELECCION}</TableCell>
                   <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
                   <TableCell style={{ width:'28%',textAlign: 'center'  }}>
-                    
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<AddCircleIcon />}
-                        onClick={() =>
-                          handleAsociarClick(elemento.COD_ELECCION)
-                        }
-                        style={{ marginRight:'15px',textAlign: 'center'  }}
-                      >
-                        Asociar
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<ListIcon />}
-                        onClick={() =>
-                          handleVerListaClick(elemento.COD_ELECCION)
-                        }
-                      >
-                        Ver Lista
-                      </Button>
-                    
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<AddCircleIcon />}
+                      onClick={() =>
+                        handleAsociarClick(elemento.COD_ELECCION)
+                      }
+                      style={{ marginRight:'15px',textAlign: 'center'  }}
+                    >
+                      Asociar
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<ListIcon />}
+                      onClick={() =>
+                        handleVerListaClick(elemento.COD_ELECCION)
+                      }
+                    >
+                      Ver Lista
+                    </Button>
                   </TableCell>
                   <TableCell style={{ width:'20%',textAlign: 'center'  }}>
-                    
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<CloudUploadIcon/>}
-                        onClick={() =>
-                          handlePublicarClick(elemento.COD_ELECCION)
-                        }
-                      >
-                        Publicar Lista
-                      </Button>
-                    
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<CloudUploadIcon/>}
+                      onClick={() =>
+                        handlePublicarClick(elemento.COD_ELECCION)
+                      }
+                    >
+                      Publicar Lista
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        </Container>
+      </Container>
 
-        <Modal open={modalListaMesasIsOpen} onClose={closeModalListaMesas}>
+      <Modal open={modalListaMesasIsOpen} onClose={() => {}}>
         <Card className="CuerpoComite" onClick={closeModalListaMesas}>
           <CardContent>
             <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>LISTA DE ASIGNACION DE MESAS</Typography>
             <ListaMesas eleccionId={selectedEleccionId} />
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
               <Button
-                variant="outlined"
-                className="BotonComiteModal"
+                variant="contained"
+                color="secondary"
+                className="custom-btn btn-8"
                 onClick={closeModalListaMesas}
               >
                 Cerrar
@@ -184,7 +181,19 @@ function AsignacionMesas({ lista }) {
           </CardContent>
         </Card>
       </Modal>
+
       <PublicacionListaVotantes isOpen={modalPublicacionIsOpen} closeModal={closeModalPublicacion} eleccionId={selectedEleccionId}/>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarType}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

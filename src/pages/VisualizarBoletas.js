@@ -63,7 +63,10 @@ const VisualizacionBoletas = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth={"lg"}>
+    <Dialog open={isOpen} onClose={() => {}} fullWidth maxWidth={"lg"} BackdropProps={{
+      style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+      invisible: false,  
+    }}>
       <DialogTitle style={{ display: 'flex', justifyContent: 'center' }}>{eleccionBoleta?.MOTIVO_ELECCION?.toUpperCase()} </DialogTitle>
       <DialogContent>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'stretch', border: '1px solid #000', width: '100%' }}>

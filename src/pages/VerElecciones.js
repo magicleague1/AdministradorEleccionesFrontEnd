@@ -76,7 +76,7 @@ const VerElecciones = ({ lista }) => {
       </Typography>
       <TableContainer component={Paper}>
         <Table >
-          <TableHead>
+          <TableHead style={{backgroundColor:'#3E5F8A'}}>
             <TableRow>
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ELECCION</TableCell>
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>TIPO ELECCION</TableCell>

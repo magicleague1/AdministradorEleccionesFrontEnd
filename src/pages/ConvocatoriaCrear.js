@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
-  Container,
   Typography,
   TextField,
   Button,
@@ -11,8 +10,9 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Snackbar,
 } from "@mui/material";
-import Swal from 'sweetalert2';
+import MuiAlert from '@mui/material/Alert';
 
 
 
@@ -46,6 +46,9 @@ const ConvocatoriaCrear = ({  isOpen, closeModal ,eleccionId,}) => {
     contacto: '',
     lugar: ''
   });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,29 +58,29 @@ const ConvocatoriaCrear = ({  isOpen, closeModal ,eleccionId,}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(process.env.REACT_APP_VARURL+'convocatorias_crear', { ...convocatoria, id_eleccion: eleccionId })
+      .post(process.env.REACT_APP_VARURL + 'convocatorias_crear', { ...convocatoria, id_eleccion: eleccionId })
       .then((response) => {
         console.log(response.data);
-        Swal.fire({
-          icon: 'success',
-          title: 'Creación de convocatoria correctamente',
-          text: `La convocatoria del proceso se creó con éxito!`
-        })
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Creación de convocatoria correctamente');
+        setSnackbarOpen(true);
       })
       .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al crear la convocatoria',
-          text: `Ocurrió un error al crear la convocatoria del proceso electoral`
-        });
+        setSnackbarSeverity('error');
+        setSnackbarMessage('Error al crear la convocatoria');
+        setSnackbarOpen(true);
         console.error(error);
       });
   };
+
   const handleVolverAtras = () => {
     closeModal();
   };
   return (
-    <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth="md">
+    <Dialog open={isOpen} onClose={() => {}} fullWidth maxWidth="md" BackdropProps={{
+      style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+      invisible: false,  
+    }}>
 
         <DialogTitle>
           <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
@@ -200,6 +203,20 @@ const ConvocatoriaCrear = ({  isOpen, closeModal ,eleccionId,}) => {
         </StyledButton>
             </StyledButtonGroup>
           </form>
+          <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => setSnackbarOpen(false)}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={() => setSnackbarOpen(false)}
+            severity={snackbarSeverity}
+          >
+            {snackbarMessage}
+          </MuiAlert>
+        </Snackbar>
         </DialogContent>
 
     </Dialog>

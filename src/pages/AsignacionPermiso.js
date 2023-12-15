@@ -100,62 +100,75 @@ const AsignacionPermiso = ({ lista }) => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Modal
+        <Modal
         open={modalIsOpen}
-        onClose={closeModal}
+        onClose={() => {}}
         aria-labelledby="Lista comite"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+          invisible: false,  
+        }}
       >
         <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '600px' }}>
-          <Typography variant="h5" gutterBottom>
-            Lista de Comite Electoral
+          <Typography variant="h5" gutterBottom style={{ textAlign: 'center' }}>
+            LISTA COMITE ELECTORAL
           </Typography>
           <div className="ContenedorVocales">
             {codComite !== null && <ListaVocalesComite idComite={codComite} />}
           </div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <Button
+               variant="contained"
+               color="secondary"
+               className="custom-btn btn-8"
+              onClick={closeModal}
+            >
+              Cerrar
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        open={modalIsOpen1}
+        onClose={() => {}}  
+        aria-labelledby="Reasignacion Comite"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+          invisible: false,  
+        }}
+      >
+        <div className="modalFrente" style={{ backgroundColor: "#fff", padding: "20px", width: "900px" }}>
+          <Typography variant="h5" gutterBottom style={{ textAlign: 'center' }}>
+            ASIGNACION PERMISOS
+          </Typography>
+          <div className="ContenedorVocales">
+            {codComite !== null && (
+              <PermisoDeVocal codComite={codComiteActualizar} />
+            )}
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <Button
-            variant="outlined"
-            color="primary"
-            onClick={closeModal}
+             variant="contained"
+             color="secondary"
+             className="custom-btn btn-8"
+            onClick={closeModal1}
             style={{ marginTop: "20px" }}
           >
             Cerrar
           </Button>
+          </div>
         </div>
       </Modal>
-          <Modal
-            open={modalIsOpen1}
-            onClose={closeModal1}
-            aria-labelledby="Reasignacion Comite"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className="modalFrente" style={{ backgroundColor: "#fff", padding: "20px", width: "900px" }}>
-              <Typography variant="h5" gutterBottom>
-                Asignacion de Permisos
-              </Typography>
-              <div className="ContenedorVocales">
-                {codComite !== null && (
-                  <PermisoDeVocal codComite={codComiteActualizar} />
-                )}
-              </div>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={closeModal1}
-                style={{ marginTop: "20px" }}
-              >
-                Cerrar
-              </Button>
-            </div>
-          </Modal>
         </div>
         </Container>
     </>

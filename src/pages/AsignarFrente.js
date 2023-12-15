@@ -6,11 +6,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import Swal from "sweetalert2";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
   const [listaFrentesP, setListaFrentesP] = useState([]);
   const [frentesAsignados, setFrentesAsignados] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState("success");
 
   useEffect(() => {
     const fetchFrentes = async () => {
@@ -19,7 +23,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
         const response = await axios.get(`${process.env.REACT_APP_VARURL}getFrentesByEleccion/${eleccionId}`);
         setListaFrentesP(response.data);
       } catch (error) {
-        console.error('Error al obtener frentes:', error);
+        console.error("Error al obtener frentes:", error);
       }
     };
 
@@ -35,7 +39,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
           setFrentesAsignados(response.data);
         }
       } catch (error) {
-        console.error('Error al obtener frentes asignados:', error);
+        console.error("Error al obtener frentes asignados:", error);
       }
     };
 
@@ -67,11 +71,9 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
     try {
       if (frentesAsignados.length === 0) {
         // Show an error if no fronts are selected
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Debes seleccionar al menos un frente para registrar.',
-        });
+        setSnackbarType("error");
+        setSnackbarMessage("Debes seleccionar al menos un frente para registrar.");
+        setSnackbarOpen(true);
         return;
       }
 
@@ -83,71 +85,134 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
 
       // Send a POST request to register the selected fronts
       await axios.post(`${process.env.REACT_APP_VARURL}actualizar_frentes`, data);
-      Swal.fire({
-        icon: 'success',
-        title: 'Frentes registrados correctamente',
-        text: 'Los Frentes se han registrado con éxito!',
-      }).then(() => {
-        handleClose();
-      });
+      setSnackbarType("success");
+      setSnackbarMessage("Frentes registrados correctamente");
+      setSnackbarOpen(true);
+
+      handleClose();
     } catch (error) {
-      console.error('Error al registrar los frentes políticos:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Ocurrió un error al registrar los frentes políticos.',
-      });
+      console.error("Error al registrar los frentes políticos:", error);
+      setSnackbarType("error");
+      setSnackbarMessage("Ocurrió un error al registrar los frentes políticos.");
+      setSnackbarOpen(true);
     }
   };
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
   return (
-    <Modal
-      open={isOpen}
-      onClose={handleClose}
-      aria-labelledby="Frentes politicos"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '400px', borderRadius: '8px', textAlign: 'center' }}>
-        <h3 className="tituloPfrente" style={{ color: 'black', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>FRENTES POLÍTICOS DISPONIBLES</h3>
-        <List>
-          {listaFrentesP.map((frente) => (
-            <ListItem key={frente.COD_FRENTE} className="titulofrente" style={{ marginBottom: '10px' }}>
-              <label className="ListaFrente" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Checkbox
-                  className="checkbox1"
-                  checked={frentesAsignados.some((f) => f.COD_FRENTE === frente.COD_FRENTE)}
-                  onChange={() => handleFrenteSelection(frente.COD_FRENTE)}
-                />
-                <ListItemText primary={frente.NOMBRE_FRENTE} style={{ color: 'black', flex: 1, textAlign: 'center'}} />
-              </label>
-            </ListItem>
-          ))}
-        </List>
-        <div style={{ marginTop: '1rem' }}>
-          <Button
-            className="botonv1frente1"
-            onClick={validarYRegistrar}
-            variant="contained"
-            color="primary"
-            style={{ marginRight: '10px' }}
+    <>
+      <Modal
+        open={isOpen}
+        onClose={() => {}}
+        aria-labelledby="Frentes politicos"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+          invisible: false,
+        }}
+      >
+        <div
+          className="modalFrente"
+          style={{
+            backgroundColor: "#fff",
+            padding: "20px",
+            width: "400px",
+            borderRadius: "8px",
+            textAlign: "center",
+          }}
+        >
+          <h3
+            className="tituloPfrente"
+            style={{
+              color: "rgb(0,57,116)",
+              marginBottom: "40px",
+              textAlign: "center",
+            }}
           >
-            Registrar
-          </Button>
-          <Button
-            className="botonvfrente1"
-            onClick={handleClose}
-            variant="contained"
-            color="secondary"
-          >
-            Cancelar
-          </Button>
+            FRENTES POLITICOS PARTICIPANTES{" "}
+          </h3>
+          <List>
+            {listaFrentesP.map((frente) => (
+              <ListItem
+                key={frente.COD_FRENTE}
+                className="titulofrente"
+                style={{ marginBottom: "10px" }}
+              >
+                <label
+                  className="ListaFrente"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Checkbox
+                    className="checkbox1"
+                    checked={frentesAsignados.some(
+                      (f) => f.COD_FRENTE === frente.COD_FRENTE
+                    )}
+                    onChange={() =>
+                      handleFrenteSelection(frente.COD_FRENTE)
+                    }
+                  />
+                  <ListItemText
+                    primary={frente.NOMBRE_FRENTE}
+                    style={{
+                      color: "black",
+                      flex: 1,
+                      textAlign: "center",
+                    }}
+                  />
+                </label>
+              </ListItem>
+            ))}
+          </List>
+          <div style={{ marginTop: "1rem" }}>
+            <Button
+              onClick={validarYRegistrar}
+              variant="contained"
+              color="primary"
+              style={{ marginRight: "10px" }}
+            >
+              Registrar
+            </Button>
+            <Button
+              onClick={handleClose}
+              variant="contained"
+              color="secondary"
+            >
+              Cancelar
+            </Button>
+          </div>
         </div>
-      </div>
-    </Modal>
+      </Modal>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={handleSnackbarClose}
+          severity={snackbarType}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 };
 

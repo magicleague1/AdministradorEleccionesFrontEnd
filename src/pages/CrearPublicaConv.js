@@ -3,9 +3,9 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Box, styled } from "@mui/system";
+import { Box, styled, Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
-import Swal from "sweetalert2";
 
 const ModalContainer = styled("div")({
   position: "absolute",
@@ -36,12 +36,18 @@ const CrearPublicaConv = ({ isOpen, closeModal, eleccionId }) => {
     contenido: "",
   });
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   useEffect(() => {
     obtenerIdConvocatoria(eleccionId);
   }, [eleccionId]);
+
   const handleVolverAtras = () => {
     closeModal();
   };
+
   const obtenerIdConvocatoria = async (eleccionId) => {
     try {
       const response = await axios.get(
@@ -65,20 +71,26 @@ const CrearPublicaConv = ({ isOpen, closeModal, eleccionId }) => {
         process.env.REACT_APP_VARURL + "publicar_convocatorias_crear",
         data
       );
-      Swal.fire({
-        icon: "success",
-        title: "Publicacion exitosa",
-        text: "La publicacion de la convocatoria se realizó con éxito.",
-      })
+      handleSnackbarOpen("success", "Publicacion exitosa", "La publicacion de la convocatoria se realizó con éxito.");
       console.log("Datos enviados:", response.data);
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error en la publicacion",
-        text: "Ocurrió un error en la publicacion de la convocatoria.",
-      });
+      handleSnackbarOpen("error", "Error en la publicacion", "Ocurrió un error en la publicacion de la convocatoria.");
       console.error("Error al enviar datos:", error);
     }
+  };
+
+  const handleSnackbarOpen = (severity, message, description) => {
+    setSnackbarSeverity(severity);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
   };
 
   return (
@@ -127,6 +139,12 @@ const CrearPublicaConv = ({ isOpen, closeModal, eleccionId }) => {
           </Box>
         </form>
       </ModalContainer>
+
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Modal>
   );
 };

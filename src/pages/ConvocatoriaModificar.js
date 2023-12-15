@@ -10,10 +10,9 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Snackbar,
 } from "@mui/material";
-import Swal from 'sweetalert2';
-
-
+import MuiAlert from '@mui/material/Alert';
 
 const StyledFormControl = styled(FormControl)({
   width: '100%',
@@ -31,7 +30,7 @@ const StyledButton = styled(Button)({
   marginLeft: '20px',
 });
 
-const ConvocatoriaModificar = ({ isOpen, closeModal,eleccionId }) => {
+const ConvocatoriaModificar = ({ isOpen, closeModal, eleccionId }) => {
   const [convocatoria, setConvocatoria] = useState({
     fecha_inicio: '',
     fecha_fin: '',
@@ -46,20 +45,20 @@ const ConvocatoriaModificar = ({ isOpen, closeModal,eleccionId }) => {
     lugar: '',
   });
 
-  const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_VARURL}convocatorias/${eleccionId}`)
       .then((response) => {
         setConvocatoria(response.data);
-        setOpen(true);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [eleccionId]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,27 +71,27 @@ const ConvocatoriaModificar = ({ isOpen, closeModal,eleccionId }) => {
       .put(`${process.env.REACT_APP_VARURL}convocatorias/${eleccionId}`, convocatoria)
       .then((response) => {
         console.log(response.data);
-        Swal.fire({
-          icon: 'success',
-          title: 'Actualizacion de convocatoria correctamente',
-          text: `La convocatoria del proceso se actualizo con éxito!`,
-        });
-        setOpen(false);
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Actualización de convocatoria correctamente');
+        setSnackbarOpen(true);
+        closeModal();
       })
       .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al actualizacion la convocatoria',
-          text: `Ocurrió un error al actualizar la convocatoria del proceso electoral`,
-        });
+        setSnackbarSeverity('error');
+        setSnackbarMessage('Error al actualizar la convocatoria');
+        setSnackbarOpen(true);
         console.error(error);
       });
   };
+
   const handleVolverAtras = () => {
     closeModal();
   };
   return (
-    <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth="md">
+    <Dialog open={isOpen} onClose={() => {}} fullWidth maxWidth="md" BackdropProps={{
+      style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+      invisible: false,  
+    }}>
       <DialogTitle>
         <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
           ACTUALIZAR CONVOCATORIA
@@ -243,6 +242,20 @@ const ConvocatoriaModificar = ({ isOpen, closeModal,eleccionId }) => {
         </StyledButton>
           </StyledButtonGroup>
         </form>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => setSnackbarOpen(false)}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={() => setSnackbarOpen(false)}
+            severity={snackbarSeverity}
+          >
+            {snackbarMessage}
+          </MuiAlert>
+        </Snackbar>
       </DialogContent>
      
     </Dialog>

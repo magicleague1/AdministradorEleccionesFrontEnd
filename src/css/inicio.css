@@ -9,18 +9,14 @@
 
     opacity: .7;
 }  
-.LetrasDescripcion{
+.LetrasDescripcion {
+    display: flex;
+    flex-direction: column;  /* Asegura que los elementos se apilen verticalmente */
+    justify-content: center;  /* Centra verticalmente los elementos */
+    align-items: center;      /* Centra horizontalmente los elementos */
     margin-bottom: 450px;
     background-color: #ffffff;
     width: 100%;
-    opacity: .8;
-} 
-.Letras1{
-    margin-left: 23%;
-    font-weight: bold;
-    color: black;
-}
-.Letras2{
-    margin-left: 15%;
-    color:black;
-}
+    opacity: 0.8;
+    height: 15%;
+  }

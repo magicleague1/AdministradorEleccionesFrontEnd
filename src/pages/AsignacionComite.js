@@ -12,12 +12,13 @@ import {
   Typography,
   Container,
   Modal,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import SustitucionDeVocal from "./SustitucionDeVocal ";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import SyncIcon from "@mui/icons-material/Sync";
-import Swal from "sweetalert2";
 import ListaVocalesComite from "./ListaVocalesComite";
 
 
@@ -27,6 +28,9 @@ const AsignacionComite = ({ lista }) => {
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [codComite, setCodComite] = useState(null);
   const [codComiteActualizar, setCodComiteActualizar] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState('success');
   const url = process.env.REACT_APP_VARURL;
 
   useEffect(() => {
@@ -50,32 +54,26 @@ const AsignacionComite = ({ lista }) => {
       const existeComite = await verificarExistenciaComite(COD_COMITE);
 
       if (!existeComite) {
-        Swal.fire({
-          icon: "error",
-          title: "Asignacion incorrecta",
-          text: "Ya se asigno Vocales de comité electoral",
-        });
+        setSnackbarType('error');
+        setSnackbarMessage('Ya se asignaron vocales de comité electoral.');
+        setSnackbarOpen(true);
         return;
       }
 
       await axios.put(`${url}asignar-comite/${COD_ELECCION}`);
       await axios.post(`${url}asignar-vocales/${COD_COMITE}`);
 
-      Swal.fire({
-        icon: "success",
-        title: "Asignación exitosa",
-        text: "La asignación del comité y vocales se realizó con éxito.",
-      }).then(() => {
-        setCodComite(COD_COMITE);
-        setModalIsOpen(true);
-      });
+      setSnackbarType('success');
+      setSnackbarMessage('La asignación del comité y vocales se realizó con éxito.');
+      setSnackbarOpen(true);
+
+      setCodComite(COD_COMITE);
+      setModalIsOpen(true);
     } catch (error) {
       console.error("Error en la asignación:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error en la asignación",
-        text: "Ocurrió un error en la asignación del comité y vocales.",
-      });
+      setSnackbarType('error');
+      setSnackbarMessage('Ocurrió un error en la asignación del comité y vocales.');
+      setSnackbarOpen(true);
     }
   };
 
@@ -97,6 +95,10 @@ const AsignacionComite = ({ lista }) => {
     setModalIsOpen1(false);
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <Container>
       <Typography variant="h4" align="center" gutterBottom style={{ marginTop: '40px', marginBottom: '30px' }}>
@@ -104,8 +106,8 @@ const AsignacionComite = ({ lista }) => {
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
-            <TableRow>
+          <TableHead style={{backgroundColor:'#3E5F8A'}}>
+            <TableRow >
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >ACCIONES</TableCell>
@@ -154,26 +156,47 @@ const AsignacionComite = ({ lista }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity={snackbarType}
+          sx={{ width: '100%', maxWidth: '400px', fontSize: '1rem' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <Modal
         open={modalIsOpen}
-        onClose={closeModal}
+        onClose={() => {}}
         aria-labelledby="Lista comite"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+          invisible: false,  
+        }}
       >
         <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <Typography variant="h5" gutterBottom>
-        Lista de Comite Electoral
+        LISTA COMITE ELECTORAL
       </Typography>
       <div className="ContenedorVocales" style={{width:'550px'}}>
         {codComite !== null && <ListaVocalesComite idComite={codComite} />}
       </div>
       <Button
-        variant="outlined"
-        color="primary"
+         variant="contained"
+         color="secondary"
+         className="custom-btn btn-8"
         onClick={closeModal}
         style={{ marginTop: "20px" }}
       >
@@ -183,17 +206,21 @@ const AsignacionComite = ({ lista }) => {
       </Modal>
       <Modal
         open={modalIsOpen1}
-        onClose={closeModal1}
+        onClose={() => {}}
         aria-labelledby="Reasignacion Comite"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+          invisible: false,  
+        }}
       >
         <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '900px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Typography variant="h5" gutterBottom style={{ marginBottom: '20px' }}>
-        Reasignacion de Lista de Comite
+        REASIGNACION COMITE ELECTORAL
       </Typography>
       <div className="ContenedorVocales">
         {codComiteActualizar !== null && (
@@ -201,8 +228,9 @@ const AsignacionComite = ({ lista }) => {
         )}
       </div>
       <Button
-        variant="outlined"
-        color="primary"
+         variant="contained"
+         color="secondary"
+         className="custom-btn btn-8"
         onClick={closeModal1}
         style={{ marginTop: "20px" }}
       >
