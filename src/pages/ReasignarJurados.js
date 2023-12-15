@@ -35,8 +35,8 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
       .then((response) => {
         Swal.fire({
           icon: 'success',
-          title: 'Candidato guardado correctamente',
-          text: `El candidato se ha actualizado con éxito!`
+          title: 'Jurados guardados correctamente',
+          text: `Los jurados se han actualizado con éxito!`
         }).then(() => {
           closeModal();
           setFormData(initialState);
@@ -45,8 +45,8 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
       .catch((error) => {
         Swal.fire({
           icon: 'error',
-          title: 'Error al agregar un candidato',
-          text: `Ocurrió un error al agregar un candidato al frente político: ${error}`
+          title: 'Error al agregar jurados',
+          text: `Ocurrió un error al reasignar los jurados: ${error}`
         });
       });
   };

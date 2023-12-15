@@ -7,21 +7,25 @@ import CrearPartidosPoliticos from "./CrearPartidosPoliticos";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
 import CandidatoPorFrentes from "./CandidatosPorFrentes.js";
+import ReasignarCandidatoModal from "./ReasignarCandidatoModal.js";
 
 const VerPartidosPoliticos = ({ lista }) => {
 
   const [modalAC, setModalAC] = useState(false);
   const [modalIF, setModalIF] = useState(false);
   const [modalVC, setModalVC] = useState(false);
+  const[modalRCA,setModalRCA]=useState(false);
   const [selectedFrenteId, setSelectedFrenteId] = useState(null);
   const [selectedEleccionId, setSelectedEleccionId] = useState(null);
   const [listaElecciones, setListaElecciones] = useState([]);
   const [modalAddFP, setModalADDFP] = useState(false);
   const [modalAFP, setModalAFP] = useState(false);
   const url = process.env.REACT_APP_VARURL;
+  
 
   const openModalAC = (id) => {
     setSelectedFrenteId(id);
@@ -72,6 +76,14 @@ const VerPartidosPoliticos = ({ lista }) => {
 
   const closeModalVC = () => {
     setModalVC(false);
+  };
+  //Reasignar Candidatos
+  const openModalRCA = (id) => {
+    setSelectedEleccionId(id);
+    setModalRCA(true);
+  };
+  const closeModalRCA = () => {
+    setModalRCA(false);
   };
   return (
     <Container>
@@ -130,7 +142,19 @@ const VerPartidosPoliticos = ({ lista }) => {
                 onClick={() => openModalVC(eleccion.COD_ELECCION)}
               >
                 Ver Candidatos
+              </Button> 
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<CachedIcon />}
+                onClick={() => openModalRCA(eleccion.COD_ELECCION)}
+              >
+                Reasignar Candidatos
               </Button>
+
+
+
+
                 </TableCell>
               </TableRow>
             ))}
@@ -142,6 +166,7 @@ const VerPartidosPoliticos = ({ lista }) => {
       <AgregarFrenteModal isOpen={modalAddFP} closeModal={closeModalADDFP} eleccionId={selectedEleccionId} />
       <AsignarCandidatoModal isOpen={modalAC} closeModal={closeModalAC} frenteId={selectedFrenteId} />
       <CandidatoPorFrentes isOpen={modalVC} closeModal={closeModalVC} eleccionId={selectedEleccionId}/>   
+      <ReasignarCandidatoModal isOpen={modalRCA} closeModal={closeModalRCA} eleccionId={selectedEleccionId}/>  
     </Container>
   );
 };

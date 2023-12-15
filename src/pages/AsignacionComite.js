@@ -79,6 +79,23 @@ const AsignacionComite = ({ lista }) => {
       });
     }
   };
+  const enviarCorreo = async (COD_COMITE) => {
+    await axios.post(`${url}'/mensajeComiteElectoral/{$COD_COMITE}`);
+    Swal.fire({
+      icon: "success",
+      title: "Asignación exitosa",
+      html:  "Se envió un correo a todos los vocales asignados",
+    }).then(() => {
+      Swal.fire({
+        icon: "error",
+        title: "Error en la asignación",
+        text: "Ocurrió un error al enviar el correo.",
+      });
+      setModalIsOpen(true);
+    });
+};
+
+
 
   const handleVerListaClick = (eleccionId) => {
     setCodComite(eleccionId);
@@ -99,40 +116,7 @@ const AsignacionComite = ({ lista }) => {
   };
 
  
-  const enviarCorreo = async (COD_ELECCION, COD_COMITE) => {
-    try {
-      const existeComite = await verificarExistenciaComite(COD_COMITE);
-
-      if (!existeComite) {
-        Swal.fire({
-          icon: "error",
-          title: "Asignacion incorrecta",
-          text: "Ya se asigno Vocales de comité electoral",
-        });
-        return;
-      }
-
-      await axios.put(`${url}asignar-comite/${COD_ELECCION}`);
-      await axios.post(`${url}asignar-vocales/${COD_COMITE}`);
-
-      Swal.fire({
-        icon: "success",
-        title: "Asignación exitosa",
-        html:  "Se envió un correo a todos los vocales asignados",
-      }).then(() => {
-        setCodComite(COD_COMITE);
-        setModalIsOpen(true);
-      });
-    } catch (error) {
-      console.error("Error en la asignación:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error en la asignación",
-        text: "Ocurrió un error en la asignación del comité y vocales.",
-      });
-    }
-  };
-
+  
 
   return (
     <Container>
@@ -189,7 +173,7 @@ const AsignacionComite = ({ lista }) => {
                     variant="outlined"
                     size="small"
                     startIcon={<MailOutlineIcon/>}
-                    onClick={() => enviarCorreo()}
+                    onClick={() => enviarCorreo(elemento.codComite)}
                     style={{marginLeft:'12px'}}
                   >
                     Enviar correo
