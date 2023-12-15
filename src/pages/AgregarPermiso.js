@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import CheckIcon from '@mui/icons-material/Check';
 import TextField from '@mui/material/TextField';
@@ -9,38 +9,29 @@ import MuiAlert from '@mui/material/Alert';
 const AgregarPermiso = ({ cod_sis, cod_comite }) => {
   const [motivo, setMotivo] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarType, setSnackbarType] = useState('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_VARURL}obtenerEstadoComprobanteAtiempo/${cod_sis}/${cod_comite}`)
-      .then(response => {
-        // Handle the response if needed
-      })
-      .catch(error => {
-        console.error('Error al obtener el estado del comprobante:', error);
+  const agregarPermiso = async () => {
+    try {
+      const response = await axios.post(process.env.REACT_APP_VARURL + 'permisos', {
+        cod_sis,
+        cod_comite,
+        motivo,
       });
-  }, [cod_sis, cod_comite]);
 
-  const agregarPermiso = () => {
-    axios.post(process.env.REACT_APP_VARURL+'permisos', {
-      cod_sis: cod_sis,
-      cod_comite: cod_comite,
-      motivo: motivo,
-    })
-    .then(response => {
-      console.log(response.data);
+      const { data } = response;
+      console.log(data);
+
       setSnackbarType('success');
       setSnackbarMessage('La asignación del permiso se realizó con éxito.');
       setSnackbarOpen(true);
-    })
-    .catch(error => {
+    } catch (error) {
       setSnackbarType('error');
       setSnackbarMessage('Ocurrió un error en la asignación de permisos');
       setSnackbarOpen(true);
       console.error('Error al agregar permiso:', error);
-    });
+    }
   };
 
   const handleCloseSnackbar = () => {
@@ -57,7 +48,12 @@ const AgregarPermiso = ({ cod_sis, cod_comite }) => {
           onChange={(e) => setMotivo(e.target.value)}
           style={{ width: '50%', marginRight: '10px', marginBottom: '10px' }}
         />
-        <Button variant="contained" onClick={agregarPermiso} startIcon={<CheckIcon />} size="small">
+        <Button
+          variant="contained"
+          onClick={agregarPermiso}
+          startIcon={<CheckIcon />}
+          size="small"
+        >
           Agregar Permiso
         </Button>
       </div>

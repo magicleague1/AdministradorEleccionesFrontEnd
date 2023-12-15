@@ -83,15 +83,15 @@ const VerElecciones = ({ lista }) => {
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FECHA</TableCell>
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>DETALLE</TableCell>
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FRENTES</TableCell>
-              <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>CONCLUSION</TableCell>            
+                         
             </TableRow>
           </TableHead>
           <TableBody>
             {listaElecciones.map((eleccion) => (
               <TableRow key={eleccion.COD_ELECCION} className="custom-row">
                 <TableCell color="white">{eleccion.MOTIVO_ELECCION}</TableCell>
-                <TableCell>{eleccion.TIPO_ELECCION}</TableCell>
-                <TableCell>{eleccion.FECHA_ELECCION}</TableCell>
+                <TableCell style={{textAlign: 'center' }}>{eleccion.TIPO_ELECCION}</TableCell>
+                <TableCell style={{textAlign: 'center' }}>{eleccion.FECHA_ELECCION}</TableCell>
                 <TableCell style={{textAlign: 'center' }}>
                   <Button
                     variant="outlined"
@@ -114,17 +114,7 @@ const VerElecciones = ({ lista }) => {
                     Agregar Frentes
                   </Button>
                 </TableCell>
-                <TableCell style={{width:'22%',textAlign: 'center' }}>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<DoneIcon />}
-                    onClick={() => openModalAFP(eleccion.COD_ELECCION)}
-                    style={{marginLeft: '12px', marginRight: '12px'}}
-                  >
-                    Terminar Eleccion
-                  </Button>
-                </TableCell>
+                
               </TableRow>
             ))}
           </TableBody>

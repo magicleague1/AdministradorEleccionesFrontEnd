@@ -119,8 +119,8 @@ function AsignacionMesas({ lista }) {
             <TableBody>
               {proceso.map((elemento) => (
                 <TableRow key={elemento.COD_ELECCION}>
-                  <TableCell>{elemento.COD_ELECCION}</TableCell>
-                  <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
+                  <TableCell style={{textAlign: 'center' }}>{elemento.COD_ELECCION}</TableCell>
+                  <TableCell style={{textAlign: 'center' }}>{elemento.MOTIVO_ELECCION}</TableCell>
                   <TableCell style={{ width:'28%',textAlign: 'center'  }}>
                     <Button
                       variant="outlined"

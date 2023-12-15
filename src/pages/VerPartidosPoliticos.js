@@ -5,11 +5,12 @@ import AgregarFrenteModal from "./AgregarFrenteModal.js";
 import AsignarFrente from "./AsignarFrente";
 import CrearPartidosPoliticos from "./CrearPartidosPoliticos";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import CachedIcon from '@mui/icons-material/Cached';
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
 import CandidatoPorFrentes from "./CandidatosPorFrentes.js";
+import ReasignarCandidatoModal from "./ReasignarCandidatoModal.js";
 
 const VerPartidosPoliticos = ({ lista }) => {
 
@@ -21,6 +22,7 @@ const VerPartidosPoliticos = ({ lista }) => {
   const [listaElecciones, setListaElecciones] = useState([]);
   const [modalAddFP, setModalADDFP] = useState(false);
   const [modalAFP, setModalAFP] = useState(false);
+  const[modalRCA,setModalRCA]=useState(false);
   const url = process.env.REACT_APP_VARURL;
 
   const openModalAC = (id) => {
@@ -73,6 +75,14 @@ const VerPartidosPoliticos = ({ lista }) => {
   const closeModalVC = () => {
     setModalVC(false);
   };
+  //Reasignar Candidatos
+  const openModalRCA = (id) => {
+    setSelectedEleccionId(id);
+    setModalRCA(true);
+  };
+  const closeModalRCA = () => {
+    setModalRCA(false);
+  };
   return (
     <Container>
       <Typography variant="h4" align="center" gutterBottom style={{ marginTop: "40px", marginBottom: "30px" }}>
@@ -91,8 +101,8 @@ const VerPartidosPoliticos = ({ lista }) => {
           <TableBody>
             {listaElecciones.map((eleccion) => (
               <TableRow key={eleccion.COD_ELECCION} className="custom-row">
-                <TableCell >{eleccion.MOTIVO_ELECCION}</TableCell>
-                <TableCell style={{ width: '23%', textAlign: 'center' }}>
+                <TableCell style={{width: '12%',textAlign: 'center' }}>{eleccion.MOTIVO_ELECCION}</TableCell>
+                <TableCell style={{ width: '15%', textAlign: 'center' }}>
                   <Button
                     variant="outlined"
                     size="small"
@@ -103,7 +113,7 @@ const VerPartidosPoliticos = ({ lista }) => {
                     Registro de Partido
                   </Button>
                 </TableCell>
-                <TableCell style={{ width: '18%', textAlign: 'center' }}>
+                <TableCell style={{ width: '12%', textAlign: 'center' }}>
                 <Button
                 variant="outlined"
                 size="small"
@@ -113,7 +123,7 @@ const VerPartidosPoliticos = ({ lista }) => {
                 Ver Frentes
               </Button>
             </TableCell>
-            <TableCell style={{ width: '29%', textAlign: 'center' }}>
+            <TableCell style={{ width: '28%', textAlign: 'center' }}>
               <Button
                 variant="outlined"
                 size="small"
@@ -128,8 +138,17 @@ const VerPartidosPoliticos = ({ lista }) => {
                 size="small"
                 startIcon={<ListAltOutlinedIcon />}
                 onClick={() => openModalVC(eleccion.COD_ELECCION)}
+                sx={{ marginRight: '15px' }}
               >
                 Ver Candidatos
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<CachedIcon />}
+                onClick={() => openModalRCA(eleccion.COD_ELECCION)}
+              >
+                Reasignar 
               </Button>
                 </TableCell>
               </TableRow>
@@ -142,6 +161,7 @@ const VerPartidosPoliticos = ({ lista }) => {
       <AgregarFrenteModal isOpen={modalAddFP} closeModal={closeModalADDFP} eleccionId={selectedEleccionId} />
       <AsignarCandidatoModal isOpen={modalAC} closeModal={closeModalAC} frenteId={selectedFrenteId} />
       <CandidatoPorFrentes isOpen={modalVC} closeModal={closeModalVC} eleccionId={selectedEleccionId}/>   
+      <ReasignarCandidatoModal isOpen={modalRCA} closeModal={closeModalRCA} eleccionId={selectedEleccionId}/>
     </Container>
   );
 };

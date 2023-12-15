@@ -1,110 +1,142 @@
-
-import React, { useEffect, useState } from "react";
-import Modal from "react-modal";
-import "../css/AgregarFrenteModal.css";
-import { Button, Input, MenuItem, Select, Snackbar, Typography } from "@mui/material";
-import MuiAlert from "@mui/material/Alert";
+import React, { useState } from 'react';
+import { Modal, Box, Typography, TextField, Button, Snackbar, Alert } from '@mui/material';
+import axios from 'axios';
 
 const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
-  const listaOpciones = ["opcion 1", "opcion 2", "opcion 3", "opcion 4"];
-  const [selectedOption, setSelectedOption] = useState("Seleccionar Cargo");
-  const [ci, setCi] = useState("");
+  const initialState = {
+    carnetIdentidadAntiguo: '',
+    carnetIdentidadNuevo: '',
+    motivo: '',
+  };
+
+  const [formData, setFormData] = useState(initialState);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState("");
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-
-  const handleSelectChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
-
-  const handleCi = (event) => {
-    setCi(event.target.value);
-  };
-
-  const toogle = () => {
-    setCi("");
-    setSelectedOption("Seleccionar Cargo");
-    closeModal();
-  };
-
-  const handleGuardar = () => {
-    // Verificar que el Carnet de Identidad solo contenga caracteres numéricos
-    const regex = /^[0-9]+$/;
-    if (ci === "") {
-      showSnackbar("error", "El carnet de identidad no puede estar en blanco");
-      return; // No continúa con la acción si no es válido
-    } else if (!regex.test(ci)) {
-      showSnackbar("error", "El carnet de identidad solo debe tener números");
-      return; // No continúa con la acción si no es válido
-    } else if (selectedOption === "Seleccionar Cargo") {
-      showSnackbar("error", "Seleccione un cargo");
-      return; // No continúa con la acción si no es válido
-    }
-
-    showSnackbar("success", "Candidato guardado correctamente");
-    // Aquí puedes realizar la acción de guardar si la validación es exitosa
-    toogle();
-  };
-
-  const showSnackbar = (severity, message) => {
-    setSnackbarSeverity(severity);
-    setSnackbarMessage(message);
-    setSnackbarOpen(true);
-  };
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // You can set the initial severity as needed
+  const url = process.env.REACT_APP_VARURL;
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
+  const handleReasignarCandidato = async () => {
+    try {
+      const response = await axios.put(`${url}reasignarCandidato`, {
+        carnetIdentidadAntiguo: formData.carnetIdentidadAntiguo,
+        carnetIdentidadNuevo: formData.carnetIdentidadNuevo,
+        motivo: formData.motivo,
+      });
+
+      if (response.data.success) {
+        setSnackbarMessage('Candidato reasignado correctamente');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+
+        closeModal();
+        setFormData(initialState);
+      } else {
+        setSnackbarMessage(`Error al reasignar candidato: ${response.data.error}`);
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setSnackbarMessage(`Error al reasignar candidato: ${error}`);
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCloseModal = () => {
+    closeModal();
+    setFormData(initialState);
+  };
+
   return (
-    <>
-      <Modal
-        className={"modalFrente"}
-        isOpen={isOpen}
-        onRequestClose={closeModal}
-        contentLabel="Frentes politicos"
-        shouldCloseOnOverlayClick={true}
-      >
-        <h3 className="tituloPfrente">REASIGNAR CANDIDATO</h3>
-        <div className="contenedorCandidatos">
-          <Typography variant="h2" className="tituloOpciones">
-            Carnet de Identidad
-          </Typography>
-          <Input className="entradaOpciones" value={ci} onChange={handleCi} />
-          <Typography variant="h2" className="tituloOpciones">
-            Cargo
-          </Typography>
-          <Select
-            className="entradaOpciones"
-            value={selectedOption}
-            onChange={handleSelectChange}
-            label="Cargo"
+    <Modal
+      open={isOpen}
+      onClose={handleCloseModal}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={{ ...modalStyle, width: '400px' }}>
+        <Typography variant="h6" component="h2">
+          REASIGNAR CANDIDATOS
+        </Typography>
+        <TextField
+          label="Carnet de Identidad Antiguo"
+          type="text"
+          name="carnetIdentidadAntiguo"
+          value={formData.carnetIdentidadAntiguo}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Carnet de Identidad Nuevo"
+          type="text"
+          name="carnetIdentidadNuevo"
+          value={formData.carnetIdentidadNuevo}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Motivo"
+          type="text"
+          name="motivo"
+          value={formData.motivo}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+        />
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleReasignarCandidato}
+            style={{ marginRight: '12px' }}
           >
-            <MenuItem value="Seleccionar Cargo" disabled>
-              Seleccionar Cargo
-            </MenuItem>
-            {listaOpciones.map((opcion, index) => (
-              <MenuItem key={index} value={opcion}>
-                {opcion}
-              </MenuItem>
-            ))}
-          </Select>
-          <Button className="custom-btn botonGuardarC" onClick={handleGuardar}>
             Guardar
           </Button>
-          <Button className="custom-btn botonvfrente" onClick={() => toogle()}>
+          <Button variant="contained" color="secondary" onClick={handleCloseModal}>
             Cancelar
           </Button>
-        </div>
-      </Modal>
-
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity}>
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
-    </>
+        </Box>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert
+            elevation={6}
+            variant="filled"
+            onClose={handleSnackbarClose}
+            severity={snackbarSeverity}
+            sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Box>
+    </Modal>
   );
+};
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
 };
 
 export default ReasignarCandidatoModal;

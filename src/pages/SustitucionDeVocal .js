@@ -51,11 +51,11 @@ const SustitucionDeVocal = ({ codComite }) => {
                     : prevVocal
                 )
               );
-              showSnackbar('success', 'Asignación exitosa', 'La asignación del comité y vocales se realizó con éxito.');
+              showSnackbar('success', 'Reasignacion exitosa', 'La reasignacion del vocal se realizó con éxito.');
             })
             .catch((error) => {
               console.error('Error al actualizar los datos:', error);
-              showSnackbar('error', 'Error en la asignación de vocales', 'Ocurrió un error en la asignación de vocales');
+              showSnackbar('error', 'Error en la actualizacion ', 'Ocurrió un error en la actualizacion de reasignacion');
             });
         } else {
           alert('No tiene permiso para realizar esta acción.');
@@ -70,14 +70,6 @@ const SustitucionDeVocal = ({ codComite }) => {
     setSnackbarSeverity(severity);
     setSnackbarMessage(message);
     setSnackbarOpen(true);
-
-    if (text) {
-      Swal.fire({
-        icon: severity,
-        title: message,
-        text,
-      });
-    }
   };
   const VocalItem = ({ vocal, onUpdate }) => (
     <Box mt={2}>
@@ -155,8 +147,8 @@ const SustitucionDeVocal = ({ codComite }) => {
           ))}
         </Grid>
       </Grid>
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
-        <MuiAlert elevation={6} variant="filled" onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+        <MuiAlert elevation={6} variant="filled" onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}  sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
           {snackbarMessage}
         </MuiAlert>
       </Snackbar>

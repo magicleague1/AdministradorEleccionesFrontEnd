@@ -131,9 +131,9 @@ const AsignacionComite = ({ lista }) => {
           <TableBody>
             {proceso.map((elemento) => (
               <TableRow key={elemento.COD_ELECCION}>
-                <TableCell>{elemento.COD_ELECCION}</TableCell>
-                <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
-                <TableCell style={{ width:'36%' }}>
+                <TableCell style={{textAlign: 'center' }}>{elemento.COD_ELECCION}</TableCell>
+                <TableCell style={{textAlign: 'center'}}>{elemento.MOTIVO_ELECCION}</TableCell>
+                <TableCell style={{ width:'36%', textAlign: 'center'  }}>
                   <Button
                     variant="outlined"
                     size="small"
@@ -166,17 +166,17 @@ const AsignacionComite = ({ lista }) => {
                     Actualizar
                   </Button>
                 </TableCell>
-                <TableCell style={{ width:'36%' }}>
+                <TableCell style={{ width: '36%', textAlign: 'center' }}>
                 <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<MailOutlineIcon/>}
-                    onClick={() => enviarCorreo(elemento.codComite)}
-                    style={{marginLeft:'12px'}}
-                  >
-                    Enviar correo
-                 </Button>
-                </TableCell>
+                  variant="outlined"
+                  size="small"
+                  startIcon={<MailOutlineIcon />}
+                  onClick={() => enviarCorreo(elemento.codComite)}
+                  style={{ marginLeft: '12px' }}
+                >
+                  Enviar correo
+                </Button>
+              </TableCell>
               </TableRow>
             ))}
           </TableBody>

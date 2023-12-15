@@ -129,12 +129,12 @@ const CrearElecciones = () => {
     console.log(formData.motivoEleccion);
 
     if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
-      handleSnackbarOpen('error', 'Error al crear el proceso electoral', 'Llene correctamente los datos');
+      handleSnackbarOpen('error', 'Error Llene los campos', 'Llene correctamente los datos');
       return;
     }
 
     if (new Date(formData.fechaFin) <= new Date(formData.fechaInicio) || new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)) {
-      handleSnackbarOpen('error', 'Error al crear el proceso electoral', 'Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin.');
+      handleSnackbarOpen('error', 'Error fechas incorrectas', 'Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin.');
       return;
     }
 
@@ -157,8 +157,7 @@ const CrearElecciones = () => {
 
     axios.post(url + "elecciones_data", nuevoProceso)
       .then((response) => {
-        handleSnackbarOpen('success', 'Proceso registrado correctamente', `El proceso electoral se ha creado con éxito para el motivo: ${formData.motivoEleccion}`);
-        setShowModal(true);
+        handleSnackbarOpen('success', 'Proceso registrado correctamente, se envio correos a toda la poblacion universitaria', `Se envió un correo de la información de este proceso electoral `);
         setFormData(initialState);
       })
       .catch((error) => {
@@ -389,12 +388,14 @@ const CrearElecciones = () => {
         open={snackbarOpen}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <MuiAlert
           elevation={6}
           variant="filled"
           onClose={handleSnackbarClose}
           severity={snackbarSeverity}
+          sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
         >
           {snackbarMessage}
         </MuiAlert>

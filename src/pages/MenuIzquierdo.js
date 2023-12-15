@@ -14,6 +14,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
 import CrearElecciones from './CrearElecciones';
 import Inicio from './Inicio';
 import VerElecciones from './VerElecciones';
@@ -23,6 +24,7 @@ import AsignacionMesas from "./AsignacionMesas";
 import VerConvocatoria from "./VerConvocatoria";
 import AsignacionPermisosC from "./AsignacionPermiso";
 import VerBoletasElectorales from "./VerBoletasElectorales";
+import JuradoElectorales from "./JuradosElectorales";
 
 function MenuIzquierdo() {
   const [openProcesoElectoral, setOpenProcesoElectoral] = useState(false);
@@ -36,7 +38,7 @@ function MenuIzquierdo() {
   const [mostrarVerConvocatoria, setMostrarVerConvocatoria] = useState(false);
   const [mostrarAsignacionP, setMostrarAsignacionP] = useState(false);
   const [mostrarBoletas, setMostrarBoletas] = useState(false);
-
+  const[mostrarJurados, setJurados]=useState(false);
 
   const handleDrawerItemClick = (item) => {
     switch (item) {
@@ -61,9 +63,12 @@ function MenuIzquierdo() {
       case "Boleta Electorales":
         handleVerConvocatoria();
         break;
+        case "Jurados Electorales":
+          handleJuradosE();
+          break;
       default:
         break;
-      
+  
 
     }
   };
@@ -78,6 +83,7 @@ function MenuIzquierdo() {
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
+    setJurados(false);
   };
 
   const handleDrawerItemSubClick = (subItem) => {
@@ -110,6 +116,7 @@ function MenuIzquierdo() {
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
+    setJurados(false);
   };
 
   const handleVerEleccionesClick = () => {
@@ -122,6 +129,7 @@ function MenuIzquierdo() {
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
+    setJurados(false);
   };
 
   const handleVerComiteClick = () => {
@@ -134,6 +142,7 @@ function MenuIzquierdo() {
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
+    setJurados(false);
   };
 
 
@@ -147,6 +156,7 @@ function MenuIzquierdo() {
     setMostrarVerConvocatoria(false);
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
+    setJurados(false);
   };
 
   const handleAsignarMesaClick = () => {
@@ -159,6 +169,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(true);
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
+    setJurados(false);
   };
 
   const handleVerConvocatoria = () => {
@@ -171,6 +182,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
+    setJurados(false);
   };
 
   const handleAsignarPermisos = () => {
@@ -183,6 +195,7 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarAsignacionP(true);
     setMostrarBoletas(false);
+    setJurados(false);
   };
 
   const handleBoletasElectorales = () => {
@@ -195,6 +208,19 @@ function MenuIzquierdo() {
     setMostrarAsignacion(false);
     setMostrarAsignacionP(false);
     setMostrarBoletas(true);
+    setJurados(false);
+  };
+  const handleJuradosE = () => {
+    setMostrarCrearEleccion(false);
+    setMostrarInicio(false);
+    setMostrarVerElecciones(false);
+    setMostrarVerComite(false);
+    setMostrarVerPartido(false);
+    setMostrarVerConvocatoria(false);
+    setMostrarAsignacion(false);
+    setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
+    setJurados(true);
   };
 
   return (
@@ -286,6 +312,13 @@ function MenuIzquierdo() {
             <ListItemText primary="Boletas Electorales" />
           </ListItem>
 
+          <ListItem button onClick={() => handleJuradosE("Jurados Electorales")} style={{ backgroundColor: mostrarJurados ? 'lightgray' : 'inherit' }}>
+            <ListItemIcon>
+             <Diversity3Icon />
+            </ListItemIcon>
+            <ListItemText primary="Jurados Electorales" />
+          </ListItem>
+
         </List>
       </Drawer>
       <div className="contentContainer">
@@ -298,6 +331,7 @@ function MenuIzquierdo() {
         {mostrarVerConvocatoria && <VerConvocatoria lista={mostrarVerConvocatoria} />}
         {mostrarAsignacionP && <AsignacionPermisosC />}
         {mostrarBoletas && <VerBoletasElectorales/>}
+        {mostrarJurados && <JuradoElectorales/>}
       </div>
     </div>
   );
