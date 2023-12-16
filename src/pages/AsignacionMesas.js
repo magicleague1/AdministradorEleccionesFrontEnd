@@ -55,14 +55,14 @@ function AsignacionMesas({ lista }) {
   
   const handleAsociarClick = async (COD_ELECCION) => {
     try {
-      const existeAsignacion = await verificarAsociacionMesas(COD_ELECCION);
+      // const existeAsignacion = await verificarAsociacionMesas(COD_ELECCION);
 
-      if (existeAsignacion) {
-        setSnackbarType('error');
-        setSnackbarMessage('Ya se asignaron mesas a ese proceso electoral');
-        setSnackbarOpen(true);
-        return;
-      }
+      // if (existeAsignacion) {
+      //   setSnackbarType('error');
+      //   setSnackbarMessage('Ya se asignaron mesas a ese proceso electoral');
+      //   setSnackbarOpen(true);
+      //   return;
+      // }
   
       await axios.post(`${url}asignar_mesas_carrera/${COD_ELECCION}`);
   

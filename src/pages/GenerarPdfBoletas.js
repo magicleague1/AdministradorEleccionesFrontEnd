@@ -49,13 +49,13 @@ const GenerarPdfBoletas = ({ isOpen, closeModal, eleccionId }) => {
   const handleGetBoletas = async (event) => {
     event.stopPropagation();
     try {
-      const existeBoleta = await verificarExistenciaBoletas();
+      // const existeBoleta = await verificarExistenciaBoletas();
 
-      if (!existeBoleta) {
-        setSnackbarMessage("Ya se generó boleta electoral, solo haga clic en descargar");
-        setSnackbarOpen(true);
-        return;
-      }
+      // if (!existeBoleta) {
+      //   setSnackbarMessage("Ya se generó boleta electoral, solo haga clic en descargar");
+      //   setSnackbarOpen(true);
+      //   return;
+      // }
 
       await axios.post(url + `generar_boletas/${eleccionId}`);
 

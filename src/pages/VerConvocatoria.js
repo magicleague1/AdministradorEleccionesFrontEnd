@@ -25,9 +25,6 @@ const VerConvocatoria = ({ lista }) => {
   const [modalIsOpenCM, setModalIsOpenCM] = useState(false);
   const [modalIsOpenCN, setModalIsOpenCN] = useState(false);
   const [modalIsOpenPC, setModalIsOpenPC] = useState(false);
-
-
-  
   ///Modal crear convocatoria
   const openModalCN = (id) => {
     setSelectedEleccionId(id);

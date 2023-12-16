@@ -20,7 +20,7 @@ function ListaVocalesComite({ idComite }) {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Realizar una solicitud GET para obtener los datos de titulares y suplentes
+   
     axios
       .get(`${process.env.REACT_APP_VARURL}ver-lista-comite/${idComite}`)
       .then((response) => {
