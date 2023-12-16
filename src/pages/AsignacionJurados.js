@@ -75,7 +75,6 @@ const AsignacionDeJurados = ({ eleccionId }) => {
       .post(`${process.env.REACT_APP_VARURL}mesa/${codMesa}`)
       .then(() => {
         openSnackbar('success', 'Asignación exitosa. Se envió correo a todos los jurados asignados.');
-        setOpenModalRJ(true);
       })
       .catch(() => {
         openSnackbar('error', 'Error en la asignación. Ocurrió un error en la asignación de Jurados.');
@@ -83,6 +82,7 @@ const AsignacionDeJurados = ({ eleccionId }) => {
   };
 
   return (
+    <div>
     <div style={{ overflowY: 'auto', maxHeight: '400px', width: '600px' }}>
       {Array.isArray(mesas) &&
         mesas.map((mesa, indexMesa) => (
@@ -224,7 +224,9 @@ const AsignacionDeJurados = ({ eleccionId }) => {
         </MuiAlert>
       </Snackbar>
 
-      <ReasiganarJurados isOpen={openModalRJ} closeModal={closeModalRASJ} codMesa={selectedCodMesa} />
+      
+    </div>
+   
       <Modal
         open={openModalVJ}
         onClose={closeModalVJ}
@@ -251,6 +253,7 @@ const AsignacionDeJurados = ({ eleccionId }) => {
           </Button>
         </div>
       </Modal>
+      <ReasiganarJurados isOpen={openModalRJ} closeModal={closeModalRASJ} codMesa={selectedCodMesa} />
     </div>
   );
 };
