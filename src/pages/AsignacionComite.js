@@ -79,25 +79,41 @@ const AsignacionComite = ({ lista }) => {
       });
     }
   };
-  const enviarCorreo = async (COD_COMITE) => {
-    await axios.post(`${url}mensajeComiteElectoral`, { idComite: COD_COMITE });
+//   const enviarCorreo = async (COD_COMITE) => {
+//     await axios.post(`${url}mensajeComiteElectoral/${COD_COMITE}`);
+//     Swal.fire({
+//       icon: "success",
+//       title: "Envio de correo exitoso",
+//       html:  "Se envió un correo a todos los vocales asignados",
+//     }).then(() => {
+//       Swal.fire({
+//         icon: "error",
+//         title: "Error en el envio de correo",
+//         text: "Ocurrió un error al enviar el correo.",
+//       });
+//       setModalIsOpen(true);
+//     });
+// };
 
+const enviarCorreo = async (COD_COMITE) => {
+  try {
+    await axios.post(`${url}mensajeComiteElectoral${COD_COMITE}`);
     Swal.fire({
-      icon: "success",
-      title: "Envio de correo exitoso",
-      html:  "Se envió un correo a todos los vocales asignados",
-    }).then(() => {
-      Swal.fire({
-        icon: "error",
-        title: "Error en el envio",
-        text: "Ocurrió un error al enviar el correo.",
-      });
-      setModalIsOpen(true);
-    });
+            icon: "success",
+            title: "Envio de correo exitoso",
+            html:  "Se envió un correo a todos los vocales asignados",
+          }).then(() => {
+            Swal.fire({
+              icon: "error",
+              title: "Error en el envio de correo",
+              text: "Ocurrió un error al enviar el correo.",
+            });
+            setModalIsOpen(true);
+          });
+  } catch (error) {
+    console.error("Error en el envío de correo:", error);
+  }
 };
-
-
-
   const handleVerListaClick = (eleccionId) => {
     setCodComite(eleccionId);
     setModalIsOpen(true);
