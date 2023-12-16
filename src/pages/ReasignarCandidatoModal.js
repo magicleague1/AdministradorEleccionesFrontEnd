@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button, Snackbar } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, Snackbar, Alert } from '@mui/material';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 
 const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   const initialState = {
@@ -13,6 +12,7 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   const [formData, setFormData] = useState(initialState);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // You can set the initial severity as needed
   const url = process.env.REACT_APP_VARURL;
 
   const handleSnackbarClose = () => {
@@ -28,29 +28,22 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
       });
 
       if (response.data.success) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Candidato reasignado correctamente',
-          text: response.data.success,
-          onClose: () => {
-            closeModal();
-            setFormData(initialState);
-          },
-        });
+        setSnackbarMessage('Candidato reasignado correctamente');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+
+        closeModal();
+        setFormData(initialState);
       } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al reasignar candidato',
-          text: response.data.error,
-        });
+        setSnackbarMessage(`Error al reasignar candidato: ${response.data.error}`);
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al reasignar candidato',
-        text: `Ocurrió un error al reasignar el candidato: ${error}`,
-      });
+      setSnackbarMessage(`Error al reasignar candidato: ${error}`);
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
@@ -67,9 +60,13 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   return (
     <Modal
       open={isOpen}
-      onClose={handleCloseModal}
+      onClose={() => {}}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      BackdropProps={{
+        style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+        invisible: false,
+      }}
     >
       <Box sx={{ ...modalStyle, width: '400px' }}>
         <Typography variant="h6" component="h2">
@@ -115,7 +112,22 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
             Cancelar
           </Button>
         </Box>
-        <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose} message={snackbarMessage} />
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert
+            elevation={6}
+            variant="filled"
+            onClose={handleSnackbarClose}
+            severity={snackbarSeverity}
+            sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Modal>
   );

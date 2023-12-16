@@ -5,7 +5,7 @@ import AgregarFrenteModal from "./AgregarFrenteModal.js";
 import AsignarFrente from "./AsignarFrente";
 import CrearPartidosPoliticos from "./CrearPartidosPoliticos";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import CachedIcon from '@mui/icons-material/Cached';
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
@@ -24,11 +24,13 @@ const VerPartidosPoliticos = ({ lista }) => {
   const [listaElecciones, setListaElecciones] = useState([]);
   const [modalAddFP, setModalADDFP] = useState(false);
   const [modalAFP, setModalAFP] = useState(false);
+  const[modalRCA,setModalRCA]=useState(false);
   const url = process.env.REACT_APP_VARURL;
   
 
   const openModalAC = (id) => {
-    setSelectedFrenteId(id);
+   
+    setSelectedEleccionId(id);
     setModalAC(true);
   };
 
@@ -92,7 +94,7 @@ const VerPartidosPoliticos = ({ lista }) => {
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead style={{backgroundColor:'#3E5F8A'}}>
             <TableRow>
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ELECCION</TableCell>
               <TableCell className="custom-header" style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}> REGISTRO </TableCell>
@@ -103,8 +105,8 @@ const VerPartidosPoliticos = ({ lista }) => {
           <TableBody>
             {listaElecciones.map((eleccion) => (
               <TableRow key={eleccion.COD_ELECCION} className="custom-row">
-                <TableCell >{eleccion.MOTIVO_ELECCION}</TableCell>
-                <TableCell style={{ width: '23%', textAlign: 'center' }}>
+                <TableCell style={{width: '12%',textAlign: 'center' }}>{eleccion.MOTIVO_ELECCION}</TableCell>
+                <TableCell style={{ width: '15%', textAlign: 'center' }}>
                   <Button
                     variant="outlined"
                     size="small"
@@ -112,10 +114,10 @@ const VerPartidosPoliticos = ({ lista }) => {
                     onClick={() => handleDetallesClick(eleccion.COD_ELECCION)}
                     className="custom-button"
                   >
-                    Registro de Partido
+                    Registro de Frente
                   </Button>
                 </TableCell>
-                <TableCell style={{ width: '18%', textAlign: 'center' }}>
+                <TableCell style={{ width: '12%', textAlign: 'center' }}>
                 <Button
                 variant="outlined"
                 size="small"
@@ -125,7 +127,7 @@ const VerPartidosPoliticos = ({ lista }) => {
                 Ver Frentes
               </Button>
             </TableCell>
-            <TableCell style={{ width: '29%', textAlign: 'center' }}>
+            <TableCell style={{ width: '28%', textAlign: 'center' }}>
               <Button
                 variant="outlined"
                 size="small"
@@ -133,28 +135,25 @@ const VerPartidosPoliticos = ({ lista }) => {
                 onClick={() => openModalAC(eleccion.COD_ELECCION)}
                 sx={{ marginRight: '15px' }}
               >
-                Asignar
+                Registrar
               </Button>
               <Button
                 variant="outlined"
                 size="small"
                 startIcon={<ListAltOutlinedIcon />}
                 onClick={() => openModalVC(eleccion.COD_ELECCION)}
+                sx={{ marginRight: '15px' }}
               >
-                Ver Candidatos
-              </Button> 
+                Ver 
+              </Button>
               <Button
                 variant="outlined"
                 size="small"
                 startIcon={<CachedIcon />}
                 onClick={() => openModalRCA(eleccion.COD_ELECCION)}
               >
-                Reasignar Candidatos
+                Reasignar 
               </Button>
-
-
-
-
                 </TableCell>
               </TableRow>
             ))}
@@ -164,9 +163,9 @@ const VerPartidosPoliticos = ({ lista }) => {
       <CrearPartidosPoliticos isOpen={modalIF} closeModal={closeModalIF} eleccionId={selectedEleccionId} />
       <AsignarFrente isOpen={modalAFP} closeModal={closeModalAFP} eleccionId={selectedEleccionId} />
       <AgregarFrenteModal isOpen={modalAddFP} closeModal={closeModalADDFP} eleccionId={selectedEleccionId} />
-      <AsignarCandidatoModal isOpen={modalAC} closeModal={closeModalAC} frenteId={selectedFrenteId} />
+      <AsignarCandidatoModal isOpen={modalAC} closeModal={closeModalAC} eleccionId={selectedEleccionId} />
       <CandidatoPorFrentes isOpen={modalVC} closeModal={closeModalVC} eleccionId={selectedEleccionId}/>   
-      <ReasignarCandidatoModal isOpen={modalRCA} closeModal={closeModalRCA} eleccionId={selectedEleccionId}/>  
+      <ReasignarCandidatoModal isOpen={modalRCA} closeModal={closeModalRCA} eleccionId={selectedEleccionId}/>
     </Container>
   );
 };

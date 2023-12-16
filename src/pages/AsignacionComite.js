@@ -12,13 +12,14 @@ import {
   Typography,
   Container,
   Modal,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import SustitucionDeVocal from "./SustitucionDeVocal ";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import SyncIcon from "@mui/icons-material/Sync";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import Swal from "sweetalert2";
 import ListaVocalesComite from "./ListaVocalesComite";
 
 
@@ -28,6 +29,9 @@ const AsignacionComite = ({ lista }) => {
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [codComite, setCodComite] = useState(null);
   const [codComiteActualizar, setCodComiteActualizar] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState('success');
   const url = process.env.REACT_APP_VARURL;
 
   useEffect(() => {
@@ -49,71 +53,44 @@ const AsignacionComite = ({ lista }) => {
   const handleAsociarClick = async (COD_ELECCION, COD_COMITE) => {
     try {
       const existeComite = await verificarExistenciaComite(COD_COMITE);
-
+  
       if (!existeComite) {
-        Swal.fire({
-          icon: "error",
-          title: "Asignacion incorrecta",
-          text: "Ya se asigno Vocales de comité electoral",
-        });
+        setSnackbarType('error');
+        setSnackbarMessage('Ya se asignaron vocales de comité electoral.');
+        setSnackbarOpen(true);
         return;
       }
-
+  
       await axios.put(`${url}asignar-comite/${COD_ELECCION}`);
       await axios.post(`${url}asignar-vocales/${COD_COMITE}`);
+  
+      // Mover la actualización del estado aquí
+      setCodComite(COD_COMITE);
+      setSnackbarType('success');
+      setSnackbarMessage('La asignación del comité con sus vocales se realizó con éxito.');
+      setSnackbarOpen(true);
 
-      Swal.fire({
-        icon: "success",
-        title: "Asignación exitosa",
-        text:  "La asignacion del comité y vocales se realizó con éxito",
-      }).then(() => {
-        setCodComite(COD_COMITE);
-        setModalIsOpen(true);
-      });
     } catch (error) {
-      console.error("Error en la asignación:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error en la asignación",
-        text: "Ocurrió un error en la asignación del comité y vocales.",
-      });
+
+      setSnackbarType('error');
+      setSnackbarMessage('Ocurrió un error en la asignación del comité y vocales.');
+      setSnackbarOpen(true);
     }
   };
-//   const enviarCorreo = async (COD_COMITE) => {
-//     await axios.post(`${url}mensajeComiteElectoral/${COD_COMITE}`);
-//     Swal.fire({
-//       icon: "success",
-//       title: "Envio de correo exitoso",
-//       html:  "Se envió un correo a todos los vocales asignados",
-//     }).then(() => {
-//       Swal.fire({
-//         icon: "error",
-//         title: "Error en el envio de correo",
-//         text: "Ocurrió un error al enviar el correo.",
-//       });
-//       setModalIsOpen(true);
-//     });
-// };
-
-const enviarCorreo = async (COD_COMITE) => {
-  try {
-    await axios.post(`${url}mensajeComiteElectoral${COD_COMITE}`);
-    Swal.fire({
-            icon: "success",
-            title: "Envio de correo exitoso",
-            html:  "Se envió un correo a todos los vocales asignados",
-          }).then(() => {
-            Swal.fire({
-              icon: "error",
-              title: "Error en el envio de correo",
-              text: "Ocurrió un error al enviar el correo.",
-            });
-            setModalIsOpen(true);
-          });
-  } catch (error) {
-    console.error("Error en el envío de correo:", error);
-  }
+  const enviarCorreo = async (COD_COMITE) => {
+    try{
+      await axios.post(`${url}mensajeComiteElectoral/${COD_COMITE}`);
+      setSnackbarType('success');
+        setSnackbarMessage('Se envió un correo a todos los vocales asignados');
+        setSnackbarOpen(true);
+    } catch(error){
+   
+      setSnackbarType('error');
+      setSnackbarMessage('Ocurrió un error al enviar el correo');
+      setSnackbarOpen(true);
+    }
 };
+
   const handleVerListaClick = (eleccionId) => {
     setCodComite(eleccionId);
     setModalIsOpen(true);
@@ -132,8 +109,9 @@ const enviarCorreo = async (COD_COMITE) => {
     setModalIsOpen1(false);
   };
 
- 
-  
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
     <Container>
@@ -142,19 +120,20 @@ const enviarCorreo = async (COD_COMITE) => {
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
-            <TableRow>
+          <TableHead style={{backgroundColor:'#3E5F8A'}}>
+            <TableRow >
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
-              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ELECCION</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >ACCIONES</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >CORREO ELECTRONICO</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {proceso.map((elemento) => (
               <TableRow key={elemento.COD_ELECCION}>
-                <TableCell>{elemento.COD_ELECCION}</TableCell>
-                <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
-                <TableCell style={{ width:'36%' }}>
+                <TableCell style={{textAlign: 'center' }}>{elemento.COD_ELECCION}</TableCell>
+                <TableCell style={{textAlign: 'center'}}>{elemento.MOTIVO_ELECCION}</TableCell>
+                <TableCell style={{ width:'36%', textAlign: 'center'  }}>
                   <Button
                     variant="outlined"
                     size="small"
@@ -186,41 +165,64 @@ const enviarCorreo = async (COD_COMITE) => {
                   >
                     Actualizar
                   </Button>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<MailOutlineIcon/>}
-                    onClick={() => enviarCorreo(elemento.COD_COMITE)}
-                    style={{marginLeft:'12px'}}
-                  >
-                    Enviar correo
-                  </Button>
                 </TableCell>
+                <TableCell style={{ width: '36%', textAlign: 'center' }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={<MailOutlineIcon />}
+                  onClick={() => enviarCorreo(elemento.codComite)}
+                  style={{ marginLeft: '12px' }}
+                >
+                  Enviar correo
+                </Button>
+              </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity={snackbarType}
+          sx={{ width: '100%', maxWidth: '400px', fontSize: '1rem' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <Modal
         open={modalIsOpen}
-        onClose={closeModal}
+        onClose={() => {}}
         aria-labelledby="Lista comite"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+          invisible: false,  
+        }}
       >
         <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <Typography variant="h5" gutterBottom>
-        Lista de Comite Electoral
+        LISTA COMITE ELECTORAL
       </Typography>
       <div className="ContenedorVocales" style={{width:'550px'}}>
         {codComite !== null && <ListaVocalesComite idComite={codComite} />}
       </div>
       <Button
-        variant="outlined"
-        color="primary"
+         variant="contained"
+         color="secondary"
+         className="custom-btn btn-8"
         onClick={closeModal}
         style={{ marginTop: "20px" }}
       >
@@ -230,17 +232,21 @@ const enviarCorreo = async (COD_COMITE) => {
       </Modal>
       <Modal
         open={modalIsOpen1}
-        onClose={closeModal1}
+        onClose={() => {}}
         aria-labelledby="Reasignacion Comite"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+          invisible: false,  
+        }}
       >
         <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '900px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Typography variant="h5" gutterBottom style={{ marginBottom: '20px' }}>
-        Reasignacion de Lista de Comite
+        REASIGNACION COMITE ELECTORAL
       </Typography>
       <div className="ContenedorVocales">
         {codComiteActualizar !== null && (
@@ -248,8 +254,9 @@ const enviarCorreo = async (COD_COMITE) => {
         )}
       </div>
       <Button
-        variant="outlined"
-        color="primary"
+         variant="contained"
+         color="secondary"
+         className="custom-btn btn-8"
         onClick={closeModal1}
         style={{ marginTop: "20px" }}
       >

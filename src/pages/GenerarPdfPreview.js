@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import CrearPublicaConv from './CrearPublicaConv';
-import { Button, Container, styled, Modal,Typography,Dialog,
-  DialogTitle,
-  DialogContent } from "@mui/material";
+import { Button,styled, Modal,Typography,Dialog,DialogTitle,DialogContent } from "@mui/material";
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import PublishIcon from '@mui/icons-material/Publish';
 import "../css/GenerarPdf.css";
@@ -53,7 +51,10 @@ const GenerarPdfPreview = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth="md">
+    <Dialog open={isOpen} onClose={() => {}} fullWidth maxWidth="md" BackdropProps={{
+      style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+      invisible: false,  
+    }}>
       <DialogTitle>
       <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
           PUBLICAR CONVOCATORIA

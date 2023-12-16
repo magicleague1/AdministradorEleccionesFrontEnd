@@ -1,65 +1,78 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import CheckIcon from '@mui/icons-material/Check';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Swal from 'sweetalert2';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const AgregarPermiso = ({ cod_sis, cod_comite }) => {
   const [motivo, setMotivo] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarType, setSnackbarType] = useState('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_VARURL}obtenerEstadoComprobanteAtiempo/${cod_sis}/${cod_comite}`)
-      .then(response => {
-        
-      })
-      .catch(error => {
-        console.error('Error al obtener el estado del comprobante:', error);
+  const agregarPermiso = async () => {
+    try {
+      const response = await axios.post(process.env.REACT_APP_VARURL + 'permisos', {
+        cod_sis,
+        cod_comite,
+        motivo,
       });
-  }, [cod_sis, cod_comite]);
 
-  const agregarPermiso = () => {
-    axios.post(process.env.REACT_APP_VARURL+'permisos', {
-      cod_sis: cod_sis,
-      cod_comite: cod_comite,
-      motivo: motivo,
+      const { data } = response;
+      console.log(data);
 
-    })
-    .then(response => {
-      console.log(response.data);
-      Swal.fire({
-        icon: 'success',
-        title: 'Asignación exitosa',
-        text: 'La asignación del permiso se realizó con éxito.'
-      });
-    })
-    .catch(error => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en la asignación ',
-        text: 'Ocurrió un error en la asignación de permisos'
-      });
+      setSnackbarType('success');
+      setSnackbarMessage('La asignación del permiso se realizó con éxito.');
+      setSnackbarOpen(true);
+    } catch (error) {
+      setSnackbarType('error');
+      setSnackbarMessage('Ocurrió un error en la asignación de permisos');
+      setSnackbarOpen(true);
       console.error('Error al agregar permiso:', error);
-    });
+    }
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
-    <div >
+    <div>
       <div>
         <TextField
           label="Motivo"
           variant="outlined"
           value={motivo}
           onChange={(e) => setMotivo(e.target.value)}
-          style={{width:'50%', marginRight:'10px'}}
+          style={{ width: '50%', marginRight: '10px', marginBottom: '10px' }}
         />
-        <Button variant="contained" onClick={agregarPermiso} startIcon={<CheckIcon />}>
+        <Button
+          variant="contained"
+          onClick={agregarPermiso}
+          startIcon={<CheckIcon />}
+          size="small"
+        >
           Agregar Permiso
         </Button>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity={snackbarType}
+          sx={{ width: '100%', maxWidth: '400px', fontSize: '1rem' }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };

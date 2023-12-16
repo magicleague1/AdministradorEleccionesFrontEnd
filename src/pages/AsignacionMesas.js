@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Paper,
-  Card,
   CardContent,
   Button,
   Typography,
@@ -13,18 +12,17 @@ import {
   TableRow,
   Modal,
   Container,
-  Box
+  Box,
+  Snackbar,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ListIcon from "@mui/icons-material/List";
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from "axios";
 import ListaMesas from "./ListadeMesas";
-import Swal from "sweetalert2";
-import "../css/Comite.css";
-import "../css/AsignacionMesas.css";
 import PublicacionListaVotantes from "./PublicacionListaVotantes";
-
+import MuiAlert from '@mui/material/Alert';
 
 function AsignacionMesas({ lista }) {
   const [proceso, setProceso] = useState([]);
@@ -32,6 +30,10 @@ function AsignacionMesas({ lista }) {
   const [selectedEleccionId, setSelectedEleccionId] = useState(null);
   const [modalListaMesasIsOpen, setModalListaMesasIsOpen] = useState(false);
   const [modalPublicacionIsOpen, setModalPublicacionIsOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState("");
+
 
   const url = process.env.REACT_APP_VARURL;
 
@@ -53,33 +55,27 @@ function AsignacionMesas({ lista }) {
   
   const handleAsociarClick = async (COD_ELECCION) => {
     try {
-      const existeAsignacion = await verificarAsociacionMesas(COD_ELECCION);
-      console.log("Soy comprobacion", existeAsignacion);
-      if (existeAsignacion) {
-        Swal.fire({
-          icon: "error",
-          title: "Asignación incorrecta",
-          text: "Ya se asignaron mesas a ese proceso electoral",
-        });
-        return;
-      }
+      // const existeAsignacion = await verificarAsociacionMesas(COD_ELECCION);
+
+      // if (existeAsignacion) {
+      //   setSnackbarType('error');
+      //   setSnackbarMessage('Ya se asignaron mesas a ese proceso electoral');
+      //   setSnackbarOpen(true);
+      //   return;
+      // }
   
       await axios.post(`${url}asignar_mesas_carrera/${COD_ELECCION}`);
   
-      Swal.fire({
-        icon: "success",
-        title: "Asignación exitosa",
-        text: "La asignación de mesas se realizó con éxito.",
-      }).then(() => {
-        setModalIsOpen(true);
-      });
+      setSnackbarType('success');
+      setSnackbarMessage('La asignación de mesas se realizó con éxito.');
+      setSnackbarOpen(true);
+      
+      setModalIsOpen(true);
     } catch (error) {
       console.error("Error en la Generación:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error en la asignación de mesas",
-        text: `Ocurrió un error en la asignación de mesas: ${error.message}`,
-      });
+      setSnackbarType('error');
+      setSnackbarMessage(`Ocurrió un error en la asignación de mesas: ${error.message}`);
+      setSnackbarOpen(true);
     }
   };
 
@@ -100,91 +96,143 @@ function AsignacionMesas({ lista }) {
   const closeModalPublicacion = () => {
     setModalPublicacionIsOpen(false);
   };
+
+//Generacion de boletas
+  const handleGetListaVotantes = async ( eleccionId) => {
+    try {
+     
+      await axios.post(`${url}generarListasVotantes/${eleccionId}`);
+  
+      setSnackbarType("success");
+      setSnackbarMessage("La generación de Lista de votantes se realizó con éxito.");
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error("Error en la Generación:", error);
+  
+      if (axios.isCancel(error)) {
+        // El request fue cancelado, no es necesario mostrar un mensaje de error
+        return;
+      }
+  
+      setSnackbarType("error");
+      setSnackbarMessage("Ocurrió un error en la generación de Lista de votantes.");
+      setSnackbarOpen(true);
+    }
+  };
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
   return (
     <>
       <Container>
-      <Typography variant="h4" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
-        ASIGNACION DE MESAS
-      </Typography>
+        <Typography variant="h4" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
+          ASIGNACION DE MESAS
+        </Typography>
         <TableContainer component={Paper} className="TablaAsignacion">
           <Table>
-            <TableHead>
+            <TableHead style={{backgroundColor:'#3E5F8A'}}>
               <TableRow>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
-                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>MESAS</TableCell>  
+                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>MESAS</TableCell> 
+                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>LISTAR VOTANTES</TableCell> 
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PUBLICACION</TableCell>            
               </TableRow>
             </TableHead>
             <TableBody>
               {proceso.map((elemento) => (
                 <TableRow key={elemento.COD_ELECCION}>
-                  <TableCell>{elemento.COD_ELECCION}</TableCell>
-                  <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
+                  <TableCell style={{textAlign: 'center' }}>{elemento.COD_ELECCION}</TableCell>
+                  <TableCell style={{textAlign: 'center' }}>{elemento.MOTIVO_ELECCION}</TableCell>
                   <TableCell style={{ width:'28%',textAlign: 'center'  }}>
-                    
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<AddCircleIcon />}
+                      onClick={() =>
+                        handleAsociarClick(elemento.COD_ELECCION)
+                      }
+                      style={{ marginRight:'15px',textAlign: 'center'  }}
+                    >
+                      Asociar
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<ListIcon />}
+                      onClick={() =>
+                        handleVerListaClick(elemento.COD_ELECCION)
+                      }
+                    >
+                      Ver Lista
+                    </Button>
+                  </TableCell>
+                  <TableCell style={{ width:'20%',textAlign: 'center'  }}>
                       <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<AddCircleIcon />}
-                        onClick={() =>
-                          handleAsociarClick(elemento.COD_ELECCION)
-                        }
-                        style={{ marginRight:'15px',textAlign: 'center'  }}
+                         variant="outlined"
+                         size="small"
+                        onClick={(event) => handleGetListaVotantes(event)}
+                        startIcon={<CloudDownloadIcon />}
+                        sx={{ marginRight: '13px' }}
                       >
-                        Asociar
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<ListIcon />}
-                        onClick={() =>
-                          handleVerListaClick(elemento.COD_ELECCION)
-                        }
-                      >
-                        Ver Lista
+                        Generar Boletas
                       </Button>
                     
                   </TableCell>
                   <TableCell style={{ width:'20%',textAlign: 'center'  }}>
-                    
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<CloudUploadIcon/>}
-                        onClick={() =>
-                          handlePublicarClick(elemento.COD_ELECCION)
-                        }
-                      >
-                        Publicar Lista
-                      </Button>
-                    
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<CloudUploadIcon/>}
+                      onClick={() =>
+                        handlePublicarClick(elemento.COD_ELECCION)
+                      }
+                    >
+                      Publicar Lista
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        </Container>
+      </Container>
 
-        <Modal open={modalListaMesasIsOpen} onClose={closeModalListaMesas}>
-        <Card className="CuerpoComite" onClick={closeModalListaMesas}>
+      <Modal open={modalListaMesasIsOpen} onClose={() => {}}  style={{
+         display: 'flex',
+         alignItems: 'center',
+         justifyContent: 'center',
+       }}
+       BackdropProps={{
+         style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+         invisible: false,  
+       }}>
+      <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '700px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        
           <CardContent>
             <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>LISTA DE ASIGNACION DE MESAS</Typography>
             <ListaMesas eleccionId={selectedEleccionId} />
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
               <Button
-                variant="outlined"
-                className="BotonComiteModal"
+                variant="contained"
+                color="secondary"
+                className="custom-btn btn-8"
                 onClick={closeModalListaMesas}
               >
                 Cerrar
               </Button>
             </Box>
           </CardContent>
-        </Card>
+        </div>
       </Modal>
+
       <PublicacionListaVotantes isOpen={modalPublicacionIsOpen} closeModal={closeModalPublicacion} eleccionId={selectedEleccionId}/>
+
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarType} sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 }

@@ -51,51 +51,62 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
     <div>
       <Modal
         open={isOpen}
-        onClose={closeModal}
+        onClose={() => {}}
         aria-labelledby="Candidatos "
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+          invisible: false,  
+        }}
       >
         <div
           className="modalFrente"
           style={{ backgroundColor: "#fff", padding: "20px", width: "400px" }}
         >
-          <h3 className="tituloPfrente" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>
+          <h3
+            className="tituloPfrente"
+            style={{ color: "black", textAlign: "center", marginBottom: "15px" }}
+          >
             FRENTES POLÍTICOS
           </h3>
-          <List>
-            {listaFrentesP.map((frente) => (
-              <ListItem key={frente.COD_FRENTE} className="titulofrente">
-                <ListItemText
-                  primary={frente.NOMBRE_FRENTE}
-                  style={{ color: "black", textAlign: "center" }}
-                />
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={
-                    <DriveFileRenameOutlineOutlinedIcon />
-                  }
-                  onClick={() => handleVerCandidatosClick(frente.COD_FRENTE)}
-                  style={{ marginRight: '12px' }}
-                >
-                  Candidatos
-                </Button>
-              </ListItem>
-            ))}
-          </List>
+
+          {listaFrentesP.length > 0 ? (
+            <List>
+              {listaFrentesP.map((frente) => (
+                <ListItem key={frente.COD_FRENTE} className="titulofrente">
+                  <ListItemText
+                    primary={frente.NOMBRE_FRENTE}
+                    style={{ color: "black", textAlign: "center" }}
+                  />
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<DriveFileRenameOutlineOutlinedIcon />}
+                    onClick={() => handleVerCandidatosClick(frente.COD_FRENTE)}
+                    style={{ marginRight: "12px" }}
+                  >
+                    Candidatos
+                  </Button>
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <p style={{ textAlign: "center" }}>No hay frentes inscritos.</p>
+          )}
+
           <div style={{ textAlign: "center" }}>
-          <Button
-            className="botonvfrente"
-            onClick={handleClose}
-            variant="contained"
-            color="primary"
-          >
-            Cerrar
-          </Button>
+            <Button
+              onClick={handleClose}
+              variant="contained"
+              color="secondary"
+              className="custom-btn btn-8"
+            >
+              Cerrar
+            </Button>
           </div>
         </div>
       </Modal>

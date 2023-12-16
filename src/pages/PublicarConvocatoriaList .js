@@ -25,27 +25,28 @@ const PublicarConvocatoriaList = () => {
 
 
   return (
-    <div class="container"  >
-
-        {publicaciones.map(publicacion => (
-              
-                  <div class="card1"key={publicacion.id}>
-                    <div class="title">{publicacion.titulo}</div>
-                    
-                    <div class="content">{publicacion.motivo_eleccion}</div>
-                    <div class="date">{publicacion.fecha_publicacion} </div>
-                    <div class="buttons">
-                    <IconButton color="primary" aria-label="descargar"  onClick={() => handleConvPublic(publicacion.id_convocatoria)}>
-                    <GetAppOutlinedIcon />
-                    </IconButton>
-                    
-                    </div>
-                    
-                  </div>
-        
-        ))}
-     
-    </div>
+    <div className="container" style={publicaciones.length > 0 ? {} : { display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    {publicaciones.length > 0 ? (
+      publicaciones.map((publicacion) => (
+        <div className="card1" key={publicacion.id}>
+          <div className="title">{publicacion.titulo}</div>
+          <div className="content">{publicacion.motivo_eleccion}</div>
+          <div className="date">{publicacion.fecha_publicacion} </div>
+          <div className="buttons">
+            <IconButton
+              color="primary"
+              aria-label="descargar"
+              onClick={() => handleConvPublic(publicacion.id_convocatoria)}
+            >
+              <GetAppOutlinedIcon />
+            </IconButton>
+          </div>
+        </div>
+      ))
+    ) : (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>No hay convocatorias publicadas.</div>
+    )}
+  </div>
   );
 };
 

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/system"; 
+import { styled } from "@mui/system";
+import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Swal from "sweetalert2";
-
+import MuiAlert from '@mui/material/Alert';
 
 const ModalContainer = styled("div")({
   position: "absolute",
   width: 550,
-  backgroundColor: "#fff", // Puedes ajustar el color de fondo según tus preferencias
+  backgroundColor: "#fff",
   boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   padding: "20px",
   top: "50%",
@@ -20,6 +20,7 @@ const ModalContainer = styled("div")({
   "& .ActualizarTitulo": {
     color: "rgb(0,57,116)",
     marginBottom: "40px",
+    textAlign: "center",
   },
 });
 
@@ -41,6 +42,9 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState('success');
   const url = process.env.REACT_APP_VARURL;
 
   useEffect(() => {
@@ -74,11 +78,9 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
       !formData.fechaFin ||
       !formData.fechaElecciones
     ) {
-      Swal.fire({
-        icon: "error",
-        title: "Error al crear el proceso electoral",
-        text: `Llene correctamente los datos `,
-      });
+      setSnackbarType('error');
+      setSnackbarMessage('Llene correctamente los datos');
+      setSnackbarOpen(true);
       return;
     }
 
@@ -86,11 +88,9 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
       new Date(formData.fechaFin) <= new Date(formData.fechaInicio) ||
       new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)
     ) {
-      Swal.fire({
-        icon: "error",
-        title: "Error al crear el proceso electoral",
-        text: ` Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin. `,
-      });
+      setSnackbarType('error');
+      setSnackbarMessage('Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin.');
+      setSnackbarOpen(true);
       return;
     }
     axios
@@ -101,21 +101,22 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
         FECHA_ELECCION: formData.fechaElecciones,
       })
       .then((response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Proceso se actualizó correctamente",
-          text: `El proceso electoral se ha actualizado con éxito!`,
-        }).then(() => {
-          handleVolverAtras();
-        });
+        setSnackbarType('success');
+        setSnackbarMessage('El proceso electoral se ha actualizado con éxito!');
+        setSnackbarOpen(true);
+        closeModal();
+        navigate("/home");
       })
       .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error al actualizar el proceso electoral",
-          text: `Ocurrió un error al actualizar el proceso electoral`,
-        });
+        setSnackbarType('error');
+        setSnackbarMessage('Ocurrió un error al actualizar el proceso electoral');
+        setSnackbarOpen(true);
       });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+    
   };
   const handleVolverAtras = () => {
     closeModal();
@@ -123,77 +124,99 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   return (
-    <Modal open={isOpen} onClose={closeModal} aria-labelledby="Actualizar Elección">
-      <ModalContainer>
-        <h3 className="ActualizarTitulo">Actualizar proceso electoral</h3>
-        <InputField
-          label="Motivo de Elección"
-          variant="outlined"
-          className="InputCrearActualizar"
-          name="motivoEleccion"
-          value={formData.motivoEleccion}
-          onChange={handleInputChange}
-          fullWidth
-        />
-        <InputField
-          label="Fecha inicio de convocatoria"
-          variant="outlined"
-          className="InputCrearActualizar"
-          type="date"
-          name="fechaInicio"
-          value={formData.fechaInicio}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={handleInputChange}
-          fullWidth
-        />
-        <InputField
-          label="Fecha fin de convocatoria"
-          variant="outlined"
-          className="InputCrearActualizar"
-          type="date"
-          name="fechaFin"
-          value={formData.fechaFin}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={handleInputChange}
-          fullWidth
-        />
-        <InputField
-          label="Fecha de las elecciones"
-          variant="outlined"
-          className="InputCrearActualizar"
-          type="date"
-          name="fechaElecciones"
-          value={formData.fechaElecciones}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={handleInputChange}
-          fullWidth
-        />
-        <div className="BotonesDivCrearActualizar">
-          <CustomButton
-            variant="contained"
-            color="primary"
-            className="custom-btn btn-9"
-            onClick={handleActualizarClick}
-          >
-            Actualizar
-          </CustomButton>
-          <CustomButton
-            variant="contained"
-            color="secondary"
-            className="custom-btn btn-8"
-            onClick={handleVolverAtras}
-          >
-            Volver
-          </CustomButton>
-        </div>
-      </ModalContainer>
-    </Modal>
+    <>
+      <Modal open={isOpen} onClose={() => {}} aria-labelledby="Actualizar Elección" BackdropProps={{
+        style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+        invisible: false,
+      }}>
+        <ModalContainer>
+          <h3 className="ActualizarTitulo">ACTUALIZAR PROCESO ELECTORAL</h3>
+          <InputField
+            label="Motivo de Elección"
+            variant="outlined"
+            className="InputCrearActualizar"
+            name="motivoEleccion"
+            value={formData.motivoEleccion}
+            onChange={handleInputChange}
+            fullWidth
+          />
+          <InputField
+            label="Fecha inicio de convocatoria"
+            variant="outlined"
+            className="InputCrearActualizar"
+            type="date"
+            name="fechaInicio"
+            value={formData.fechaInicio}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={handleInputChange}
+            fullWidth
+          />
+          <InputField
+            label="Fecha fin de convocatoria"
+            variant="outlined"
+            className="InputCrearActualizar"
+            type="date"
+            name="fechaFin"
+            value={formData.fechaFin}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={handleInputChange}
+            fullWidth
+          />
+          <InputField
+            label="Fecha de las elecciones"
+            variant="outlined"
+            className="InputCrearActualizar"
+            type="date"
+            name="fechaElecciones"
+            value={formData.fechaElecciones}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={handleInputChange}
+            fullWidth
+          />
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <CustomButton
+              variant="contained"
+              color="primary"
+              className="custom-btn btn-9"
+              onClick={handleActualizarClick}
+            >
+              Actualizar
+            </CustomButton>
+            <CustomButton
+              variant="contained"
+              color="secondary"
+              className="custom-btn btn-8"
+              onClick={handleVolverAtras}
+            >
+              Volver
+            </CustomButton>
+          </div>
+        </ModalContainer>
+      </Modal>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity={snackbarType}
+          sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 };
 

@@ -16,14 +16,11 @@ import {
   Box
 } from "@mui/material";
 import axios from "axios";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
+import ListIcon from "@mui/icons-material/List";
 import AsignacionJurados from "./AsignacionJurados";
 
 function AsignacionJuradosEl({ lista }) {
   const [proceso, setProceso] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalIsOpenRea, setModalIsOpenRea] = useState(false);
   const [modalIsOpenAsi, setModalIsOpenAsi] = useState(false);
   const [selectedEleccionId, setSelectedEleccionId] = useState(null);
 
@@ -34,18 +31,6 @@ function AsignacionJuradosEl({ lista }) {
       setProceso(response.data);
     });
   }, [lista]);
-
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const openModalRea = () => {
-    setModalIsOpenRea(true);
-  };
-  const closeModalRea = () => {
-    setModalIsOpenRea(false);
-  };
 
   const openModalAsi = (id) => {
     setSelectedEleccionId(id);
@@ -62,22 +47,24 @@ function AsignacionJuradosEl({ lista }) {
       </Typography>
         <TableContainer component={Paper} className="TablaAsignacionJurados">
           <Table>
-            <TableHead>
+            <TableHead style={{backgroundColor:'#3E5F8A'}}>
               <TableRow>
-                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
+              <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
+                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ELECCION</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>MESA</TableCell>
-                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>LISTA</TableCell>              
+                            
               </TableRow>
             </TableHead>
             <TableBody>
               {proceso.map((elemento) => (
                 <TableRow key={elemento.COD_ELECCION}>
-                  <TableCell>{elemento.MOTIVO_ELECCION}</TableCell>
+                   <TableCell style={{textAlign: 'center' }}>{elemento.COD_ELECCION}</TableCell>
+                  <TableCell style={{textAlign: 'center' }}>{elemento.MOTIVO_ELECCION}</TableCell>
                   <TableCell style={{ width:'28%',textAlign: 'center'  }}>
                   <Button
                     variant="outlined"
                     size="small"
-                    startIcon={<PersonAddAltOutlinedIcon />}
+                    startIcon={<ListIcon />}
                     className="custom-button"
                     onClick={() => openModalAsi(elemento.COD_ELECCION)}
                     sx={{marginRight:'12px'}}
@@ -93,22 +80,36 @@ function AsignacionJuradosEl({ lista }) {
         </TableContainer>
         </Container>
         
-      <Modal open={modalIsOpenAsi} onClose={closeModalAsi}>
-        <Card className="JuradoElectorales" onClick={closeModalAsi}>
+      <Modal open={modalIsOpenAsi} 
+       onClose={() => {}}
+       aria-labelledby="Reasignacion Comite"
+       style={{
+         display: 'flex',
+         alignItems: 'center',
+         justifyContent: 'center',
+       }}
+       BackdropProps={{
+         style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+         invisible: false,  
+       }}>
+        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '700px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        
           <CardContent>
-            <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>LISTA DE ASIGNACION DE MESAS</Typography>
+            <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>ASIGNACION DE JURADOS</Typography>
             <AsignacionJurados eleccionId={selectedEleccionId}/>
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
               <Button
-                variant="outlined"
-                className="BotonComiteModal"
+                variant="contained"
+                color="secondary"
+                className="custom-btn btn-8"
                 onClick={closeModalAsi}
               >
                 Cerrar
               </Button>
             </Box>
           </CardContent>
-        </Card>
+  
+        </div>
       </Modal> 
     </>
   );

@@ -25,9 +25,6 @@ const VerConvocatoria = ({ lista }) => {
   const [modalIsOpenCM, setModalIsOpenCM] = useState(false);
   const [modalIsOpenCN, setModalIsOpenCN] = useState(false);
   const [modalIsOpenPC, setModalIsOpenPC] = useState(false);
-
-
-  
   ///Modal crear convocatoria
   const openModalCN = (id) => {
     setSelectedEleccionId(id);
@@ -67,9 +64,9 @@ const VerConvocatoria = ({ lista }) => {
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead style={{backgroundColor:'#3E5F8A'}}>
             <TableRow>
-              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>CARGO(S) A ELECCION</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}> ELECCION</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>FECHA</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>CONVOCATORIA</TableCell>
             </TableRow>
@@ -77,8 +74,8 @@ const VerConvocatoria = ({ lista }) => {
           <TableBody>
           {listaElecciones.map((eleccion) => (
   <TableRow key={eleccion.COD_ELECCION}>
-    <TableCell>{eleccion?.MOTIVO_ELECCION}</TableCell>
-    <TableCell>{eleccion?.FECHA_ELECCION}</TableCell>
+    <TableCell style={{textAlign: 'center'}}>{eleccion?.MOTIVO_ELECCION}</TableCell>
+    <TableCell style={{textAlign: 'center'}}>{eleccion?.FECHA_ELECCION}</TableCell>
     <TableCell style={{width:'38%',textAlign: 'center' }}>
       <Button
         variant="outlined"

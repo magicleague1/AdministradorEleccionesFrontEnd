@@ -10,8 +10,9 @@ import {
   Box,
   Button,
   Modal,
+  Snackbar,
+  Alert as MuiAlert,
 } from '@mui/material';
-import Swal from 'sweetalert2';
 import ReasiganarJurados from './ReasignarJurados';
 import VerJurados from './VerJurados';
 
@@ -20,6 +21,9 @@ const AsignacionDeJurados = ({ eleccionId }) => {
   const [selectedCodMesa, setSelectedCodMesa] = useState(null);
   const [openModalRJ, setOpenModalRJ] = useState(false);
   const [openModalVJ, setOpenModalVJ] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarType, setSnackbarType] = useState('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     axios
@@ -32,6 +36,16 @@ const AsignacionDeJurados = ({ eleccionId }) => {
         console.error('Error al obtener la lista de mesas:', error);
       });
   }, [eleccionId]);
+
+  const openSnackbar = (type, message) => {
+    setSnackbarType(type);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const closeSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   const openModalRASJ = (codMesa, event) => {
     event.stopPropagation();
@@ -60,24 +74,15 @@ const AsignacionDeJurados = ({ eleccionId }) => {
     axios
       .post(`${process.env.REACT_APP_VARURL}mesa/${codMesa}`)
       .then(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Asignación exitosa',
-          text: 'Se envió correo a todos los jurados asignados',
-        }).then(() => {
-          setOpenModalRJ(true);
-        });
+        openSnackbar('success', 'Asignación exitosa. Se envió correo a todos los jurados asignados.');
       })
       .catch(() => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error en la asignación',
-          text: 'Ocurrió un error en la asignación de Jurados.',
-        });
+        openSnackbar('error', 'Error en la asignación. Ocurrió un error en la asignación de Jurados.');
       });
   };
 
   return (
+    <div>
     <div style={{ overflowY: 'auto', maxHeight: '400px', width: '600px' }}>
       {Array.isArray(mesas) &&
         mesas.map((mesa, indexMesa) => (
@@ -202,7 +207,26 @@ const AsignacionDeJurados = ({ eleccionId }) => {
             </CardContent>
           </Card>
         ))}
-      <ReasiganarJurados isOpen={openModalRJ} closeModal={closeModalRASJ} codMesa={selectedCodMesa} />
+       <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={closeSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={closeSnackbar}
+          severity={snackbarType}
+          sx={{ width: '100%', maxWidth: '400px', fontSize: '1rem' }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+
+      
+    </div>
+   
       <Modal
         open={openModalVJ}
         onClose={closeModalVJ}
@@ -219,8 +243,9 @@ const AsignacionDeJurados = ({ eleccionId }) => {
           </Typography>
           <VerJurados isOpen={openModalVJ} closeModal={closeModalVJ} codMesa={selectedCodMesa} />
           <Button
-            variant="outlined"
-            color="primary"
+            variant="contained"
+            color="secondary"
+            className="custom-btn btn-8"
             onClick={(event) =>{closeModalVJ(event)}}
             style={{ marginTop: '20px' }}
           >
@@ -228,6 +253,7 @@ const AsignacionDeJurados = ({ eleccionId }) => {
           </Button>
         </div>
       </Modal>
+      <ReasiganarJurados isOpen={openModalRJ} closeModal={closeModalRASJ} codMesa={selectedCodMesa} />
     </div>
   );
 };

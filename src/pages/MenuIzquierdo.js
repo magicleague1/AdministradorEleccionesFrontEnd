@@ -11,6 +11,7 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
@@ -292,7 +293,7 @@ function MenuIzquierdo() {
           
           <ListItem button onClick={() => handleDrawerItemClick("Asignacion de Mesas")} style={{ backgroundColor: mostrarAsignacion ? 'lightgray' : 'inherit' }} >
             <ListItemIcon>
-              <AssignmentIcon />
+              <AssignmentTurnedInIcon />
             </ListItemIcon>
             <ListItemText primary="Asignacion de mesas" />
           </ListItem>
@@ -302,7 +303,7 @@ function MenuIzquierdo() {
             <ListItemIcon>
               <CreateIcon />
             </ListItemIcon>
-            <ListItemText primary="Crear Convocatoria" />
+            <ListItemText primary="Convocatoria" />
           </ListItem>
 
           <ListItem button onClick={() => handleBoletasElectorales("Boletas Electorales")} style={{ backgroundColor: mostrarBoletas ? 'lightgray' : 'inherit' }}>
@@ -312,7 +313,7 @@ function MenuIzquierdo() {
             <ListItemText primary="Boletas Electorales" />
           </ListItem>
 
-          <ListItem button onClick={() => handleJuradosE("Jurados Electorales")} >
+          <ListItem button onClick={() => handleJuradosE("Jurados Electorales")} style={{ backgroundColor: mostrarJurados ? 'lightgray' : 'inherit' }}>
             <ListItemIcon>
              <Diversity3Icon />
             </ListItemIcon>

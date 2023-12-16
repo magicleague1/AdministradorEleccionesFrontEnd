@@ -63,27 +63,30 @@ const VisualizacionBoletas = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth={"lg"}>
+    <Dialog open={isOpen} onClose={() => {}} fullWidth maxWidth={"lg"} BackdropProps={{
+      style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+      invisible: false,  
+    }}>
       <DialogTitle style={{ display: 'flex', justifyContent: 'center' }}>{eleccionBoleta?.MOTIVO_ELECCION?.toUpperCase()} </DialogTitle>
       <DialogContent>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'stretch', border: '1px solid #000', width: '100%' }}>
-          {frentesBoleta.map((frente, index) => (
-            <Card key={index} style={{ flex: '0 0 calc(33.33% - 2rem)', margin: '1rem', backgroundColor: '#b5bac9' }}>
-              <CardContent>
-                <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>{frente.NOMBRE_FRENTE}</Typography>
-                <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>{frente.SIGLA_FRENTE}</Typography>
-                <Typography>Candidatos:</Typography>
-                <div>
-                  <CandidatosBoletas frenteId={frente.COD_FRENTE} />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
-                  <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}></div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </DialogContent>
+  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'stretch', border: '1px solid #000', width: '100%' }}>
+    {frentesBoleta.map((frente, index) => (
+      <Card key={index} style={{ flex: '0 0 80%', margin: '1rem', backgroundColor: '#b5bac9' ,justifyContent: 'center', textAlign:'center'}}>
+        <CardContent>
+          <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>{frente.NOMBRE_FRENTE}</Typography>
+          <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center' }}>{frente.SIGLA_FRENTE}</Typography>
+          <Typography style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom:'12px' }}>Candidatos:</Typography>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom:'22px' }}>
+            <CandidatosBoletas frenteId={frente.COD_FRENTE} />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '120px' }}>
+            <div style={{ margin: 'auto', border: '1px solid #000', width: '50px', height: '50px' }}></div>
+          </div>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+</DialogContent>
       <StyledButtonGroup>
         <StyledButton
           variant="contained"

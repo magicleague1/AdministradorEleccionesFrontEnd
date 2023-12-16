@@ -7,11 +7,11 @@ import MenuIzquierdo from './pages/MenuIzquierdo';
 import ActualizarEleccion from './pages/ActualizarEleccionModal';
 import PdfConvocatoria from './pages/pdfConvocatoria';
 import VerConvocatoria from './pages/VerConvocatoria';
-import GenerarPdfPreview from './pages/GenerarPdfPreview';
 import GenerarPdfPreviewPublic from './pages/GenerarPdfPreviewPublic';
 import SustitucionDeVocal from './pages/SustitucionDeVocal ';
 import AgregarPermiso from './pages/AgregarPermiso';
 import AsignacionPermiso from './pages/AsignacionPermiso';
+import GenerarPdfListaVotantesPublic from './pages/GenerarPdfListaVotantesPublic';
 
 
 
@@ -26,8 +26,8 @@ function App() {
         <Route path='/PdfConvocatoria/:id' element={<PdfConvocatoria/>}/>
 
         <Route path="/VerConvocatoria" element={<VerConvocatoria/>}></Route>  
-        <Route path="/pdf/:id" element={<GenerarPdfPreview/>} />
         <Route path="/pdfPublicado/:id" element={<GenerarPdfPreviewPublic/>} />
+        <Route path="/pdfPublicadoLista/:id" element={<GenerarPdfListaVotantesPublic/>} />
 
         <Route path="/SustitucionDeVocal" element={<SustitucionDeVocal/>}></Route> 
 

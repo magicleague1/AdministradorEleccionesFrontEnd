@@ -45,7 +45,7 @@ const LoginPage = () => {
           const administrador = response.data;
 
           if (showValorInput.password === administrador.CONTRASENAADMINISTRADOR) {
-            alert('Administrador correcto');
+
             navigate('/home');
           } else {
             alert('Contraseña incorrecta');

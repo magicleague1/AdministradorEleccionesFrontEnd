@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import CrearPublicaConv from './CrearPublicaConv';
-import { Button, Container, styled, Modal,Typography,Dialog,
+import { Button, styled, Modal,Typography,Dialog,
   DialogTitle,
   DialogContent } from "@mui/material";
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import PublishIcon from '@mui/icons-material/Publish';
 import "../css/GenerarPdf.css";
+import CrearListaPublicacion from './CrearListaPublicacion';
 
 
 const StyledButton = styled(Button)({
@@ -44,7 +44,7 @@ const PublicacionListaVotantes = ({ isOpen, closeModal, eleccionId }) => {
     closeModal();
   };
   const handleGetPDF = async () => {
-    const response = await fetch(`${process.env.REACT_APP_VARURL}generar_pdf/${eleccionId}`);
+    const response = await fetch(`${process.env.REACT_APP_VARURL}generarPDFMesasAsignadasPorEleccion/${eleccionId}`);
     const data = await response.json();
 
     if (data && data.pdf) {
@@ -53,15 +53,20 @@ const PublicacionListaVotantes = ({ isOpen, closeModal, eleccionId }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={closeModal} fullWidth maxWidth="md">
+    <Dialog open={isOpen} onClose={() => {}} fullWidth maxWidth="md" ackdropProps={{
+        style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
+        invisible: false,  
+      }}
+      
+      >
       <DialogTitle>
       <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
-          PUBLICAR CONVOCATORIA
+          PUBLICAR LISTA VOTANTES
         </Typography>
       </DialogTitle>
       <DialogContent sx={{ display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',}}>
+        justifyContent: 'center',
+        alignItems: 'center',}}>
       <StyledButton
           variant="contained"
           color="primary"
@@ -93,7 +98,7 @@ const PublicacionListaVotantes = ({ isOpen, closeModal, eleccionId }) => {
         </StyledButton>
       <Modal open={modalPP} onClose={closeModalADDFP}>
         
-          <CrearPublicaConv
+          <CrearListaPublicacion
             isOpen={modalPP}
             closeModal={closeModalADDFP}
             eleccionId={eleccionMId}

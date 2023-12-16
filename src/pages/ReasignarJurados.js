@@ -1,50 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import Swal from 'sweetalert2';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const ReasiganarJurados = ({ isOpen, closeModal }) => {
   const initialState = {
-   carnetIdentidad:"",
-    motivo: ""
+    carnetIdentidad: "",
+    motivo: "",
   };
 
   const [formData, setFormData] = useState(initialState);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarType, setSnackbarType] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const url = process.env.REACT_APP_VARURL;
 
   const handleGuardar = () => {
     if (formData.carnetIdentidad === "" || formData.motivo === "") {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al reasignar jurado',
-        text: `Complete correctamente los datos.`,
-      });
+      openSnackbar("error", "Complete correctamente los datos.");
       return;
     }
 
-
-    axios.put(`${url}jurado/${formData.carnetIdentidad}`, formData)
+    axios
+      .put(`${url}jurado/${formData.carnetIdentidad}`, formData)
       .then((response) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Jurados guardados correctamente',
-          text: `Los jurados se han actualizado con éxito!`
-        }).then(() => {
-          closeModal();
-          setFormData(initialState);
-        });
+        openSnackbar("success", "Jurados guardados correctamente");
+        closeModal();
+        setFormData(initialState);
       })
       .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al agregar jurados',
-          text: `Ocurrió un error al reasignar los jurados: ${error}`
-        });
+        openSnackbar("error", `Error al agregar jurados: ${error}`);
       });
   };
 
@@ -59,6 +50,16 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
     setFormData(initialState);
   };
 
+  const openSnackbar = (type, message) => {
+    setSnackbarType(type);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const closeSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <Modal
       open={isOpen}
@@ -66,8 +67,8 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={{ ...modalStyle, width: '400px' }}>
-        <Typography variant="h6" component="h2">
+      <Box sx={{ ...modalStyle, width: "400px" }}>
+        <Typography variant="h6" component="h2" style={{ textAlign: "center" }}>
           REASIGNAR JURADOS
         </Typography>
         <TextField
@@ -90,26 +91,42 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
           fullWidth
           margin="normal"
         />
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
-        <Button variant="contained" color="primary" onClick={handleGuardar} style={{marginRight:'12px'}}>
-          Guardar
-        </Button>
-        <Button variant="contained" color="secondary" onClick={(event) =>{handleCloseModal(event)}}>
-          Cancelar
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: "16px" }}>
+          <Button variant="contained" color="primary" onClick={handleGuardar} style={{ marginRight: "12px" }}>
+            Guardar
+          </Button>
+          <Button variant="contained" color="secondary" onClick={(event) => handleCloseModal(event)}>
+            Cancelar
+          </Button>
         </Box>
-        
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={closeSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={closeSnackbar}
+            severity={snackbarType}
+            sx={{ width: "100%", maxWidth: "600px", fontSize: "1rem" }}
+          >
+            {snackbarMessage}
+          </MuiAlert>
+        </Snackbar>
       </Box>
     </Modal>
   );
 };
 
 const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
 };

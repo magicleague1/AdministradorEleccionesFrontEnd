@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "../css/HomePage.css";
 import PublicarConvocatoriaList from './PublicarConvocatoriaList ';
+import PublicarListaVotantes from './PublicarListaVotantes';
 
 const IndexPage = () => {
   // Paso 2: Define el estado
@@ -26,17 +27,17 @@ const IndexPage = () => {
           </div>
           <div className="navbar-links">
             <ul className='Home'>
-              {/* Paso 3: Evita que los enlaces recarguen la página */}
-              <li className='HomeLI'><a href="#" onClick={() => setContentToShow("Inicio")}>Inicio</a></li>
-              <li><a href="#" onClick={handleConvocatoriaClick}>Convocatorias</a></li>
-              <li><a href="#" onClick={handlePublicacionClick}>Publicaciones</a></li>
-              <li><a href="/Login" className="btn-request">Ingresar</a></li>
+       
+              <li className='HomeLI'><a href="#" onClick={() => setContentToShow("Inicio")} style={{ textDecoration: 'none' }}>Inicio</a></li>
+              <li className='HomeLI'><a href="#" onClick={handleConvocatoriaClick} style={{ textDecoration: 'none' }}>Convocatorias</a></li>
+              <li className='HomeLI'><a href="#" onClick={handlePublicacionClick} style={{ textDecoration: 'none' }}>Publicaciones</a></li>
+              <li className='HomeLI'><a href="/Login" className="btn-request" style={{ textDecoration: 'none' }}>Ingresar</a></li>
             </ul>
           </div>
         </div>
 
         <div>
-          {/* Paso 4: Renderiza el contenido en función del estado */}
+         
           {contentToShow === "Inicio" && (
             <>
               <div className="titulo">
@@ -62,9 +63,7 @@ const IndexPage = () => {
           {contentToShow === "publicacion" && (
             <>
               <h2 className='TituloHome'>Contenido de Publicacion:</h2>
-              <div>
-                <p>Este es el contenido específico para Publicacion.</p>
-              </div>
+              <PublicarListaVotantes/>
             </>
           )}
           {contentToShow === "convocatoria" && (

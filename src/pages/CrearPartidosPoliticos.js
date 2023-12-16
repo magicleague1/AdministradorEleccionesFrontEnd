@@ -9,9 +9,10 @@ import {
   Button,
   Box,
   styled,
+  Snackbar,
 } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
-import Swal from "sweetalert2";
 
 const ModalContainer = styled("div")({
   position: "absolute",
@@ -52,6 +53,9 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
 
   const [formData, setFormData] = useState(initialState);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -65,11 +69,7 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
 
   const handleGuardarClick = () => {
     if (!formData.NOMBRE_FRENTE || !formData.SIGLA_FRENTE || !selectedFile) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al crear el frente político',
-        text: 'Complete correctamente los datos.',
-      });
+      handleSnackbarOpen("error", "Error al crear el frente político", "Complete correctamente los datos.");
       return;
     }
 
@@ -81,21 +81,13 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
     data.append('COD_ELECCION', eleccionId);
 
     axios.post(`${process.env.REACT_APP_VARURL}frentes/nuevo`, data)
-      .then((response) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Proceso registrado correctamente',
-          text: 'El frente político se ha creado con éxito.',
-        });
+      .then(() => {
+        handleSnackbarOpen("success", "Proceso registrado correctamente", "El frente político se ha creado con éxito.");
         setFormData(initialState);
         setSelectedFile(null);
       })
       .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al crear el frente político',
-          text: `Ocurrió un error al crear el frente político: ${error}`,
-        });
+        handleSnackbarOpen("error", "Error al crear el frente político", `Ocurrió un error al crear el frente político: ${error}`);
       });
   };
 
@@ -103,79 +95,103 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
     closeModal();
   };
 
+  const handleSnackbarOpen = (severity, message, description) => {
+    setSnackbarSeverity(severity);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+   
+    setSnackbarOpen(false);
+  };
+
   return (
-    <Modal open={isOpen} onClose={closeModal} aria-labelledby="Inscribir Frente">
-      <ModalContainer>
-        <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
-          INSCRIPCIÓN DE UN FRENTE POLÍTICO
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={15} style={{ display: 'flex', alignItems: 'center' }}>
-            <StyledFormControl style={{ width: '100%', marginRight: '20px' }}>
-              <TextField
-                label="Nombre:"
-                type="text"
-                name="NOMBRE_FRENTE"
-                value={formData.NOMBRE_FRENTE}
-                onChange={handleInputChange}
-                placeholder="Ingrese el nombre del frente político"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
+    <>
+      <Modal open={isOpen} onClose={() => {}} aria-labelledby="Inscribir Frente" BackdropProps={{
+        style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+        invisible: false,
+      }}>
+        <ModalContainer>
+          <Typography variant="h5" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
+          AÑADIENDO UN NUEVO FRENTE POLITICO
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={15} style={{ display: 'flex', alignItems: 'center' }}>
+              <StyledFormControl style={{ width: '100%', marginRight: '20px' }}>
+                <TextField
+                  label="Nombre:"
+                  type="text"
+                  name="NOMBRE_FRENTE"
+                  value={formData.NOMBRE_FRENTE}
+                  onChange={handleInputChange}
+                  placeholder="Ingrese el nombre del frente político"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </StyledFormControl>
+              <StyledFormControl>
+                <TextField
+                  label="Sigla:"
+                  type="text"
+                  name="SIGLA_FRENTE"
+                  value={formData.SIGLA_FRENTE}
+                  onChange={handleInputChange}
+                  placeholder="Ingrese la sigla del frente político"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </StyledFormControl>
+            </Grid>
+            <Grid item xs={12} md={15}>
+              <InputLabel htmlFor="logo" style={{ marginBottom: '8px' }}>Logo:</InputLabel>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="motivo-input"
               />
-            </StyledFormControl>
-            <StyledFormControl>
-              <TextField
-                label="Sigla:"
-                type="text"
-                name="SIGLA_FRENTE"
-                value={formData.SIGLA_FRENTE}
-                onChange={handleInputChange}
-                placeholder="Ingrese la sigla del frente político"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </StyledFormControl>
+              {selectedFile && (
+                <Typography variant="body1">
+                  Archivo seleccionado: {selectedFile.name}
+                </Typography>
+              )}
+            </Grid>
+            <Grid item xs={12} md={15}>
+              <StyledButtonGroup>
+                <StyledButton
+                  variant="contained"
+                  color="primary"
+                  onClick={handleGuardarClick}
+                >
+                  Registrar
+                </StyledButton>
+                <StyledButton
+                  variant="contained"
+                  color="secondary"
+                  className="custom-btn btn-8"
+                  onClick={handleVolverAtras}
+                >
+                  Volver
+                </StyledButton>
+              </StyledButtonGroup>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={15}>
-            <InputLabel htmlFor="logo" style={{ marginBottom: '8px' }}>Logo:</InputLabel>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="motivo-input"
-            />
-            {selectedFile && (
-              <Typography variant="body1">
-                Archivo seleccionado: {selectedFile.name}
-              </Typography>
-            )}
-          </Grid>
-          <Grid item xs={12} md={15}>
-            <StyledButtonGroup>
-              <StyledButton
-                variant="contained"
-                color="primary"
-                onClick={handleGuardarClick}
-              >
-                Registrar
-              </StyledButton>
-              <StyledButton
-                variant="contained"
-                color="secondary"
-                className="custom-btn btn-8"
-                onClick={handleVolverAtras}
-              >
-                Volver
-              </StyledButton>
-            </StyledButtonGroup>
-          </Grid>
-        </Grid>
-      </ModalContainer>
-    </Modal>
+        </ModalContainer>
+      </Modal>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+    </>
   );
 };
 
