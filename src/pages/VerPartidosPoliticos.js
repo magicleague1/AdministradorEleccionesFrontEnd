@@ -26,7 +26,8 @@ const VerPartidosPoliticos = ({ lista }) => {
   const url = process.env.REACT_APP_VARURL;
 
   const openModalAC = (id) => {
-    setSelectedFrenteId(id);
+   
+    setSelectedEleccionId(id);
     setModalAC(true);
   };
 
@@ -159,7 +160,7 @@ const VerPartidosPoliticos = ({ lista }) => {
       <CrearPartidosPoliticos isOpen={modalIF} closeModal={closeModalIF} eleccionId={selectedEleccionId} />
       <AsignarFrente isOpen={modalAFP} closeModal={closeModalAFP} eleccionId={selectedEleccionId} />
       <AgregarFrenteModal isOpen={modalAddFP} closeModal={closeModalADDFP} eleccionId={selectedEleccionId} />
-      <AsignarCandidatoModal isOpen={modalAC} closeModal={closeModalAC} frenteId={selectedFrenteId} />
+      <AsignarCandidatoModal isOpen={modalAC} closeModal={closeModalAC} eleccionId={selectedEleccionId} />
       <CandidatoPorFrentes isOpen={modalVC} closeModal={closeModalVC} eleccionId={selectedEleccionId}/>   
       <ReasignarCandidatoModal isOpen={modalRCA} closeModal={closeModalRCA} eleccionId={selectedEleccionId}/>
     </Container>

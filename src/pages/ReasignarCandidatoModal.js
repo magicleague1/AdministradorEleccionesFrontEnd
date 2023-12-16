@@ -60,9 +60,13 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   return (
     <Modal
       open={isOpen}
-      onClose={handleCloseModal}
+      onClose={() => {}}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      BackdropProps={{
+        style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+        invisible: false,
+      }}
     >
       <Box sx={{ ...modalStyle, width: '400px' }}>
         <Typography variant="h6" component="h2">

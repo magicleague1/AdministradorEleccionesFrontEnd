@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Paper,
-  Card,
   CardContent,
   Button,
   Typography,
@@ -15,14 +14,15 @@ import {
   Container,
   Box,
   Snackbar,
-  Alert
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ListIcon from "@mui/icons-material/List";
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from "axios";
 import ListaMesas from "./ListadeMesas";
 import PublicacionListaVotantes from "./PublicacionListaVotantes";
+import MuiAlert from '@mui/material/Alert';
 
 function AsignacionMesas({ lista }) {
   const [proceso, setProceso] = useState([]);
@@ -32,7 +32,8 @@ function AsignacionMesas({ lista }) {
   const [modalPublicacionIsOpen, setModalPublicacionIsOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarType, setSnackbarType] = useState('success');
+  const [snackbarType, setSnackbarType] = useState("");
+
 
   const url = process.env.REACT_APP_VARURL;
 
@@ -96,10 +97,31 @@ function AsignacionMesas({ lista }) {
     setModalPublicacionIsOpen(false);
   };
 
-  const handleCloseSnackbar = () => {
+//Generacion de boletas
+  const handleGetListaVotantes = async ( eleccionId) => {
+    try {
+     
+      await axios.post(`${url}generarListasVotantes/${eleccionId}`);
+  
+      setSnackbarType("success");
+      setSnackbarMessage("La generación de Lista de votantes se realizó con éxito.");
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error("Error en la Generación:", error);
+  
+      if (axios.isCancel(error)) {
+        // El request fue cancelado, no es necesario mostrar un mensaje de error
+        return;
+      }
+  
+      setSnackbarType("error");
+      setSnackbarMessage("Ocurrió un error en la generación de Lista de votantes.");
+      setSnackbarOpen(true);
+    }
+  };
+  const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
   return (
     <>
       <Container>
@@ -112,7 +134,8 @@ function AsignacionMesas({ lista }) {
               <TableRow>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
-                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>MESAS</TableCell>  
+                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>MESAS</TableCell> 
+                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>LISTAR VOTANTES</TableCell> 
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PUBLICACION</TableCell>            
               </TableRow>
             </TableHead>
@@ -143,6 +166,18 @@ function AsignacionMesas({ lista }) {
                     >
                       Ver Lista
                     </Button>
+                  </TableCell>
+                  <TableCell style={{ width:'20%',textAlign: 'center'  }}>
+                      <Button
+                         variant="outlined"
+                         size="small"
+                        onClick={(event) => handleGetListaVotantes(event)}
+                        startIcon={<CloudDownloadIcon />}
+                        sx={{ marginRight: '13px' }}
+                      >
+                        Generar Boletas
+                      </Button>
+                    
                   </TableCell>
                   <TableCell style={{ width:'20%',textAlign: 'center'  }}>
                     <Button
@@ -193,15 +228,10 @@ function AsignacionMesas({ lista }) {
 
       <PublicacionListaVotantes isOpen={modalPublicacionIsOpen} closeModal={closeModalPublicacion} eleccionId={selectedEleccionId}/>
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarType} sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarType} sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
           {snackbarMessage}
-        </Alert>
+        </MuiAlert>
       </Snackbar>
     </>
   );

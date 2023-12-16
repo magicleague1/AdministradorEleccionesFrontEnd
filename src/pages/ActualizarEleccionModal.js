@@ -104,6 +104,7 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
         setSnackbarType('success');
         setSnackbarMessage('El proceso electoral se ha actualizado con éxito!');
         setSnackbarOpen(true);
+        closeModal();
         navigate("/home");
       })
       .catch((error) => {
@@ -115,7 +116,7 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
-    closeModal();
+    
   };
   const handleVolverAtras = () => {
     closeModal();

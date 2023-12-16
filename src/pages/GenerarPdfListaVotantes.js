@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Button, styled, Typography, Dialog, DialogTitle, DialogContent, Snackbar } from "@mui/material";
+import React, { useState} from 'react';
+import { Button, styled, Typography, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import axios from "axios";
-import MuiAlert from '@mui/material/Alert';
+
 
 const StyledButton = styled(Button)({
   marginBottom: '15px',
@@ -22,20 +22,13 @@ const StyledPDFEmbed = styled('embed')({
   marginTop: '20px',
 });
 
-const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
+const GenerarPdfListaVotantes = ({ isOpen, closeModal, codmesa }) => {
   const [pdfSrc, setPdfSrc] = useState('');
   const [modalPP, setModalPP] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState("");
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [botonesDeshabilitados, setBotonesDeshabilitados] = useState({});
+
+
 
   const url = process.env.REACT_APP_VARURL;
-
-  useEffect(() => {
-    setBotonesDeshabilitados({});
-    setModalPP(isOpen);
-  }, [isOpen, codMesa]);
 
   const closeModalADDFP = () => {
     setModalPP(false);
@@ -49,8 +42,7 @@ const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
   const handleGetPDF = async (event) => {
     event.stopPropagation();
     try {
-      console.log("PDF boletas", codMesa);
-      const response = await axios.get(url + `obtenerDatosPorMesaYGenerarPDF/${codMesa}`);
+      const response = await axios.get(url + `obtenerDatosPorMesaYGenerarPDF/${codmesa}`);
 
       const data = response.data;
 
@@ -62,70 +54,16 @@ const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
     }
   };
 
-  const verificarExistenciaLista = async (codMesa) => {
-    try {
-      const response = await axios.get(`${url}obtenerDatosPorMesaYGenerarPDF/${codMesa}`);
-      return response.data.hasData; // Ajusta esto según la estructura de tu respuesta
-    } catch (error) {
-      console.error("Error al verificar la existencia de la boleta:", error);
-      throw error; // Lanza el error para que pueda ser manejado por la función que llama a esta
-    }
-  };
-  
-  const handleGetListaVotantes = async (event) => {
-    event.stopPropagation();
-    try {
-      const existeBoleta = await verificarExistenciaLista(codMesa);
-      console.log(existeBoleta);
-        if (existeBoleta) {
-           setSnackbarSeverity("error");
-           setSnackbarMessage("Ya se generó Lista de Votantes, solo haz clic en descargar");
-           setSnackbarOpen(true);
-      return;
-      }
-  
-      await axios.post(`${url}generarListasVotantes/${codMesa}`);
-  
-      setSnackbarSeverity("success");
-      setSnackbarMessage("La generación de Lista de votantes se realizó con éxito.");
-      setSnackbarOpen(true);
-    } catch (error) {
-      console.error("Error en la Generación:", error);
-  
-      if (axios.isCancel(error)) {
-        // El request fue cancelado, no es necesario mostrar un mensaje de error
-        return;
-      }
-  
-      setSnackbarSeverity("error");
-      setSnackbarMessage("Ocurrió un error en la generación de Lista de votantes.");
-      setSnackbarOpen(true);
-    }
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
   return (
     <>
-      <Dialog open={modalPP} onClose={closeModalADDFP} fullWidth maxWidth="md">
+      <Dialog open={isOpen} onClose={closeModalADDFP} fullWidth maxWidth="md">
         <DialogTitle>
           <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
-            LISTA VOTANTES- CODIGO MESA: {codMesa}
+            LISTA VOTANTES- CODIGO MESA: {codmesa}
           </Typography>
         </DialogTitle>
         <DialogContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <StyledButton
-            variant="contained"
-            color="primary"
-            onClick={(event) => handleGetListaVotantes(event)}
-            disabled={botonesDeshabilitados[codMesa]}
-            startIcon={<StyledIcon><CloudDownloadIcon /></StyledIcon>}
-            sx={{ marginRight: '13px' }}
-          >
-            Generar Boletas
-          </StyledButton>
+          
           <StyledButton
             variant="contained"
             color="primary"
@@ -151,11 +89,7 @@ const GenerarPdfListaVotantes = ({ isOpen, closeModal, codMesa }) => {
         </StyledButton>
       </Dialog>
 
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
-        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}>
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
+      
     </>
   );
 };

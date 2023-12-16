@@ -34,10 +34,10 @@ function ListaMesas({ eleccionId }) {
       });
   }, [eleccionId]);
 
-  const openModalGB = (cod_mesa, event) => {
+  const openModalGB = (cod_mesa,event) => {
     // Evitar que el evento se propague al contenedor padre
     event.stopPropagation();
-    setSelectedCodMesa(cod_mesa);
+    setSelectedCodMesa(cod_mesa)
     setOpenModal(true);
   };
   const closeModalGB = () => {
@@ -130,7 +130,7 @@ function ListaMesas({ eleccionId }) {
                                 <Button
                                   variant="outlined"
                                   className="BotonComiteModal"
-                                  onClick={(event) => openModalGB(mesaCarrera.cod_mesa, event)}
+                                  onClick={(event) => openModalGB( mesaCarrera.cod_mesa, event)}
                                   style={{
                                     width: '100px', // Ancho reducido
                                     backgroundColor: '#3498db',
@@ -144,7 +144,7 @@ function ListaMesas({ eleccionId }) {
                                     cursor: 'pointer',
                                   }}
                                 >
-                                  Lista Votantes
+                                  Ver Votantes
                                 </Button>
                                 <Button
                                   variant="outlined"
@@ -200,7 +200,7 @@ function ListaMesas({ eleccionId }) {
       <GenerarPdfListaVotantes
       isOpen={openModal}
       closeModal={closeModalGB}
-      codMesa={selectedCodMesa}
+       codmesa={selectedCodMesa}
       />
       <GenerarPdfActaApertura
       isOpen={openModalAAL}

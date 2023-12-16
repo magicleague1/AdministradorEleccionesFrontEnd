@@ -116,8 +116,8 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
         invisible: false,
       }}>
         <ModalContainer>
-          <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
-            INSCRIPCIÓN DE UN FRENTE POLÍTICO
+          <Typography variant="h5" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
+          AÑADIENDO UN NUEVO FRENTE POLITICO
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={15} style={{ display: 'flex', alignItems: 'center' }}>
