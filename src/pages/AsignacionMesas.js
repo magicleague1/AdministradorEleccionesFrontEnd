@@ -168,15 +168,16 @@ function AsignacionMesas({ lista }) {
                     </Button>
                   </TableCell>
                   <TableCell style={{ width:'20%',textAlign: 'center'  }}>
-                      <Button
-                         variant="outlined"
-                         size="small"
-                        onClick={(event) => handleGetListaVotantes(event)}
-                        startIcon={<CloudDownloadIcon />}
-                        sx={{ marginRight: '13px' }}
-                      >
-                        Generar Boletas
-                      </Button>
+                  <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => handleGetListaVotantes(elemento.COD_ELECCION)}
+                      startIcon={<CloudDownloadIcon />}
+                      sx={{ marginRight: '13px' }}
+                    >
+                      Generar Boletas
+                    </Button>
+
                     
                   </TableCell>
                   <TableCell style={{ width:'20%',textAlign: 'center'  }}>

@@ -23,10 +23,10 @@ const AgregarCandidatoModal = ({ isOpen, closeModal }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
-
+  const url = process.env.REACT_APP_VARURL;
   useEffect(() => {
     // Fetch the list of fronts
-    axios.get("http://localhost:8000/frentes")
+    axios.get('${url}frentes')
       .then((response) => {
         setFronts(response.data);
       })
@@ -35,7 +35,7 @@ const AgregarCandidatoModal = ({ isOpen, closeModal }) => {
       });
   }, []);
 
-  const url = process.env.REACT_APP_VARURL;
+  
 
   const handleGuardar = () => {
     if (formData.carnetIdentidad === "" || formData.cargoPostulado === "") {
