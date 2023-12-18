@@ -79,7 +79,7 @@ const AsignacionComite = ({ lista }) => {
   };
   const enviarCorreo = async (COD_COMITE) => {
     try{
-      await axios.post(`${url}mensajeComiteElectoral/${COD_COMITE}`);
+      axios.post(`${url}mensajeComiteElectoral/${COD_COMITE}`);
       setSnackbarType('success');
         setSnackbarMessage('Se envió un correo a todos los vocales asignados');
         setSnackbarOpen(true);
@@ -116,7 +116,7 @@ const AsignacionComite = ({ lista }) => {
   return (
     <Container>
       <Typography variant="h4" align="center" gutterBottom style={{ marginTop: '40px', marginBottom: '30px' }}>
-         VOCALES DEL COMITE ELECTORAL
+          COMITE ELECTORAL
       </Typography>
       <TableContainer component={Paper}>
         <Table>
@@ -124,7 +124,7 @@ const AsignacionComite = ({ lista }) => {
             <TableRow >
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ELECCION</TableCell>
-              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >ACCIONES</TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >VOCALES</TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }} >CORREO ELECTRONICO</TableCell>
             </TableRow>
           </TableHead>
@@ -171,7 +171,7 @@ const AsignacionComite = ({ lista }) => {
                   variant="outlined"
                   size="small"
                   startIcon={<MailOutlineIcon />}
-                  onClick={() => enviarCorreo(elemento.codComite)}
+                  onClick={() => enviarCorreo(elemento.COD_COMITE)}
                   style={{ marginLeft: '12px' }}
                 >
                   Enviar correo

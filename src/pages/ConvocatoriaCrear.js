@@ -57,10 +57,16 @@ const ConvocatoriaCrear = ({  isOpen, closeModal ,eleccionId,}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (new Date(convocatoria.fecha_fin) <= new Date(convocatoria.fecha_inicio) ) {
+        setSnackbarSeverity('error');
+        setSnackbarMessage('Error fechas incorrectas');
+        setSnackbarOpen(true);
+      return;
+    }
     axios
       .post(process.env.REACT_APP_VARURL + 'convocatorias_crear', { ...convocatoria, id_eleccion: eleccionId })
       .then((response) => {
-        console.log(response.data);
         setSnackbarSeverity('success');
         setSnackbarMessage('Creación de convocatoria correctamente');
         setSnackbarOpen(true);

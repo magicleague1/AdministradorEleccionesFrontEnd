@@ -43,7 +43,7 @@ function AsignacionJuradosEl({ lista }) {
     <>
       <Container>
       <Typography variant="h4" align="center" gutterBottom style={{marginTop:'40px', marginBottom:'30px'}}>
-        ASIGNACION DE JURADOS
+        JURADOS
       </Typography>
         <TableContainer component={Paper} className="TablaAsignacionJurados">
           <Table>
@@ -69,7 +69,7 @@ function AsignacionJuradosEl({ lista }) {
                     onClick={() => openModalAsi(elemento.COD_ELECCION)}
                     sx={{marginRight:'12px'}}
                 >
-                    Ver Lista Mesas
+                    Ver Lista Jurados
                 </Button>
                     </TableCell> 
                  
@@ -95,7 +95,7 @@ function AsignacionJuradosEl({ lista }) {
         <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '700px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
           <CardContent>
-            <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>ASIGNACION DE JURADOS</Typography>
+            <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>ASIGNACION DE JURADOS POR MESA</Typography>
             <AsignacionJurados eleccionId={selectedEleccionId}/>
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
               <Button

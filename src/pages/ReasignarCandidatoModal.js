@@ -13,6 +13,7 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // You can set the initial severity as needed
+  
   const url = process.env.REACT_APP_VARURL;
 
   const handleSnackbarClose = () => {
@@ -20,31 +21,51 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   };
 
   const handleReasignarCandidato = async () => {
-    try {
-      const response = await axios.put(`${url}reasignarCandidato`, {
-        carnetIdentidadAntiguo: formData.carnetIdentidadAntiguo,
-        carnetIdentidadNuevo: formData.carnetIdentidadNuevo,
-        motivo: formData.motivo,
-      });
-
-      if (response.data.success) {
-        setSnackbarMessage('Candidato reasignado correctamente');
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
-
-        closeModal();
-        setFormData(initialState);
-      } else {
-        setSnackbarMessage(`Error al reasignar candidato: ${response.data.error}`);
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setSnackbarMessage(`Error al reasignar candidato: ${error}`);
-      setSnackbarSeverity('error');
+    if (formData.carnetIdentidadAntiguo === "" || formData.carnetIdentidadNuevo === "" || formData.motivo ==="") {
+      setSnackbarSeverity("error");
+      setSnackbarMessage("Complete correctamente los datos.");
       setSnackbarOpen(true);
+      return;
     }
+    axios
+      .get(`${url}candidatos/verificarExistencia`, {
+        params: {
+          carnetIdentidad: formData.carnetIdentidadAntiguo,
+        },
+      })
+      .then((response) => {
+        const existeCandidato = response.data.existeCandidato;
+
+        if (existeCandidato) {
+          setSnackbarSeverity("error");
+          setSnackbarMessage("Este candidato ya está registrado.");
+          setSnackbarOpen(true);
+        } else {
+          axios
+          .put(`${url}reasignarCandidato`, {
+            carnetIdentidadAntiguo: formData.carnetIdentidadAntiguo,
+            carnetIdentidadNuevo: formData.carnetIdentidadNuevo,
+            motivo: formData.motivo,
+          })
+            .then((response) => {
+              setSnackbarSeverity("success");
+              setSnackbarMessage("Candidato registrado correctamente");
+              setSnackbarOpen(true);
+              setFormData(initialState);
+            })
+            .catch((error) => {
+              setSnackbarSeverity("error");
+              setSnackbarMessage(
+                `Ocurrió un error al reasignar un candidato al frente político: ${error}`
+              );
+              setSnackbarOpen(true);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error al verificar la existencia del candidato:", error);
+      });
+ 
   };
 
   const handleInputChange = (e) => {

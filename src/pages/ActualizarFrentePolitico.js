@@ -47,8 +47,10 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(frenteId);
         const response = await axios.get(url + `frentes/${frenteId}`);
         const frente = response.data;
+       
         setFormData({
           nombre: frente.NOMBRE_FRENTE,
           sigla: frente.SIGLA_FRENTE,

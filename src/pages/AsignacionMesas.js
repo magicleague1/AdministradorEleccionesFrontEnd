@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ListIcon from "@mui/icons-material/List";
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from "axios";
 import ListaMesas from "./ListadeMesas";
@@ -43,10 +42,10 @@ function AsignacionMesas({ lista }) {
     });
   }, [lista]);
 
-  const verificarAsociacionMesas = async (COD_ELECCION) => {
+  const verificarAsociacionMesas = async (cod_eleccion) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_VARURL}listarMesasAsignadasPorEleccion/${COD_ELECCION}`);
-        return response.data.asignacionExistente;
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}verificar-mesas/${cod_eleccion}`);
+        return !response.data.existeMesa;
     } catch (error) {
         console.error("Error al verificar la existencia de la asignación de mesas:", error);
         return false;
@@ -55,14 +54,14 @@ function AsignacionMesas({ lista }) {
   
   const handleAsociarClick = async (COD_ELECCION) => {
     try {
-      // const existeAsignacion = await verificarAsociacionMesas(COD_ELECCION);
+       const existeAsignacion = await verificarAsociacionMesas(COD_ELECCION);
 
-      // if (existeAsignacion) {
-      //   setSnackbarType('error');
-      //   setSnackbarMessage('Ya se asignaron mesas a ese proceso electoral');
-      //   setSnackbarOpen(true);
-      //   return;
-      // }
+      if (!existeAsignacion) {
+        setSnackbarType('error');
+        setSnackbarMessage('Ya se asignaron mesas a ese proceso electoral');
+        setSnackbarOpen(true);
+       return;
+      }
   
       await axios.post(`${url}asignar_mesas_carrera/${COD_ELECCION}`);
   
@@ -135,7 +134,6 @@ function AsignacionMesas({ lista }) {
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>ID</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PROCESO</TableCell>
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>MESAS</TableCell> 
-                <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>LISTAR VOTANTES</TableCell> 
                 <TableCell  style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>PUBLICACION</TableCell>            
               </TableRow>
             </TableHead>
@@ -167,19 +165,7 @@ function AsignacionMesas({ lista }) {
                       Ver Lista
                     </Button>
                   </TableCell>
-                  <TableCell style={{ width:'20%',textAlign: 'center'  }}>
-                  <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => handleGetListaVotantes(elemento.COD_ELECCION)}
-                      startIcon={<CloudDownloadIcon />}
-                      sx={{ marginRight: '13px' }}
-                    >
-                      Generar Boletas
-                    </Button>
-
-                    
-                  </TableCell>
+                
                   <TableCell style={{ width:'20%',textAlign: 'center'  }}>
                     <Button
                       variant="outlined"

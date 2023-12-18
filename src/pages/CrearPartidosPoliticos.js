@@ -69,7 +69,7 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
 
   const handleGuardarClick = () => {
     if (!formData.NOMBRE_FRENTE || !formData.SIGLA_FRENTE || !selectedFile) {
-      handleSnackbarOpen("error", "Error al crear el frente político", "Complete correctamente los datos.");
+      handleSnackbarOpen("error", "Complete correctamente los datos.");
       return;
     }
 
@@ -82,12 +82,21 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
 
     axios.post(`${process.env.REACT_APP_VARURL}frentes/nuevo`, data)
       .then(() => {
-        handleSnackbarOpen("success", "Proceso registrado correctamente", "El frente político se ha creado con éxito.");
+        handleSnackbarOpen("success", "El frente político se ha creado con éxito.");
         setFormData(initialState);
         setSelectedFile(null);
       })
       .catch((error) => {
-        handleSnackbarOpen("error", "Error al crear el frente político", `Ocurrió un error al crear el frente político: ${error}`);
+        if (error.response && error.response.data && error.response.data.error) {
+         
+          if (error.response.data.error === 'El frente ya está registrado para esta elección.') {
+            handleSnackbarOpen("error", "Este frente ya está registrado para esta elección.");
+          } else {
+            handleSnackbarOpen("error", "Error al crear el frente político", `Ocurrió un error al crear el frente político: ${error.response.data.error}`);
+          }
+        } else {
+          handleSnackbarOpen("error", "Error al crear el frente político", `Ocurrió un error al crear el frente político: ${error}`);
+        }
       });
   };
 
@@ -117,7 +126,7 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
       }}>
         <ModalContainer>
           <Typography variant="h5" gutterBottom style={{ textAlign: 'center', marginBottom: '28px' }}>
-          AÑADIENDO UN NUEVO FRENTE POLITICO
+         INSCRIPCION DE FRENTE POLITICO
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={15} style={{ display: 'flex', alignItems: 'center' }}>

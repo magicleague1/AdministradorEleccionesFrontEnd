@@ -8,27 +8,21 @@ import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRen
 import axios from "axios";
 
 const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
-  const [listaFrentesP, setListaFrentesP] = useState([]);
+  const [candidatos, setCandidatos] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedFrente, setSelectedFrente] = useState(null);
 
   useEffect(() => {
+   
+      
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`
-        );
-
-        if (response.data && response.data.frentes) {
-          setListaFrentesP(response.data.frentes);
-        } else {
-          console.log("La respuesta de la API no contiene datos de frentes.");
-        }
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`);
+        setCandidatos(response.data.frentes);
       } catch (error) {
-        console.error("Error al obtener los frentes:", error.message);
+        console.log("Error al obtener los frentes");
       }
     };
-
     fetchData();
   }, [eleccionId]);
 
@@ -45,12 +39,14 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
   const closeModal2 = () => {
     closeModal();
   };
-
+  const handleVolverAtras = () => {
+    closeModal();
+  };
   return (
     <div>
       <Modal
         open={isOpen}
-        onClose={closeModal2}
+        onClose={() => {}}
         aria-labelledby="Frentes Políticos"
         style={{
           display: "flex",
@@ -74,12 +70,12 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
               marginBottom: "15px",
             }}
           >
-            FRENTES POLÍTICOS
+            CANDIDATOS POR FRENTE POLÍTICOS
           </h3>
 
-          {listaFrentesP.length > 0 ? (
+          {candidatos.length > 0 ? (
             <List>
-              {listaFrentesP.map((frente) => (
+              {candidatos.map((frente) => (
                 <ListItem key={frente.COD_FRENTE} className="titulofrente">
                   <ListItemText
                     primary={frente.NOMBRE_FRENTE}
@@ -101,14 +97,23 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
           ) : (
             <p style={{ textAlign: "center" }}>No hay frentes inscritos.</p>
           )}
+           <div style={{ textAlign: "center" }}>
+              <Button
+                onClick={handleVolverAtras}
+                variant="contained"
+                color="secondary"
+                className="custom-btn btn-8"
+              >
+                Cerrar
+              </Button>
+            </div>
         </div>
+        
       </Modal>
-
-      {/* Modal para mostrar los candidatos del frente seleccionado */}
       {selectedFrente && (
         <Modal
           open={modalIsOpen}
-          onClose={closeModal1}
+          onClose={() => {}}
           aria-labelledby="Candidatos del Frente"
           style={{
             display: "flex",
