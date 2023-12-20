@@ -149,7 +149,7 @@ const ActualizarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
             className="custom-btn btn-8"
             onClick={handleVolverAtras}
           >
-            Volver
+            Cancelar
           </CustomButton>
         </Box>
 

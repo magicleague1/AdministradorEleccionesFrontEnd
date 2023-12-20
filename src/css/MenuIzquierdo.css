@@ -9,7 +9,7 @@
 	font-family: 'Open Sans', sans-serif;
 }
 ::-webkit-scrollbar {
-  width: 12px; /* ancho del scrollbar */
+  width: 6px; /* ancho del scrollbar */
 }
 
 /* Manija (pulgar) del scrollbar */

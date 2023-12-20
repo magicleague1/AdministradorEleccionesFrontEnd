@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button, Snackbar, Alert } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, Snackbar, Alert, MenuItem,
+  Select,
+  styled,
+  FormControl,
+  InputLabel, } from '@mui/material';
 import axios from 'axios';
+const StyledFormControl = styled(FormControl)({
+  width: '100%',
+  marginTop:'8px'
+});
 
 const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   const initialState = {
@@ -13,13 +21,19 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // You can set the initial severity as needed
-  
+  const [motivo, setMotivo] = useState('');
+
   const url = process.env.REACT_APP_VARURL;
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
+  const opcionesMotivo = [
+    { value: 'Renuncia', label: 'Renuncia' },
+    { value: 'Fallecimiento', label: 'Fallecimiento' },
+    { value: 'Inhabilitación', label: 'Inhabilitación' },
+  ];
+ 
   const handleReasignarCandidato = async () => {
     if (formData.carnetIdentidadAntiguo === "" || formData.carnetIdentidadNuevo === "" || formData.motivo ==="") {
       setSnackbarSeverity("error");
@@ -45,7 +59,7 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
           .put(`${url}reasignarCandidato`, {
             carnetIdentidadAntiguo: formData.carnetIdentidadAntiguo,
             carnetIdentidadNuevo: formData.carnetIdentidadNuevo,
-            motivo: formData.motivo,
+            motivo: motivo,
           })
             .then((response) => {
               setSnackbarSeverity("success");
@@ -71,9 +85,13 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (name === 'motivoPermiso') {
+      setMotivo(value);
+    }
   };
 
   const handleCloseModal = () => {
+    setMotivo(""); 
     closeModal();
     setFormData(initialState);
   };
@@ -111,15 +129,31 @@ const ReasignarCandidatoModal = ({ isOpen, closeModal }) => {
           fullWidth
           margin="normal"
         />
-        <TextField
-          label="Motivo"
-          type="text"
-          name="motivo"
-          value={formData.motivo}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-        />
+        <StyledFormControl >
+            <FormControl fullWidth>
+              <InputLabel htmlFor="motivoPermiso">Motivo de reasignacion:</InputLabel>
+              <Select
+                label="Motivo de reasignacion"
+                name="motivoPermiso"
+                value={motivo}
+                onChange={(e) => {
+                  handleInputChange(e);
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              >
+                <MenuItem value="" disabled>
+                  -----Seleccione un motivo-----
+                </MenuItem>
+                {opcionesMotivo.map((opcion) => (
+                  <MenuItem key={opcion.value} value={opcion.value}>
+                    {opcion.label}
+                  </MenuItem>
+                ))}
+              </Select>
+                </FormControl>
+        </StyledFormControl>
         <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
           <Button
             variant="contained"

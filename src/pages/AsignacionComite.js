@@ -15,10 +15,9 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import SustitucionDeVocal from "./SustitucionDeVocal ";
+
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ViewListIcon from "@mui/icons-material/ViewList";
-import SyncIcon from "@mui/icons-material/Sync";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import ListaVocalesComite from "./ListaVocalesComite";
 
@@ -26,9 +25,7 @@ import ListaVocalesComite from "./ListaVocalesComite";
 const AsignacionComite = ({ lista }) => {
   const [proceso, setProceso] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalIsOpen1, setModalIsOpen1] = useState(false);
   const [codComite, setCodComite] = useState(null);
-  const [codComiteActualizar, setCodComiteActualizar] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarType, setSnackbarType] = useState('success');
@@ -96,17 +93,8 @@ const AsignacionComite = ({ lista }) => {
     setModalIsOpen(true);
   };
 
-  const handleActualizar = (codComite) => {
-    setCodComiteActualizar(codComite);
-    setModalIsOpen1(true);
-  };
-
   const closeModal = () => {
     setModalIsOpen(false);
-  };
-
-  const closeModal1 = () => {
-    setModalIsOpen1(false);
   };
 
   const handleCloseSnackbar = () => {
@@ -156,15 +144,7 @@ const AsignacionComite = ({ lista }) => {
                   >
                     Ver Lista
                   </Button>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<SyncIcon />}
-                    onClick={() => handleActualizar(elemento.COD_COMITE)}
-                    style={{marginLeft:'12px'}}
-                  >
-                    Actualizar
-                  </Button>
+                  
                 </TableCell>
                 <TableCell style={{ width: '36%', textAlign: 'center' }}>
                 <Button
@@ -214,7 +194,7 @@ const AsignacionComite = ({ lista }) => {
       >
         <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <Typography variant="h5" gutterBottom>
-        LISTA COMITE ELECTORAL
+      VOCALES ASIGNADOS AL COMITÉ ELECTORAL
       </Typography>
       <div className="ContenedorVocales" style={{width:'550px'}}>
         {codComite !== null && <ListaVocalesComite idComite={codComite} />}
@@ -230,40 +210,7 @@ const AsignacionComite = ({ lista }) => {
       </Button>
     </div>
       </Modal>
-      <Modal
-        open={modalIsOpen1}
-        onClose={() => {}}
-        aria-labelledby="Reasignacion Comite"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        BackdropProps={{
-          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
-          invisible: false,  
-        }}
-      >
-        <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '900px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Typography variant="h5" gutterBottom style={{ marginBottom: '20px' }}>
-        REASIGNACION COMITE ELECTORAL
-      </Typography>
-      <div className="ContenedorVocales">
-        {codComiteActualizar !== null && (
-          <SustitucionDeVocal codComite={codComiteActualizar} />
-        )}
-      </div>
-      <Button
-         variant="contained"
-         color="secondary"
-         className="custom-btn btn-8"
-        onClick={closeModal1}
-        style={{ marginTop: "20px" }}
-      >
-        Cerrar
-      </Button>
-    </div>
-      </Modal>
+      
     </Container>
   );
 };

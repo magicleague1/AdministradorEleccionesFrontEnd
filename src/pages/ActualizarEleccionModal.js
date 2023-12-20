@@ -79,7 +79,7 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
       !formData.fechaElecciones
     ) {
       setSnackbarType('error');
-      setSnackbarMessage('Llene correctamente los datos');
+      setSnackbarMessage('Error Llene los campos vacios');
       setSnackbarOpen(true);
       return;
     }
@@ -89,7 +89,7 @@ const ActualizarEleccionModal = ({ isOpen, closeModal, eleccionId }) => {
       new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)
     ) {
       setSnackbarType('error');
-      setSnackbarMessage('Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin.');
+      setSnackbarMessage('Verifique las fechas ingresadas. La fecha de inicio debe ser anterior a la fecha de fin, y la fecha de las elecciones debe ser posterior a la fecha de fin');
       setSnackbarOpen(true);
       return;
     }

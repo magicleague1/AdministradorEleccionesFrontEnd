@@ -23,20 +23,20 @@ const CandidatosBoletas = ({ frenteId }) => {
     fetchData2();
   }, [frenteId]);
 
-
-
   return (
     <React.Fragment>
       {loading && <p>Cargando candidatos...</p>}
       {error && <p>Error: {error}</p>}
-      {candidatoPorFrente.length > 0 && (
+      {candidatoPorFrente.length > 0 ? (
         <div>
           {candidatoPorFrente.map((candidato, index) => (
             <Typography key={index}>
-              {candidato.NOMBRE} {candidato.APELLIDO}- {candidato.CARGO_POSTULADO}
+              {candidato.NOMBRE} {candidato.APELLIDO} - {candidato.CARGO_POSTULADO}
             </Typography>
           ))}
         </div>
+      ) : (
+        <Typography>No hay candidatos registrados. Por favor, regístrese candidatos para generar las boletas electorales.</Typography>
       )}
     </React.Fragment>
   );

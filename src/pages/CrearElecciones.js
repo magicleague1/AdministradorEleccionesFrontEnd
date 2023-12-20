@@ -42,7 +42,7 @@ const StyledFormControl = styled(FormControl)({
 const StyledButtonGroup = styled(Box)({
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center',  // Agrega esta línea para centrar verticalmente
+  alignItems: 'center',  
   textAlign: 'center',
   width: '100%',
 });
@@ -94,9 +94,9 @@ const CrearElecciones = () => {
   const url = process.env.REACT_APP_VARURL;
 
   const opcionesMotivo = [
-    { value: 'universitaria', label: 'Rector, Vicerrector' },
-    { value: 'facultativa', label: 'Decano, Director Académico' },
-    { value: 'carrera', label: 'Director de carrera' },
+    { value: 'Universitaria', label: 'Rector, Vicerrector' },
+    { value: 'Facultativa', label: 'Decano, Director Académico' },
+    { value: 'Carrera', label: 'Director de carrera' },
   ];
 
   const handleInputChange = (e) => {
@@ -125,12 +125,12 @@ const CrearElecciones = () => {
 
 
     if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
-      handleSnackbarOpen('error', 'Error Llene los campos', 'Llene correctamente los datos');
+      handleSnackbarOpen('error', 'Error Llene los campos vacios');
       return;
     }
 
     if (new Date(formData.fechaFin) <= new Date(formData.fechaInicio) || new Date(formData.fechaElecciones) <= new Date(formData.fechaFin)) {
-      handleSnackbarOpen('error', 'Error fechas incorrectas', 'Las fechas no son válidas. Asegúrese de que la fecha de inicio sea anterior a la fecha de fin y la fecha de elecciones sea posterior a la fecha de fin.');
+      handleSnackbarOpen('error', 'Verifique las fechas ingresadas. La fecha de inicio debe ser anterior a la fecha de fin, y la fecha de las elecciones debe ser posterior a la fecha de fin');
       return;
     }
 
@@ -153,11 +153,11 @@ const CrearElecciones = () => {
 
     axios.post(url + "elecciones_data", nuevoProceso)
       .then((response) => {
-        handleSnackbarOpen('success', 'Proceso registrado correctamente, se envio correos a toda la poblacion universitaria');
+        handleSnackbarOpen('success', 'Proceso registrado correctamente');
         setFormData(initialState);
       })
       .catch((error) => {
-        handleSnackbarOpen('error', 'Error al crear el proceso electoral', `Ocurrió un error al crear el proceso electoral: ${error}`);
+        handleSnackbarOpen('error', 'Error al crear el proceso electoral');
       });
   };
 

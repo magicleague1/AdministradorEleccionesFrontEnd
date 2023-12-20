@@ -197,7 +197,7 @@ function AsignacionMesas({ lista }) {
       <div className="modalFrente" style={{ backgroundColor: '#fff', padding: '20px', width: '700px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
           <CardContent>
-            <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>LISTA DE ASIGNACION DE MESAS</Typography>
+            <Typography variant="h5" style={{ color: "black", textAlign: "center", marginBottom: "15px" }}>DETALLE DE MESAS ASIGNADAS</Typography>
             <ListaMesas eleccionId={selectedEleccionId} />
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
               <Button

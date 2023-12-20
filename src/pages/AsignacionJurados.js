@@ -69,16 +69,30 @@ const AsignacionDeJurados = ({ eleccionId }) => {
     setSelectedCodMesa(null);
     setOpenModalVJ(false);
   };
+  const verificarExistenciaJurados = async (codMesa) => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_VARURL}verificar-jurados/${codMesa}`);
+      return !response.data.existeJurados;
+    } catch (error) {
+      console.error("Error al verificar la existencia del jurados:", error);
+      return false;
+    }
+  };
 
-  const asignarJurados = (codMesa) => {
-    axios
-      .post(`${process.env.REACT_APP_VARURL}mesa/${codMesa}`)
-      .then(() => {
-        openSnackbar('success', 'Asignación exitosa. Se envió correo a todos los jurados asignados.');
-      })
-      .catch(() => {
-        openSnackbar('error', 'Error en la asignación. Ocurrió un error en la asignación de Jurados.');
-      });
+  const asignarJurados = async (codMesa) => {
+    try {
+      const existeJurado = await verificarExistenciaJurados(codMesa);
+      console.log(existeJurado);
+      if (!existeJurado) {
+        openSnackbar('error', 'Ya se asignaron jurados a esta mesa.');
+        return;
+      }
+      await axios.post(`${process.env.REACT_APP_VARURL}mesa/${codMesa}`);
+  
+      openSnackbar('success', 'Asignación exitosa. Se envió correo a todos los jurados asignados.');
+    } catch (error) {
+      openSnackbar('error', 'Error en la asignación. Ocurrió un error en la asignación de Jurados.');
+    }
   };
   if (mesas.length === 0) {
     return (

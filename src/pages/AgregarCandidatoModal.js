@@ -27,6 +27,7 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
    
     const fetchData = async () => {
       try {
+        console.log(eleccionId);
         const response = await axios.get(`${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`);
         setFronts(response.data.frentes);
       } catch (error) {
@@ -34,7 +35,7 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
       }
     };
     fetchData();
-  }, []);
+  }, [eleccionId]);
 
   const handleGuardar = () => {
     if (formData.carnetIdentidad === "" || formData.cargoPostulado === "") {

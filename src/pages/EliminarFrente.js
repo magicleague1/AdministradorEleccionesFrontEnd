@@ -7,16 +7,26 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
-
+import {
+  MenuItem,
+  Select,
+  styled,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
+const StyledFormControl = styled(FormControl)({
+  width: '90%',
+  marginLeft:'12px',
+  marginTop:'8px'
+});
 const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
-  const initialState = {
-    motivoEliminacion: "",
-  };
-
-  const [formData, setFormData] = useState(initialState);
+  
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [motivo, setMotivo] = useState('');
+  const [mostrarTextField, setMostrarTextField] = useState(false);
+  const [motivoAdicional, setMotivoAdicional] = useState('');
 
   const url = process.env.REACT_APP_VARURL;
 
@@ -29,36 +39,44 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+  const opcionesMotivo = [
+    { value: 'Inhabilitación por Documentación Incompleta', label: 'Inhabilitación por Documentación Incompleta' },
+    { value: 'Incumplimiento del Reglamento de Campañas', label: 'Incumplimiento del Reglamento de Campañas' },
+    { value: 'Inhabilitación de Candidatos', label: 'Inhabilitación de Candidatos' },
+    { value: 'Otro', label: 'Otro' },
+  ];
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    const textoSeleccionado = opcionesMotivo.find(
+      (opcion) => opcion.value === value
+    )?.label;
 
+    setMotivo(textoSeleccionado);
+    setMostrarTextField(value === 'Otro');
+  };
   const handleEliminarClick = () => {
-    if (!formData.motivoEliminacion) {
+    if (!motivo) {
       handleSnackbarOpen("error", "Ingrese un motivo");
       return;
     }
-
-    const eliminacion = {
-      MOTIVO: formData.motivoEliminacion,
-    };
-
+    const motivoFinal = motivoAdicional || motivo;
     axios
-      .put(`${url}frentes/delete/${frenteId}`, eliminacion)
+      .put(`${url}frentes/delete/${frenteId}`, {motivo: motivoFinal})
       .then((response) => {
         handleSnackbarOpen("success", "Frente político eliminado correctamente");
-        handleVolverAtras();
-        setFormData(initialState);
+        handleCancelarClick();
+        setMotivo("");
       })
       .catch((error) => {
         handleSnackbarOpen("error", "Ocurrió un error al eliminar el frente político");
       });
   };
 
-  const handleVolverAtras = () => {
+  const handleCancelarClick = () => {
+    setMotivo(""); 
+    setMostrarTextField(false);
+    setMotivoAdicional("");
     closeModal();
-  };
-
-  const handleMotivoChange = (e) => {
-    const { value } = e.target;
-    setFormData({ ...formData, motivoEliminacion: value });
   };
 
   return (
@@ -81,22 +99,56 @@ const EliminarFrenteModal = ({ isOpen, closeModal, frenteId }) => {
           <Typography variant="body1" gutterBottom sx={{ display: "flex", justifyContent: "center" }}>
             ¿Deseas eliminar el frente político?
           </Typography>
-
-          <TextField
-            label="Motivo de eliminación"
-            type="text"
-            name="motivoEliminacion"
-            value={formData.motivoEliminacion}
-            onChange={handleMotivoChange}
-            fullWidth
-            margin="normal"
-          />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <StyledFormControl >
+            <FormControl fullWidth>
+              <InputLabel htmlFor="motivoPermiso">Motivo de eliminación:</InputLabel>
+              <Select
+                label="Motivo de eliminación"
+                name="motivoPermiso"
+                value={motivo}
+                onChange={(e) => {
+                  handleInputChange(e);
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              >
+                <MenuItem value="" disabled>
+                  -----Seleccione un motivo-----
+                </MenuItem>
+                {opcionesMotivo.map((opcion) => (
+                  <MenuItem key={opcion.value} value={opcion.value}>
+                    {opcion.label}
+                  </MenuItem>
+                ))}
+              </Select>
+                </FormControl>
+                {mostrarTextField && (
+                  <FormControl>
+                  <TextField
+                    label="Ingrese otro motivo:"
+                    type="text"
+                    name="SIGLA_FRENTE"
+                    value={motivoAdicional}
+                    onChange={(e) => setMotivoAdicional(e.target.value)}
+                    placeholder="Ingrese otro motivo"
+                    fullWidth
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    sx={{marginTop:'18px'}}
+                  />
+                  </FormControl>
+                )}
+          </StyledFormControl>
+          </div>
 
           <Box sx={{ display: "flex", justifyContent: "center", marginTop: "16px" }}>
             <Button variant="contained" color="error" onClick={handleEliminarClick} style={{ marginRight: "12px" }}>
               Eliminar
             </Button>
-            <Button variant="contained" color="primary" onClick={handleVolverAtras}>
+            <Button variant="contained" color="primary" onClick={handleCancelarClick} >
               Cancelar
             </Button>
           </Box>

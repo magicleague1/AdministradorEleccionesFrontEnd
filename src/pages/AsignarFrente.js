@@ -33,7 +33,6 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
   useEffect(() => {
     const fetchFrentesAsignados = async () => {
       try {
-        // Fetch assigned fronts
         if (eleccionId) {
           const response = await axios.get(`${process.env.REACT_APP_VARURL}eleccionesAsignadas/${eleccionId}`);
           setFrentesAsignados(response.data);
@@ -142,6 +141,10 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
           >
             FRENTES POLITICOS PARTICIPANTES{" "}
           </h3>
+          {listaElecciones.length === 0 ? (
+            <p>No hay frentes registrados.</p>
+          ) : (
+            <>
           <List>
             {listaElecciones.map((frente) => (
               <ListItem
@@ -178,12 +181,15 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
               </ListItem>
             ))}
           </List>
+          </>
+           )}
           <div style={{ marginTop: "1rem" }}>
             <Button
               onClick={validarYRegistrar}
               variant="contained"
               color="primary"
               style={{ marginRight: "10px" }}
+              disabled={frentesAsignados.length === 0}
             >
               Registrar
             </Button>
@@ -195,6 +201,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
               Cancelar
             </Button>
           </div>
+           
         </div>
       </Modal>
 

@@ -35,17 +35,17 @@ function ListaVocalesComite({ idComite }) {
   }, [idComite]);
 
   const filteredTitulares = titulares.filter((titular) =>
-    titular.CARNETIDENTIDAD.toLowerCase().includes(searchTerm.toLowerCase())
+    titular.CODSIS.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const filteredSuplentes = suplentes.filter((suplente) =>
-    suplente.CARNETIDENTIDAD.toLowerCase().includes(searchTerm.toLowerCase())
+    suplente.CODSIS.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <Paper className="ListaComitePadre" elevation={3} style={{ padding: '10px', textAlign: 'center' }}>
     <TextField
-      label="Buscar por carnet de identidad"
+      label="Buscar por codigo SIS"
       variant="outlined"
       fullWidth
       margin="normal"
@@ -63,7 +63,7 @@ function ListaVocalesComite({ idComite }) {
       }}
     />
    <div>
-      {filteredTitulares.length > 0 ? (
+   {titulares.length > 0 ? (
         <div>
           <Typography variant="h5" style={{ marginLeft: '10px' }}>
             Titulares:
@@ -74,7 +74,7 @@ function ListaVocalesComite({ idComite }) {
                 <ListItem>
                   <ListItemText
                     primary={`${titular.NOMBRE} ${titular.APELLIDO}`}
-                    secondary={`CI: ${titular.CARNETIDENTIDAD} - ${
+                    secondary={`Codigo SIS: ${titular.CODSIS} - ${
                       titular.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
                     }`}
                   />
@@ -85,39 +85,38 @@ function ListaVocalesComite({ idComite }) {
           </List>
         </div>
       ) : (
-        
         <Typography variant="body1" style={{ marginLeft: '10px' }}>
-          Titulares:
-          No hay titulares asignados.
+          Titulares: No hay titulares asignados.
         </Typography>
       )}
 
-      {filteredSuplentes.length > 0 ? (
-        <div>
-          <Typography variant="h5" style={{ marginLeft: '10px' }}>
-            Suplentes:
-          </Typography>
-          <List>
-            {filteredSuplentes.map((suplente, index) => (
-              <div key={suplente.CARNETIDENTIDAD}>
-                <ListItem>
-                  <ListItemText
-                    primary={`${suplente.NOMBRE} ${suplente.APELLIDO}`}
-                    secondary={`CI: ${suplente.CARNETIDENTIDAD} - ${
-                      suplente.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
-                    }`}
-                  />
-                </ListItem>
-                {index !== filteredSuplentes.length - 1 && <Divider />}
-              </div>
-            ))}
-          </List>
+
+{suplentes.length > 0 ? (
+  <div>
+    <Typography variant="h5" style={{ marginLeft: '10px' }}>
+      Suplentes:
+    </Typography>
+    <List>
+      {filteredSuplentes.map((suplente, index) => (
+        <div key={suplente.CARNETIDENTIDAD}>
+          <ListItem>
+            <ListItemText
+              primary={`${suplente.NOMBRE} ${suplente.APELLIDO}`}
+              secondary={`Codigo SIS: ${suplente.CODSIS} - ${
+                suplente.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
+              }`}
+            />
+          </ListItem>
+          {index !== filteredSuplentes.length - 1 && <Divider />}
         </div>
-      ) : (
-        <Typography variant="body1" style={{ marginLeft: '10px' }}>
-         Suplentes:  No hay suplentes asignados.
-        </Typography>
-      )}
+      ))}
+    </List>
+  </div>
+) : (
+  <Typography variant="body1" style={{ marginLeft: '10px' }}>
+    Suplentes: No hay suplentes asignados.
+  </Typography>
+)}
     </div>
   </Paper>
   );

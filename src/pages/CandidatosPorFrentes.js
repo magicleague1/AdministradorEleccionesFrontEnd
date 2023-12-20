@@ -19,6 +19,7 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`);
         setCandidatos(response.data.frentes);
+        console.log(candidatos);
       } catch (error) {
         console.log("Error al obtener los frentes");
       }
@@ -146,14 +147,14 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
                   <ListItem key={index}>
                     <ListItemText
                       primary={`${candidato.NOMBRE} ${candidato.APELLIDO}`}
-                      secondary={`Carnet: ${candidato.CARNETIDENTIDAD}`}
+                      secondary={`Carnet: ${candidato.CARNETIDENTIDAD}` }
                       style={{ color: "black" }}
                     />
                   </ListItem>
                 ))}
               </List>
             ) : (
-              <p style={{ textAlign: "center" }}>No hay candidatos para este frente.</p>
+              <p style={{ textAlign: "center" }}>No hay candidatos registrados para este frente.</p>
             )}
 
             <div style={{ textAlign: "center" }}>

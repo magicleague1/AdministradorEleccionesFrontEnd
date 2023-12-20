@@ -10,10 +10,13 @@ import {
   Box,
   styled,
   Snackbar,
+  Input,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
-
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 const ModalContainer = styled("div")({
   position: "absolute",
   width: 600,
@@ -161,12 +164,20 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
             </Grid>
             <Grid item xs={12} md={15}>
               <InputLabel htmlFor="logo" style={{ marginBottom: '8px' }}>Logo:</InputLabel>
-              <input
+              <Input
                 type="file"
+                id="logo"
                 accept="image/*"
+                style={{ display: "none" }}
                 onChange={handleFileChange}
-                className="motivo-input"
               />
+              <label htmlFor="logo">
+              <Tooltip title="Subir Archivo" arrow>
+      <Button color="primary" variant="contained" component="span" sx={{ margin: '8px' }}>
+        <CloudUploadIcon /> Subir Archivo
+      </Button>
+    </Tooltip>
+              </label>
               {selectedFile && (
                 <Typography variant="body1">
                   Archivo seleccionado: {selectedFile.name}
@@ -186,9 +197,12 @@ const PartidosPoliticos = ({ isOpen, closeModal, eleccionId }) => {
                   variant="contained"
                   color="secondary"
                   className="custom-btn btn-8"
-                  onClick={handleVolverAtras}
+                  onClick={() => {
+                    handleVolverAtras();
+                    setSelectedFile(null);
+                  }}
                 >
-                  Volver
+                  Cancelar
                 </StyledButton>
               </StyledButtonGroup>
             </Grid>

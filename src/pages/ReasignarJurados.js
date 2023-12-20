@@ -7,6 +7,13 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import   {MenuItem, Select, styled, FormControl, InputLabel, } from '@mui/material';
+
+const StyledFormControl = styled(FormControl)({
+  width: '100%',
+  marginTop:'8px'
+});
+
 
 const ReasiganarJurados = ({ isOpen, closeModal }) => {
   const initialState = {
@@ -18,8 +25,11 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarType, setSnackbarType] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [motivoR, setMotivo] = useState('');
 
   const url = process.env.REACT_APP_VARURL;
+  
+
 
   const handleGuardar = () => {
     if (formData.carnetIdentidad === "" || formData.motivo === "") {
@@ -28,7 +38,7 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
     }
 
     axios
-      .put(`${url}jurado/${formData.carnetIdentidad}`, formData)
+      .put(`${url}jurado/${formData.carnetIdentidad}`, {carnetIdentidad: formData.carnetIdentidad, motivo: motivoR })
       .then((response) => {
         openSnackbar("success", "Jurados guardados correctamente");
         closeModal();
@@ -38,14 +48,23 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
         openSnackbar("error", `Error al agregar jurados: ${error}`);
       });
   };
-
+  const opcionesMotivo = [
+    { value: 'Enfermedad de base', label: 'Enfermedad de base' },
+    { value: 'Estado de gestacion', label: 'Estado de gestacion' },
+    { value: 'Accidentes de tránsito', label: 'Accidentes de tránsito' },
+    { value: 'Viaje al exterior del país', label: 'Viaje al exterior del país' },
+  ];
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (name === 'motivoPermiso') {
+      setMotivo(value);
+    }
   };
 
   const handleCloseModal = (event) => {
     event.stopPropagation();
+    setMotivo(""); 
     closeModal();
     setFormData(initialState);
   };
@@ -81,16 +100,31 @@ const ReasiganarJurados = ({ isOpen, closeModal }) => {
           fullWidth
           margin="normal"
         />
-        <TextField
-          label="Motivo"
-          type="text"
-          name="motivo"
-          value={formData.motivo}
-          onChange={handleInputChange}
-          onClick={(e) => e.stopPropagation()}
-          fullWidth
-          margin="normal"
-        />
+        <StyledFormControl >
+            <FormControl fullWidth>
+              <InputLabel htmlFor="motivoPermiso">Motivo de reasignacion:</InputLabel>
+              <Select
+                label="Motivo de reasignacion"
+                name="motivoPermiso"
+                value={motivoR}
+                onChange={(e) => {
+                  handleInputChange(e);
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              >
+                <MenuItem value="" disabled>
+                  -----Seleccione un motivo-----
+                </MenuItem>
+                {opcionesMotivo.map((opcion) => (
+                  <MenuItem key={opcion.value} value={opcion.value}>
+                    {opcion.label}
+                  </MenuItem>
+                ))}
+              </Select>
+                </FormControl>
+        </StyledFormControl>
         <Box sx={{ display: "flex", justifyContent: "center", marginTop: "16px" }}>
           <Button variant="contained" color="primary" onClick={handleGuardar} style={{ marginRight: "12px" }}>
             Guardar

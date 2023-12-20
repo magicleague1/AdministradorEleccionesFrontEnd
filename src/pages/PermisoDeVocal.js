@@ -10,7 +10,6 @@ import {
   TextField,
 } from '@mui/material';
 import AgregarPermiso from './AgregarPermiso';
-import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -77,28 +76,35 @@ const PermisoDeVocal = ({ codComite }) => {
       >
         <Box>
           <Typography variant="h6" style={{ color: ' #ffffff' }}>
-            Vocales Titular:
+            Vocales Titulares:
           </Typography>
-          <List >
-            {filterVocales(vocales).map((vocal, index) => (
-              <Box key={index} mb={2}>
-                <Paper elevation={3} style={{ padding: '16px' }}>
-                  <ListItem style={{ display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText
-                      primary={`${vocal.NOMBRE} ${vocal.APELLIDO} (Código SIS: ${vocal.COD_SIS}) ${
-                        vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
-                      }`}
-                      style={{ marginBottom: '8px' }}
-                    />
-
-                    <Box>
-                      <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
-                    </Box>
-                  </ListItem>
-                </Paper>
-              </Box>
-            ))}
-          </List>
+          {filterVocales(vocales).length > 0 ? (
+            <List>
+              {filterVocales(vocales).map((vocal, index) => (
+                <Box key={index} mb={2}>
+                  <Paper elevation={3} style={{ padding: '16px' }}>
+                    <ListItem style={{ display: 'flex', flexDirection: 'column' }}>
+                      <ListItemText
+                        primary={`${vocal.NOMBRE} ${vocal.APELLIDO} (Código SIS: ${vocal.COD_SIS}) ${
+                          vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
+                        }`}
+                        style={{ marginBottom: '8px' }}
+                      />
+                      <Box>
+                        <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
+                      </Box>
+                    </ListItem>
+                  </Paper>
+                </Box>
+              ))}
+            </List>
+          ) : (
+            searchTerm.trim() === '' && (
+              <Typography variant="body1" style={{ marginLeft: '10px' }}>
+                No hay vocales titulares asignados.
+              </Typography>
+            )
+          )}
         </Box>
       </Paper>
 
@@ -111,27 +117,34 @@ const PermisoDeVocal = ({ codComite }) => {
           backgroundColor: 'rgba(178,218,250)',
         }}
       >
-        <Box>
+         <Box>
           <Typography variant="h6">Vocales Suplentes:</Typography>
-          <List>
-            {filterVocales(vocales2).map((vocal, index) => (
-              <Box key={index} mb={2}>
-                <Paper elevation={3} style={{ padding: '16px' }}>
-                  <ListItem style={{ display: 'flex', flexDirection: 'column' }}>
-                    <ListItemText
-                      primary={`${vocal.NOMBRE} ${vocal.APELLIDO} (Código SIS: ${vocal.COD_SIS}) ${
-                        vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
-                      }`}
-                    />
-
-                    <Box>
-                      <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
-                    </Box>
-                  </ListItem>
-                </Paper>
-              </Box>
-            ))}
-          </List>
+          {filterVocales(vocales2).length > 0 ? (
+            <List>
+              {filterVocales(vocales2).map((vocal, index) => (
+                <Box key={index} mb={2}>
+                  <Paper elevation={3} style={{ padding: '16px' }}>
+                    <ListItem style={{ display: 'flex', flexDirection: 'column' }}>
+                      <ListItemText
+                        primary={`${vocal.NOMBRE} ${vocal.APELLIDO} (Código SIS: ${vocal.COD_SIS}) ${
+                          vocal.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
+                        }`}
+                      />
+                      <Box>
+                        <AgregarPermiso cod_sis={vocal.COD_SIS} cod_comite={codComite} />
+                      </Box>
+                    </ListItem>
+                  </Paper>
+                </Box>
+              ))}
+            </List>
+          ) : (
+            searchTerm.trim() === '' && (
+              <Typography variant="body1" style={{ marginLeft: '10px' }}>
+                No hay vocales suplentes asignados.
+              </Typography>
+            )
+          )}
         </Box>
       </Paper>
     </Box>

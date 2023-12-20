@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import "../css/MenuIzquierdo.css";
 import Logo from '../assets/logo.png';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Collapse } from "@mui/material";
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Collapse, Button,Box } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import CreateIcon from "@mui/icons-material/Create";
 import BallotIcon from "@mui/icons-material/Ballot";
@@ -16,6 +16,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
+import { useNavigate } from 'react-router-dom';
 import CrearElecciones from './CrearElecciones';
 import Inicio from './Inicio';
 import VerElecciones from './VerElecciones';
@@ -26,6 +27,7 @@ import VerConvocatoria from "./VerConvocatoria";
 import AsignacionPermisosC from "./AsignacionPermiso";
 import VerBoletasElectorales from "./VerBoletasElectorales";
 import JuradoElectorales from "./JuradosElectorales";
+
 
 function MenuIzquierdo() {
   const [openProcesoElectoral, setOpenProcesoElectoral] = useState(false);
@@ -40,6 +42,7 @@ function MenuIzquierdo() {
   const [mostrarAsignacionP, setMostrarAsignacionP] = useState(false);
   const [mostrarBoletas, setMostrarBoletas] = useState(false);
   const[mostrarJurados, setJurados]=useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerItemClick = (item) => {
     switch (item) {
@@ -227,6 +230,7 @@ function MenuIzquierdo() {
   return (
     <div style={{ display: 'flex' }}>
     <Drawer variant="permanent" style={{ width: '320px' }}>
+   
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
         <img src={Logo} alt="profile_picture" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
         <h3 style={{ color: 'black', fontSize: '22px', marginTop: '8px' }}>Administrador de elecciones </h3>
@@ -320,6 +324,17 @@ function MenuIzquierdo() {
           </ListItem>
 
         </List>
+        <Box sx={{ marginTop: 'auto', textAlign: 'center' , marginBottom:'10px'}}>
+      <Button
+        variant="contained"
+        color="secondary"
+        className="custom-btn btn-8"
+        onClick={() => navigate('/')}
+      >
+        Salir
+      </Button>
+    </Box>
+
       </Drawer>
       <div className="contentContainer">
         {mostrarCrearEleccion && <CrearElecciones />}

@@ -91,7 +91,7 @@ function VerJuradosE({ codMesa }) {
                 <ListItem>
                   <ListItemText
                     primary={`${jurado.NOMBRE} ${jurado.APELLIDO}`}
-                    secondary={`CI: ${jurado.CARNETIDENTIDAD} - ${jurado.CARGO_JURADO} ` }
+                    secondary={`Codigo SIS: ${jurado.CODSIS} - ${jurado.CARGO_JURADO} ` }
                   />
                 </ListItem>
                 {index !== filteredJurados.length - 1 && <Divider />}
