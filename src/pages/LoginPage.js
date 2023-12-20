@@ -3,6 +3,8 @@ import { TextField, Button, Container, Typography, Paper, CssBaseline } from '@m
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import imagen from "../img/UMSS.png"
+// import { useUser } from './DiferenciarUsuarios';//agregue esto
+
 const styles = {
   minHeight: '100vh',
   width: '100vw',
@@ -17,14 +19,16 @@ const styles = {
   padding: 0,
 };
 const LoginPage = () => {
+  // const { login } = useUser();//agregue esto nuevo
+
   const [showErrorNombre, setshowErrorName] = useState(false);
   const [showValorInput, setValorInput] = useState({ name: '', password: '' });
   const [showContraseña, setContraseña] = useState(false);
 
   const url = process.env.REACT_APP_VARURL;
   const navigate = useNavigate();
-
-  const LoginClick = (e) => {
+//modifique el async y le puse un try
+  const LoginClick =  (e) => {
     e.preventDefault();
 
     if (showValorInput.name.length === 0) {
@@ -39,23 +43,44 @@ const LoginPage = () => {
       setContraseña(false);
     }
 
-    if (!showErrorNombre && !showContraseña) {
-      axios.get(url + 'verificarAdministrador/' + showValorInput.name).then((response) => {
-        if (response.data) {
-          const administrador = response.data;
+  //   if (!showErrorNombre && !showContraseña) {
+  //     try {
+  //       const response = await axios.get(url + 'verificarAdministrador/' + showValorInput.name);
+  //       if (response.data) {
+  //         const administrador = response.data;
 
-          if (showValorInput.password === administrador.CONTRASENAADMINISTRADOR) {
+  //         if (showValorInput.password === administrador.CONTRASENAADMINISTRADOR) {
+  //           login({ name: showValorInput.name, role: 'admin' });
+  //           navigate('/home');
+  //         } else {
+  //           alert('Contraseña incorrecta');
+  //         }
+  //       } else {
+  //         alert('No existe administrador');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error al verificar administrador:', error);
+  //     }
+  //   }
+  // };
+  if (!showErrorNombre && !showContraseña) {
+      
+    axios.get(url + 'verificarAdministrador/' + showValorInput.name).then((response) => {
+      if (response.data) {
+        const administrador = response.data;
 
-            navigate('/home');
-          } else {
-            alert('Contraseña incorrecta');
-          }
+        if (showValorInput.password === administrador.CONTRASENAADMINISTRADOR) {
+
+          navigate('/home');
         } else {
-          alert('No existe administrador');
+          alert('Contraseña incorrecta');
         }
-      });
-    }
-  };
+      } else {
+        alert('No existe administrador');
+      }
+    });
+  }
+};
 
   const CapturaContenido = (e) => {
     const { name, value } = e.target;

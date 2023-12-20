@@ -26,8 +26,12 @@ import VerConvocatoria from "./VerConvocatoria";
 import AsignacionPermisosC from "./AsignacionPermiso";
 import VerBoletasElectorales from "./VerBoletasElectorales";
 import JuradoElectorales from "./JuradosElectorales";
+import VistaAdmin from "./VistaAdmin";
+// import { useUser } from './DiferenciarUsuarios';//agregue esto
 
 function MenuIzquierdo() {
+  // const { user } = useUser();//agregue esto
+
   const [openProcesoElectoral, setOpenProcesoElectoral] = useState(false);
   const [openComiteElectoral, setOpenComiteElectoral] = useState(false);
   const [mostrarCrearEleccion, setMostrarCrearEleccion] = useState(false);
@@ -40,6 +44,8 @@ function MenuIzquierdo() {
   const [mostrarAsignacionP, setMostrarAsignacionP] = useState(false);
   const [mostrarBoletas, setMostrarBoletas] = useState(false);
   const[mostrarJurados, setJurados]=useState(false);
+  const[mostrarRegistroT, setRegistro]=useState(false);
+  
 
   const handleDrawerItemClick = (item) => {
     switch (item) {
@@ -85,6 +91,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setRegistro(false);
   };
 
   const handleDrawerItemSubClick = (subItem) => {
@@ -118,6 +125,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setRegistro(false);
   };
 
   const handleVerEleccionesClick = () => {
@@ -131,6 +139,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setRegistro(false);
   };
 
   const handleVerComiteClick = () => {
@@ -144,6 +153,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setRegistro(false);
   };
 
 
@@ -158,6 +168,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setRegistro(false);
   };
 
   const handleAsignarMesaClick = () => {
@@ -171,6 +182,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setRegistro(false);
   };
 
   const handleVerConvocatoria = () => {
@@ -184,6 +196,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setRegistro(false);
   };
 
   const handleAsignarPermisos = () => {
@@ -197,6 +210,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(true);
     setMostrarBoletas(false);
     setJurados(false);
+    setRegistro(false);
   };
 
   const handleBoletasElectorales = () => {
@@ -210,6 +224,7 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(true);
     setJurados(false);
+    setRegistro(false);
   };
   const handleJuradosE = () => {
     setMostrarCrearEleccion(false);
@@ -222,7 +237,22 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(true);
+    setRegistro(false);
   };
+  const handleRegistrarT = () => {
+    setMostrarCrearEleccion(false);
+    setMostrarInicio(false);
+    setMostrarVerElecciones(false);
+    setMostrarVerComite(false);
+    setMostrarVerPartido(false);
+    setMostrarVerConvocatoria(false);
+    setMostrarAsignacion(false);
+    setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
+    setJurados(false);
+    setRegistro(true);
+  };
+
 
   return (
     <div style={{ display: 'flex' }}>
@@ -318,7 +348,13 @@ function MenuIzquierdo() {
             </ListItemIcon>
             <ListItemText primary="Jurados Electorales" />
           </ListItem>
-
+      
+          <ListItem button onClick={() => handleRegistrarT("Registrar Tribunales")} style={{ backgroundColor: mostrarRegistroT ? 'lightgray' : 'inherit' }}>
+            <ListItemIcon>
+             <Diversity3Icon />
+            </ListItemIcon>
+            <ListItemText primary="Registrar Tribunales" />
+          </ListItem>
         </List>
       </Drawer>
       <div className="contentContainer">
@@ -332,9 +368,11 @@ function MenuIzquierdo() {
         {mostrarAsignacionP && <AsignacionPermisosC />}
         {mostrarBoletas && <VerBoletasElectorales/>}
         {mostrarJurados && <JuradoElectorales/>}
+        {mostrarRegistroT && <VistaAdmin/>}
       </div>
     </div>
   );
 }
+
 
 export default MenuIzquierdo;

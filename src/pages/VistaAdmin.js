@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Paper, CssBaseline,Snackbar } from '@mui/material';
 import axios from 'axios';
-import imagen from "../img/UMSS.png";
 import { useNavigate } from 'react-router-dom';
 import MuiAlert from "@mui/material/Alert";
+// import { useUser } from './DiferenciarUsuarios';//agregue esto
 
 const styles = {
-  minHeight: '100vh',
-  width: '100vw',
-  backgroundImage: `url('https://us.123rf.com/450wm/panychev/panychev1611/panychev161100133/66317182-resumen-de-fondo-de-color-azul-oscuro-textura-plana-sitio-web-o-obras-de-arte-tel%C3%B3n-de-fondo.jpg')`,
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  display: 'flex',
-  flexDirection: 'column',
+  minHeight: '102vh',
+  display: 'center',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: 0,
+
 };
 const RegistrarUsuario = () => {
+    // const { login } = useUser();//agregue esto
   const [showErrorNombre, setshowErrorName] = useState(false);
   const [showErrorCorreo, setshowErrorCorreo] = useState(false);
   const [showErrorContraseña, setshowErrorContraseña] = useState(false);
@@ -57,6 +52,7 @@ const RegistrarUsuario = () => {
       axios.post(url + 'registrarUsuario', userData)
         .then((response) => {
           console.log('Usuario registrado:', response.data);
+        //   login({ name: userData.name, role: 'user' });//agregue esto
           handleSnackbarOpen('success', 'Usuario registrado correctamente');
           navigate('/home');
         })
@@ -98,51 +94,80 @@ const handleSnackbarOpen = (severity, message) => {
       <CssBaseline />
       <Paper elevation={5} sx={{ padding: 3, width: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography component="h1" variant="h4" gutterBottom sx={{ fontSize: '25px' }}>
-          Registro de Usuario
+          Registro de Tribunales
         </Typography>
-        <img src={imagen} alt="Descripción de la imagen" style={{ width: '20%', marginBottom: '20px' }} />
         <form onSubmit={handleRegister} style={{ width: '100%' }}>
           <TextField
-            label="Nombre"
+            label="Carnet de Identidad"
             variant="outlined"
-            placeholder="Ingresa tu nombre"
+            placeholder="Ingresa el primer carnet"
             margin="normal"
             fullWidth
             type="text"
             name="name"
             onChange={handleInputChange}
             error={showErrorNombre}
-            helperText={showErrorNombre && 'Por favor ingrese un nombre'}
+            helperText={showErrorNombre && 'Por favor ingrese un carnet'}
             InputLabelProps={{
               shrink: true,
             }}
           />
           <TextField
-            label="Correo Electrónico"
+            label="Carnet de Identidad"
             variant="outlined"
-            placeholder="Ingresa tu correo electrónico"
+            placeholder="Ingresa el segundo carnet"
             margin="normal"
             fullWidth
-            type="email"
-            name="email"
+            type="text"
+            name="name"
             onChange={handleInputChange}
-            error={showErrorCorreo}
-            helperText={showErrorCorreo && 'Por favor ingrese un correo electrónico válido'}
+            error={showErrorNombre}
+            helperText={showErrorNombre && 'Por favor ingrese un carnet'}
             InputLabelProps={{
               shrink: true,
             }}
           />
           <TextField
-            label="Contraseña"
+            label="Carnet de Identidad"
             variant="outlined"
-            placeholder="Ingresa tu contraseña"
+            placeholder="Ingresa el tercer carnet"
             margin="normal"
             fullWidth
-            type="password"
-            name="password"
+            type="text"
+            name="name"
             onChange={handleInputChange}
-            error={showErrorContraseña}
-            helperText={showErrorContraseña && 'Por favor ingrese una contraseña'}
+            error={showErrorNombre}
+            helperText={showErrorNombre && 'Por favor ingrese un carnet'}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            label="Carnet de Identidad"
+            variant="outlined"
+            placeholder="Ingresa el cuarto carnet"
+            margin="normal"
+            fullWidth
+            type="text"
+            name="name"
+            onChange={handleInputChange}
+            error={showErrorNombre}
+            helperText={showErrorNombre && 'Por favor ingrese un carnet'}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            label="Carnet de Identidad"
+            variant="outlined"
+            placeholder="Ingresa el quinto carnet"
+            margin="normal"
+            fullWidth
+            type="text"
+            name="name"
+            onChange={handleInputChange}
+            error={showErrorNombre}
+            helperText={showErrorNombre && 'Por favor ingrese un carnet'}
             InputLabelProps={{
               shrink: true,
             }}

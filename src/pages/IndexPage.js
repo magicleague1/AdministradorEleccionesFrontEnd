@@ -36,7 +36,6 @@ const IndexPage = () => {
               <li className='HomeLI'><a href="#" onClick={handleConvocatoriaClick} style={{ textDecoration: 'none' }}>Convocatorias</a></li>
               <li className='HomeLI'><a href="#" onClick={handlePublicacionClick} style={{ textDecoration: 'none' }}>Publicaciones</a></li>
               <li className='HomeLI'><a href="/Login" className="btn-request" style={{ textDecoration: 'none' }}>Ingresar</a></li>
-              <li className='HomeLI'><a href="/registrar" onClick={handleRegistrarClick} className="btn-request" style={{ textDecoration: 'none' }}>Registrar</a></li>
             </ul>
           </div>
         </div>
@@ -78,9 +77,6 @@ const IndexPage = () => {
             </>
           )}
         </div>
-        {contentToShow === "admin" && (
-            <VistaAdmin />
-          )}
       </div>
     </div>
   );

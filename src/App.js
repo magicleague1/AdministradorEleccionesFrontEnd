@@ -14,16 +14,20 @@ import AsignacionPermiso from './pages/AsignacionPermiso';
 import GenerarPdfListaVotantesPublic from './pages/GenerarPdfListaVotantesPublic';
 import VistaAdmin from './pages/VistaAdmin';
 
+// import { UserProvider } from './DiferenciarUsuarios';
+
 
 
 
 function App() {
   return (
     <BrowserRouter>
+    {/* <UserProvider> */}
       <Routes>
         <Route path="/" element={<IndexPage/>}></Route>
         <Route path="/login" element={<LoginPage/>}></Route>
         <Route path="/home" element={<MenuIzquierdo/>}></Route>  
+
         <Route path="/actualizarEleccion/:id" element={<ActualizarEleccion />} />
         <Route path='/PdfConvocatoria/:id' element={<PdfConvocatoria/>}/>
 
@@ -35,12 +39,13 @@ function App() {
 
         <Route path="/AgregarPermiso" element={<AgregarPermiso/>}></Route>
         <Route path="/AsignacionPermiso" element={<AsignacionPermiso/>}></Route> 
-        <Route path="/registrar" element={<VistaAdmin />}></Route>
+        
 
  
 
 
       </Routes>
+      {/* </UserProvider> */}
     </BrowserRouter>
   );
 }
