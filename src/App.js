@@ -12,6 +12,8 @@ import SustitucionDeVocal from './pages/SustitucionDeVocal ';
 import AgregarPermiso from './pages/AgregarPermiso';
 import AsignacionPermiso from './pages/AsignacionPermiso';
 import GenerarPdfListaVotantesPublic from './pages/GenerarPdfListaVotantesPublic';
+import VistaAdmin from './pages/VistaAdmin';
+
 
 
 
@@ -33,6 +35,7 @@ function App() {
 
         <Route path="/AgregarPermiso" element={<AgregarPermiso/>}></Route>
         <Route path="/AsignacionPermiso" element={<AsignacionPermiso/>}></Route> 
+        <Route path="/registrar" element={<VistaAdmin />}></Route>
 
  
 

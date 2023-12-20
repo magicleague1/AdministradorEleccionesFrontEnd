@@ -5,7 +5,6 @@ import AgregarFrenteModal from "./AgregarFrenteModal.js";
 import AsignarFrente from "./AsignarFrente";
 import CrearPartidosPoliticos from "./CrearPartidosPoliticos";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import CachedIcon from '@mui/icons-material/Cached';
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
@@ -24,7 +23,6 @@ const VerPartidosPoliticos = ({ lista }) => {
   const [listaElecciones, setListaElecciones] = useState([]);
   const [modalAddFP, setModalADDFP] = useState(false);
   const [modalAFP, setModalAFP] = useState(false);
-  const[modalRCA,setModalRCA]=useState(false);
   const url = process.env.REACT_APP_VARURL;
   
 

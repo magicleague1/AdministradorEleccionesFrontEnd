@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../css/HomePage.css";
 import PublicarConvocatoriaList from './PublicarConvocatoriaList ';
 import PublicarListaVotantes from './PublicarListaVotantes';
-
+import VistaAdmin from './VistaAdmin'
 const IndexPage = () => {
   // Paso 2: Define el estado
   const [contentToShow, setContentToShow] = useState("Inicio");
@@ -16,6 +16,10 @@ const IndexPage = () => {
   const handleConvocatoriaClick = () => {
     setContentToShow("convocatoria");
   }; 
+  //Actualiza al hacer clic en "Ingrezar"
+  const handleRegistrarClick = () => {
+    setContentToShow("admin");
+  };
 
   // Paso 4: Condiciona la renderización del contenido en función del estado
   return (
@@ -32,6 +36,7 @@ const IndexPage = () => {
               <li className='HomeLI'><a href="#" onClick={handleConvocatoriaClick} style={{ textDecoration: 'none' }}>Convocatorias</a></li>
               <li className='HomeLI'><a href="#" onClick={handlePublicacionClick} style={{ textDecoration: 'none' }}>Publicaciones</a></li>
               <li className='HomeLI'><a href="/Login" className="btn-request" style={{ textDecoration: 'none' }}>Ingresar</a></li>
+              <li className='HomeLI'><a href="/registrar" onClick={handleRegistrarClick} className="btn-request" style={{ textDecoration: 'none' }}>Registrar</a></li>
             </ul>
           </div>
         </div>
@@ -73,6 +78,9 @@ const IndexPage = () => {
             </>
           )}
         </div>
+        {contentToShow === "admin" && (
+            <VistaAdmin />
+          )}
       </div>
     </div>
   );
