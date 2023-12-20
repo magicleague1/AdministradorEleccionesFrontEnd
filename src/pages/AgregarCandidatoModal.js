@@ -4,14 +4,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import InputLabel from '@mui/material/InputLabel';
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-const AgregarCandidatoModal = ({ isOpen, closeModal }) => {
+const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
   const initialState = {
     codFrente: "",
     carnetIdentidad: "",
@@ -23,19 +22,19 @@ const AgregarCandidatoModal = ({ isOpen, closeModal }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
-
-  useEffect(() => {
-    // Fetch the list of fronts
-    axios.get("http://localhost:8000/frentes")
-      .then((response) => {
-        setFronts(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching fronts:", error);
-      });
-  }, []);
-
   const url = process.env.REACT_APP_VARURL;
+  useEffect(() => {
+   
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`);
+        setFronts(response.data.frentes);
+      } catch (error) {
+        console.log("Error al obtener los frentes");
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleGuardar = () => {
     if (formData.carnetIdentidad === "" || formData.cargoPostulado === "") {
@@ -44,30 +43,48 @@ const AgregarCandidatoModal = ({ isOpen, closeModal }) => {
       setSnackbarOpen(true);
       return;
     }
-
+  
     const nuevoCandidato = {
       COD_FRENTE: formData.codFrente,
       CARNETIDENTIDAD: formData.carnetIdentidad,
       CARGO_POSTULADO: formData.cargoPostulado,
     };
-
+  
     axios
-      .post(`${url}frentes/asignarCandidatos`, nuevoCandidato)
+      .get(`${url}candidatos/verificarExistencia`, {
+        params: {
+          carnetIdentidad: nuevoCandidato.CARNETIDENTIDAD,
+        },
+      })
       .then((response) => {
-        setSnackbarType("success");
-        setSnackbarMessage("Candidato guardado correctamente");
-        setSnackbarOpen(true);
-        setFormData(initialState);
+        const existeCandidato = response.data.existeCandidato;
+        console.log(existeCandidato);
+        if (existeCandidato) {
+          setSnackbarType("error");
+          setSnackbarMessage("Este candidato ya está registrado.");
+          setSnackbarOpen(true);
+        } else {
+          axios
+            .post(`${url}frentes/asignarCandidatos`, nuevoCandidato)
+            .then((response) => {
+              setSnackbarType("success");
+              setSnackbarMessage("Candidato guardado correctamente");
+              setSnackbarOpen(true);
+              setFormData(initialState);
+            })
+            .catch((error) => {
+              setSnackbarType("error");
+              setSnackbarMessage(
+                `Ocurrió un error al agregar un candidato al frente político: ${error}`
+              );
+              setSnackbarOpen(true);
+            });
+        }
       })
       .catch((error) => {
-        setSnackbarType("error");
-        setSnackbarMessage(
-          `Ocurrió un error al agregar un candidato al frente político: ${error}`
-        );
-        setSnackbarOpen(true);
+        console.error("Error al verificar la existencia del candidato:", error);
       });
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -172,12 +189,7 @@ const AgregarCandidatoModal = ({ isOpen, closeModal }) => {
             variant="filled"
             onClose={handleCloseSnackbar}
             severity={snackbarType}
-            sx={{
-              width: "100%",
-              maxWidth: "600px",
-              fontSize: "1.2rem",
-              padding: "20px",
-            }}
+            sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
           >
             {snackbarMessage}
           </MuiAlert>

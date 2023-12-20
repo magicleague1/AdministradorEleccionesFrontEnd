@@ -230,7 +230,6 @@ function MenuIzquierdo() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
         <img src={Logo} alt="profile_picture" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
         <h3 style={{ color: 'black', fontSize: '22px', marginTop: '8px' }}>Administrador de elecciones </h3>
-        <b style={{ color: 'black', marginTop: '4px', fontSize: '22px' }}> UMSS </b>
       </div>
       <List>
         <ListItem button onClick={() => handleDrawerItemClick("Inicio")} style={{ backgroundColor: mostrarInicio ? 'lightgray' : 'inherit' }}>

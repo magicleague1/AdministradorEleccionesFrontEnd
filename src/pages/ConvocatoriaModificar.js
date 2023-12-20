@@ -67,6 +67,12 @@ const ConvocatoriaModificar = ({ isOpen, closeModal, eleccionId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (new Date(convocatoria.fecha_fin) <= new Date(convocatoria.fecha_inicio) ) {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Error fechas incorrectas');
+      setSnackbarOpen(true);
+    return;
+  }
     try {
       await axios.put(`${process.env.REACT_APP_VARURL}convocatorias/${eleccionId}`, convocatoria);
       setSnackbarSeverity('success');

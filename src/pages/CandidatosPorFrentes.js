@@ -6,87 +6,87 @@ import ListItemText from "@mui/material/ListItemText";
 import Button from "@mui/material/Button";
 import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
 import axios from "axios";
-import ListaCandidatos from "./ListaCandidatos";
 
 const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
-  const [listaFrentesP, setListaFrentesP] = useState([]);
+  const [candidatos, setCandidatos] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedFrenteId, setSelectedFrenteId] = useState(null);
+  const [selectedFrente, setSelectedFrente] = useState(null);
 
   useEffect(() => {
+   
+      
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_VARURL}obtener_frentes_por_eleccion/${eleccionId}`
-        );
-
-        if (response.data && response.data.frentes) {
-          setListaFrentesP(response.data.frentes);
-        } else {
-          console.log("La respuesta de la API no contiene datos de frentes.");
-        }
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`);
+        setCandidatos(response.data.frentes);
       } catch (error) {
-        console.error("Error al obtener los frentes:", error.message);
+        console.log("Error al obtener los frentes");
       }
     };
-
     fetchData();
   }, [eleccionId]);
 
-  const handleClose = () => {
-    closeModal();
-  };
-
-  const handleVerCandidatosClick = (id) => {
-    setSelectedFrenteId(id);
+  const handleVerCandidatosClick = (frente) => {
+    setSelectedFrente(frente);
     setModalIsOpen(true);
   };
 
   const closeModal1 = () => {
     setModalIsOpen(false);
-    setSelectedFrenteId(null);
+    setSelectedFrente(null);
   };
 
+  const closeModal2 = () => {
+    closeModal();
+  };
+  const handleVolverAtras = () => {
+    closeModal();
+  };
   return (
     <div>
       <Modal
         open={isOpen}
         onClose={() => {}}
-        aria-labelledby="Candidatos "
+        aria-labelledby="Frentes Políticos"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
         BackdropProps={{
-          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },  
-          invisible: false,  
+          style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+          invisible: false,
         }}
       >
         <div
           className="modalFrente"
-          style={{ backgroundColor: "#fff", padding: "20px", width: "400px" }}
+          style={{ backgroundColor: "#fff", padding: "20px", width: "600px" }}
         >
           <h3
             className="tituloPfrente"
-            style={{ color: "black", textAlign: "center", marginBottom: "15px" }}
+            style={{
+              color: "black",
+              textAlign: "center",
+              marginBottom: "15px",
+            }}
           >
-            FRENTES POLÍTICOS
+            CANDIDATOS POR FRENTE POLÍTICOS
           </h3>
 
-          {listaFrentesP.length > 0 ? (
+          {candidatos.length > 0 ? (
             <List>
-              {listaFrentesP.map((frente) => (
+              {candidatos.map((frente) => (
                 <ListItem key={frente.COD_FRENTE} className="titulofrente">
                   <ListItemText
                     primary={frente.NOMBRE_FRENTE}
+                    secondary={`(${frente.SIGLA_FRENTE})`}
                     style={{ color: "black", textAlign: "center" }}
                   />
                   <Button
                     variant="outlined"
                     size="small"
                     startIcon={<DriveFileRenameOutlineOutlinedIcon />}
-                    onClick={() => handleVerCandidatosClick(frente.COD_FRENTE)}
+                    onClick={() => handleVerCandidatosClick(frente)}
                     style={{ marginRight: "12px" }}
                   >
                     Candidatos
@@ -97,24 +97,78 @@ const CandidatosPorFrentes = ({ isOpen, closeModal, eleccionId }) => {
           ) : (
             <p style={{ textAlign: "center" }}>No hay frentes inscritos.</p>
           )}
-
-          <div style={{ textAlign: "center" }}>
-            <Button
-              onClick={handleClose}
-              variant="contained"
-              color="secondary"
-              className="custom-btn btn-8"
-            >
-              Cerrar
-            </Button>
-          </div>
+           <div style={{ textAlign: "center" }}>
+              <Button
+                onClick={handleVolverAtras}
+                variant="contained"
+                color="secondary"
+                className="custom-btn btn-8"
+              >
+                Cerrar
+              </Button>
+            </div>
         </div>
+        
       </Modal>
-      <ListaCandidatos
-        isOpen={modalIsOpen}
-        closeModal={closeModal1}
-        frenteId={selectedFrenteId}
-      />
+      {selectedFrente && (
+        <Modal
+          open={modalIsOpen}
+          onClose={() => {}}
+          aria-labelledby="Candidatos del Frente"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          BackdropProps={{
+            style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+            invisible: false,
+          }}
+        >
+          <div
+            className="modalFrente"
+            style={{ backgroundColor: "#fff", padding: "20px", width: "600px" }}
+          >
+            <h3
+              className="tituloPfrente"
+              style={{
+                color: "black",
+                textAlign: "center",
+                marginBottom: "15px",
+              }}
+            >
+              Candidatos del Frente: {selectedFrente.NOMBRE_FRENTE} ({selectedFrente.SIGLA_FRENTE})
+            </h3>
+
+            {selectedFrente.candidatos.length > 0 ? (
+              <List>
+                {selectedFrente.candidatos.map((candidato, index) => (
+                  <ListItem key={index}>
+                    <ListItemText
+                      primary={`${candidato.NOMBRE} ${candidato.APELLIDO}`}
+                      secondary={`Carnet: ${candidato.CARNETIDENTIDAD}`}
+                      style={{ color: "black" }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <p style={{ textAlign: "center" }}>No hay candidatos para este frente.</p>
+            )}
+
+            <div style={{ textAlign: "center" }}>
+              <Button
+                onClick={closeModal1}
+                variant="contained"
+                color="secondary"
+                className="custom-btn btn-8"
+              >
+                Cerrar
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

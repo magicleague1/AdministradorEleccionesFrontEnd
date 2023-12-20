@@ -51,7 +51,7 @@ function VerJuradosE({ codMesa }) {
   const filteredJurados = jurados.filter((jurado) =>
     jurado.CARNETIDENTIDAD.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+ console.log(filteredJurados);
   return (
     <Paper
       className="ListaComitePadre"
@@ -91,9 +91,7 @@ function VerJuradosE({ codMesa }) {
                 <ListItem>
                   <ListItemText
                     primary={`${jurado.NOMBRE} ${jurado.APELLIDO}`}
-                    secondary={`CI: ${jurado.CARNETIDENTIDAD} - ${
-                      jurado.ESTUDIANTE === 1 ? 'Estudiante' : 'Docente'
-                    }`}
+                    secondary={`CI: ${jurado.CARNETIDENTIDAD} - ${jurado.CARGO_JURADO} ` }
                   />
                 </ListItem>
                 {index !== filteredJurados.length - 1 && <Divider />}

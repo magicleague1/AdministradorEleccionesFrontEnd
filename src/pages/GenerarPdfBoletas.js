@@ -28,6 +28,7 @@ const GenerarPdfBoletas = ({ isOpen, closeModal, eleccionId }) => {
   const [pdfSrc, setPdfSrc] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState("success");
   const url = process.env.REACT_APP_VARURL;
 
   const handleVolverAtras = () => {
@@ -45,37 +46,38 @@ const GenerarPdfBoletas = ({ isOpen, closeModal, eleccionId }) => {
       console.error("Error al obtener el PDF", error);
     }
   };
+  const verificarExistenciaBoletas = async (cod_eleccion) => {
+    try {
+      const response = await axios.get(`${url}verificar-boletas/${cod_eleccion}`);
+      return !response.data.existeBoleta;
+    } catch (error) {
+      console.error("Error al verificar la existencia del comité:", error);
+      return false;
+    }
+  };
 
   const handleGetBoletas = async (event) => {
     event.stopPropagation();
     try {
-      // const existeBoleta = await verificarExistenciaBoletas();
+       const existeBoleta = await verificarExistenciaBoletas(eleccionId);
 
-      // if (!existeBoleta) {
-      //   setSnackbarMessage("Ya se generó boleta electoral, solo haga clic en descargar");
-      //   setSnackbarOpen(true);
-      //   return;
-      // }
+       if (!existeBoleta) {
+        setSnackbarType("error");
+         setSnackbarMessage("Ya se generó boleta electoral, solo haga clic en descargar");
+         setSnackbarOpen(true);
+         return;
+       }
 
       await axios.post(url + `generar_boletas/${eleccionId}`);
-
+      setSnackbarType("success");
       setSnackbarMessage("La generación de boletas electorales se realizó con éxito.");
       setSnackbarOpen(true);
 
     } catch (error) {
       console.error("Error en la Generacion:", error);
+      setSnackbarType("error");
       setSnackbarMessage("Ocurrió un error en la generación de boletas electorales.");
       setSnackbarOpen(true);
-    }
-  };
-
-  const verificarExistenciaBoletas = async () => {
-    try {
-      const response = await axios.get(`${url}generarBoletasPDF/${eleccionId}`);
-      return response.data.existeBoleta;
-    } catch (error) {
-      console.error("Error al verificar la existencia de la boleta:", error);
-      return false;
     }
   };
 
@@ -151,7 +153,7 @@ const GenerarPdfBoletas = ({ isOpen, closeModal, eleccionId }) => {
           elevation={6}
           variant="filled"
           onClose={handleCloseSnackbar}
-          severity="info" // You can customize the severity based on your needs
+          severity={snackbarType}
           sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }} // Adjust the font size and padding
         >
           {snackbarMessage}

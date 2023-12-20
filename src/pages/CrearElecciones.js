@@ -76,10 +76,6 @@ const CrearElecciones = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  console.log(tipoEleccionselect);
-
-  console.log(selectedFacultad);
-  console.log(selectedCarrera);
 
   useEffect(() => {
     fetch(process.env.REACT_APP_VARURL + 'facultades')
@@ -126,7 +122,7 @@ const CrearElecciones = () => {
   };
 
   const handleGuardarClick = () => {
-    console.log(formData.motivoEleccion);
+
 
     if (!formData.motivoEleccion || !formData.fechaInicio || !formData.fechaFin || !formData.fechaElecciones) {
       handleSnackbarOpen('error', 'Error Llene los campos', 'Llene correctamente los datos');
@@ -153,11 +149,11 @@ const CrearElecciones = () => {
       cod_carrera: selectedCarrera
     };
 
-    console.log('----->>>', nuevoProceso);
+
 
     axios.post(url + "elecciones_data", nuevoProceso)
       .then((response) => {
-        handleSnackbarOpen('success', 'Proceso registrado correctamente, se envio correos a toda la poblacion universitaria', `Se envió un correo de la información de este proceso electoral `);
+        handleSnackbarOpen('success', 'Proceso registrado correctamente, se envio correos a toda la poblacion universitaria');
         setFormData(initialState);
       })
       .catch((error) => {

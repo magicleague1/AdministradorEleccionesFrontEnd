@@ -10,24 +10,24 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
-  const [listaFrentesP, setListaFrentesP] = useState([]);
+  const [listaElecciones, setListaElecciones] = useState([]);
   const [frentesAsignados, setFrentesAsignados] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
 
   useEffect(() => {
-    const fetchFrentes = async () => {
+    const fetchData = async () => {
       try {
-        // Fetch available fronts
-        const response = await axios.get(`${process.env.REACT_APP_VARURL}getFrentesByEleccion/${eleccionId}`);
-        setListaFrentesP(response.data);
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`);
+        setListaElecciones(response.data.frentes);
+        console.log(listaElecciones);
       } catch (error) {
-        console.error("Error al obtener frentes:", error);
+        console.log("Error al obtener los frentes");
       }
     };
 
-    fetchFrentes();
+    fetchData();
   }, [eleccionId]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
       setFrentesAsignados(updatedFrentes);
     } else {
       // If the front is not assigned, add it
-      const frenteSeleccionado = listaFrentesP.find((f) => f.COD_FRENTE === frenteId);
+      const frenteSeleccionado = listaElecciones.find((f) => f.COD_FRENTE === frenteId);
       if (frenteSeleccionado) {
         const updatedFrentes = [...frentesAsignados, frenteSeleccionado];
         setFrentesAsignados(updatedFrentes);
@@ -143,7 +143,7 @@ const AsignarFrente = ({ isOpen, closeModal, eleccionId }) => {
             FRENTES POLITICOS PARTICIPANTES{" "}
           </h3>
           <List>
-            {listaFrentesP.map((frente) => (
+            {listaElecciones.map((frente) => (
               <ListItem
                 key={frente.COD_FRENTE}
                 className="titulofrente"

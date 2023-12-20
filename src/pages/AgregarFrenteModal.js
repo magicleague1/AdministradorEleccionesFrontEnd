@@ -19,7 +19,7 @@ const AgregarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtener_frentes_por_eleccion/${eleccionId}`);
+        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`);
         setListaFrentesP(response.data.frentes);
         console.log(listaFrentesP);
       } catch (error) {
@@ -31,6 +31,8 @@ const AgregarFrenteModal = ({ isOpen, closeModal, eleccionId }) => {
   }, [eleccionId]);
 
   const handleActualizarClick = (id) => {
+    console.log(listaFrentesP);
+    console.log(id);
     setSelectedFrenteId(id);
     setModalIsOpen(true);
   };

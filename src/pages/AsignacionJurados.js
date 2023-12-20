@@ -80,7 +80,13 @@ const AsignacionDeJurados = ({ eleccionId }) => {
         openSnackbar('error', 'Error en la asignación. Ocurrió un error en la asignación de Jurados.');
       });
   };
-
+  if (mesas.length === 0) {
+    return (
+      <Typography variant="h6" style={{ margin: '20px', textAlign:'center' }}>
+        No hay mesas Asignadas.
+      </Typography>
+    );
+  }
   return (
     <div>
     <div style={{ overflowY: 'auto', maxHeight: '400px', width: '600px' }}>

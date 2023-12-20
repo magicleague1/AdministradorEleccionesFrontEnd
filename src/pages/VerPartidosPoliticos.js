@@ -13,7 +13,6 @@ import CandidatoPorFrentes from "./CandidatosPorFrentes.js";
 import ReasignarCandidatoModal from "./ReasignarCandidatoModal.js";
 
 const VerPartidosPoliticos = ({ lista }) => {
-
   const [modalAC, setModalAC] = useState(false);
   const [modalIF, setModalIF] = useState(false);
   const [modalVC, setModalVC] = useState(false);
@@ -23,11 +22,12 @@ const VerPartidosPoliticos = ({ lista }) => {
   const [listaElecciones, setListaElecciones] = useState([]);
   const [modalAddFP, setModalADDFP] = useState(false);
   const [modalAFP, setModalAFP] = useState(false);
+  const [modalRCA, setModalRCA] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(false); // Estado para forzar la actualización
   const url = process.env.REACT_APP_VARURL;
   
 
   const openModalAC = (id) => {
-   
     setSelectedEleccionId(id);
     setModalAC(true);
   };
@@ -35,12 +35,13 @@ const VerPartidosPoliticos = ({ lista }) => {
   const closeModalAC = () => {
     setModalAC(false);
   };
+
   useEffect(() => {
     axios.get(url + "elecciones_index").then((response) => {
       setListaElecciones(response.data);
     });
-  }, []);
-  //Inscripcion de un nuevo frente
+  }, [forceUpdate]); // Dependencia añadida para forzar la actualización
+
   const handleDetallesClick = (id) => {
     setSelectedEleccionId(id);
     setModalIF(true);
@@ -50,7 +51,7 @@ const VerPartidosPoliticos = ({ lista }) => {
     setModalIF(false);
     setSelectedEleccionId(null);
   };
-  //frentes por eleccion
+
   const openModalADDFP = (id) => {
     setSelectedEleccionId(id);
     setModalADDFP(true);
@@ -68,7 +69,7 @@ const VerPartidosPoliticos = ({ lista }) => {
   const closeModalAFP = () => {
     setModalAFP(false);
   };
-  //Ver Candidatos
+
   const openModalVC = (id) => {
     setSelectedEleccionId(id);
     setModalVC(true);
@@ -77,14 +78,21 @@ const VerPartidosPoliticos = ({ lista }) => {
   const closeModalVC = () => {
     setModalVC(false);
   };
-  //Reasignar Candidatos
+
   const openModalRCA = (id) => {
     setSelectedEleccionId(id);
     setModalRCA(true);
   };
+
   const closeModalRCA = () => {
     setModalRCA(false);
   };
+
+  const handleRefreshClick = () => {
+    // Al hacer clic en el botón de refresco, se actualiza el estado
+    setForceUpdate((prev) => !prev);
+  };
+
   return (
     <Container>
       <Typography variant="h4" align="center" gutterBottom style={{ marginTop: "40px", marginBottom: "30px" }}>
@@ -116,42 +124,42 @@ const VerPartidosPoliticos = ({ lista }) => {
                   </Button>
                 </TableCell>
                 <TableCell style={{ width: '12%', textAlign: 'center' }}>
-                <Button
-                variant="outlined"
-                size="small"
-                startIcon={<ListAltOutlinedIcon />}
-                onClick={() => openModalADDFP(eleccion.COD_ELECCION)}
-              >
-                Ver Frentes
-              </Button>
-            </TableCell>
-            <TableCell style={{ width: '28%', textAlign: 'center' }}>
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<PersonAddAltOutlinedIcon />}
-                onClick={() => openModalAC(eleccion.COD_ELECCION)}
-                sx={{ marginRight: '15px' }}
-              >
-                Registrar
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<ListAltOutlinedIcon />}
-                onClick={() => openModalVC(eleccion.COD_ELECCION)}
-                sx={{ marginRight: '15px' }}
-              >
-                Ver 
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<CachedIcon />}
-                onClick={() => openModalRCA(eleccion.COD_ELECCION)}
-              >
-                Reasignar 
-              </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<ListAltOutlinedIcon />}
+                    onClick={() => openModalADDFP(eleccion.COD_ELECCION)}
+                  >
+                    Ver Frentes
+                  </Button>
+                </TableCell>
+                <TableCell style={{ width: '28%', textAlign: 'center' }}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<PersonAddAltOutlinedIcon />}
+                    onClick={() => openModalAC(eleccion.COD_ELECCION)}
+                    sx={{ marginRight: '15px' }}
+                  >
+                    Registrar
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<ListAltOutlinedIcon />}
+                    onClick={() => openModalVC(eleccion.COD_ELECCION)}
+                    sx={{ marginRight: '15px' }}
+                  >
+                    Ver 
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<CachedIcon />}
+                    onClick={() => openModalRCA(eleccion.COD_ELECCION)}
+                  >
+                    Reasignar 
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -162,8 +170,33 @@ const VerPartidosPoliticos = ({ lista }) => {
       <AsignarFrente isOpen={modalAFP} closeModal={closeModalAFP} eleccionId={selectedEleccionId} />
       <AgregarFrenteModal isOpen={modalAddFP} closeModal={closeModalADDFP} eleccionId={selectedEleccionId} />
       <AsignarCandidatoModal isOpen={modalAC} closeModal={closeModalAC} eleccionId={selectedEleccionId} />
-      <CandidatoPorFrentes isOpen={modalVC} closeModal={closeModalVC} eleccionId={selectedEleccionId}/>   
-      <ReasignarCandidatoModal isOpen={modalRCA} closeModal={closeModalRCA} eleccionId={selectedEleccionId}/>
+      <CandidatoPorFrentes
+        isOpen={modalVC}
+        closeModal={() => {
+          closeModalVC();
+          setForceUpdate((prev) => !prev);
+        }}
+        eleccionId={selectedEleccionId}
+        forceUpdate={forceUpdate}
+      />
+      <ReasignarCandidatoModal
+        isOpen={modalRCA}
+        closeModal={() => {
+          closeModalRCA();
+          setForceUpdate((prev) => !prev);
+        }}
+        eleccionId={selectedEleccionId}
+      />
+
+      <Button
+        variant="outlined"
+        color="primary"
+        startIcon={<CachedIcon />}
+        onClick={handleRefreshClick}
+        style={{ marginTop: '20px' }}
+      >
+        Refrescar Parte Específica
+      </Button>
     </Container>
   );
 };

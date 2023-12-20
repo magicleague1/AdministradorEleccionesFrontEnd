@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import DoneIcon from '@mui/icons-material/Done';
 import ActualizarEleccionModal from "../pages/ActualizarEleccionModal";
 import AgregarFrenteModal from "./AgregarFrenteModal.js";
 import AsignarFrente from "./AsignarFrente";
