@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Paper, CssBaseline } from '@mui/material';
+import { TextField, Button, Container, Typography, Paper, CssBaseline,Snackbar } from '@mui/material';
 import axios from 'axios';
 import imagen from "../img/UMSS.png";
 import { useNavigate } from 'react-router-dom';
-
-
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-
+import MuiAlert from "@mui/material/Alert";
 
 const styles = {
   minHeight: '100vh',
@@ -30,8 +23,10 @@ const RegistrarUsuario = () => {
   const [showErrorCorreo, setshowErrorCorreo] = useState(false);
   const [showErrorContraseña, setshowErrorContraseña] = useState(false);
   const [userData, setUserData] = useState({ name: '', email: '', password: '' });
-  
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Corregido el nombre del estado
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const url = process.env.REACT_APP_VARURL;
   const navigate = useNavigate();
@@ -62,10 +57,12 @@ const RegistrarUsuario = () => {
       axios.post(url + 'registrarUsuario', userData)
         .then((response) => {
           console.log('Usuario registrado:', response.data);
+          handleSnackbarOpen('success', 'Usuario registrado correctamente');
           navigate('/home');
         })
         .catch((error) => {
           console.error('Error al registrar usuario:', error);
+          handleSnackbarOpen('error', 'Error al registrar', `Ocurrió un error al registrar al usuario: ${error}`);
         });
     }
   };
@@ -78,9 +75,22 @@ const RegistrarUsuario = () => {
     });
   };
 
-  const handleCloseSuccessModal = () => {
-    setShowSuccessModal(false);
-    navigate('/home');
+  const handleCancel = () => {
+    navigate('/');
+  };
+//Mensajes de alerta
+const handleSnackbarOpen = (severity, message) => {
+    setSnackbarSeverity(severity);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
   };
 
   return (
@@ -137,30 +147,33 @@ const RegistrarUsuario = () => {
               shrink: true,
             }}
           />
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-            Registrar
-          </Button>
+           <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+            <Button type="submit" variant="contained" fullWidth>
+              Registrar
+            </Button>
+            <Button type="button" variant="contained" fullWidth onClick={handleCancel}>
+              Cancelar
+            </Button>
+          </div>
         </form>
       </Paper>
-       {/* Modal de éxito */}
-       <Dialog open={showSuccessModal} onClose={handleCloseSuccessModal}>
-        <DialogTitle>Registrado correctamente</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            ¡Tu registro ha sido exitoso! Serás redirigido a la página de inicio.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseSuccessModal} autoFocus>
-            OK
-          </Button>
-          <Button onClick={() => navigate('/home')} color="primary">
-            Cancelar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 };
-
 export default RegistrarUsuario;

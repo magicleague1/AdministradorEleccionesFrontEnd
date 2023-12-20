@@ -22,7 +22,6 @@ const VerPartidosPoliticos = ({ lista }) => {
   const [listaElecciones, setListaElecciones] = useState([]);
   const [modalAddFP, setModalADDFP] = useState(false);
   const [modalAFP, setModalAFP] = useState(false);
-  const [modalRCA, setModalRCA] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(false); // Estado para forzar la actualización
   const url = process.env.REACT_APP_VARURL;
   
