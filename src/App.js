@@ -5,7 +5,7 @@ import LoginPage from './pages/LoginPage';
 import IndexPage from './pages/IndexPage';
 import MenuIzquierdo from './pages/MenuIzquierdo';
 import GenerarPdfPreviewPublic from './pages/GenerarPdfPreviewPublic';
-import GenerarPdfListaVotantesPublic from './pages/GenerarPdfListaVotantesPublic';
+import GenerarPdfListaVotantesPublic from './pages/GenerarPdfListaVotantesPublic'
 
 const PrivateRoute = ({ children }) => {
   const { authenticated } = useAuth();

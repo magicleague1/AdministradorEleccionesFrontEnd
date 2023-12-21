@@ -7,9 +7,18 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import {
+  MenuItem,
+  Select,
+  styled,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
 
+const StyledFormControl = styled(FormControl)({
+  width: '100%',
+  marginRight: '12px',
+});
 const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
   const initialState = {
     codFrente: "",
@@ -22,21 +31,53 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
+  const [motivo, setMotivo] = useState('');
+
   const url = process.env.REACT_APP_VARURL;
+  
+  const [opcionesMotivo, setOpcionesMotivo] = useState([]);
+  
   useEffect(() => {
-   
     const fetchData = async () => {
       try {
-        console.log(eleccionId);
-        const response = await axios.get(`${process.env.REACT_APP_VARURL}obtenerFrentesYCandidatos/${eleccionId}`);
+        const responseEleccion = await axios.get(`${url}obtener_id/${eleccionId}`);
+        const eleccion = responseEleccion.data;
+        if (eleccion.MOTIVO_ELECCION === 'universitaria') {
+          setOpcionesMotivo(opcionesRector);
+        } else if (eleccion.MOTIVO_ELECCION === 'facultativa') {
+          setOpcionesMotivo(opcionesDecano);
+        } else if (eleccion.MOTIVO_ELECCION === 'carrera') {
+          setOpcionesMotivo(opcionesCarrera);
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos de la elección:", error);
+      }
+    };
+
+    const fetchData1 = async () => {
+      try {
+        const response = await axios.get(`${url}obtenerFrentesYCandidatos/${eleccionId}`);
         setFronts(response.data.frentes);
       } catch (error) {
         console.log("Error al obtener los frentes");
       }
     };
     fetchData();
+    fetchData1();
+    
   }, [eleccionId]);
 
+  const opcionesRector = [
+    { value: 'Rector', label: 'Rector' },
+    { value: 'Vicerector', label: 'Vicerector' },
+  ];
+  const opcionesDecano = [
+    { value: 'Rector', label: 'Decano' },
+    { value: 'Director Academico', label: 'Director Academico' },
+  ];
+  const opcionesCarrera = [
+    { value: 'Director de Carrera', label: 'Director de Carrera' },
+  ];
   const handleGuardar = () => {
     if (formData.carnetIdentidad === "" || formData.cargoPostulado === "") {
       setSnackbarType("error");
@@ -89,8 +130,9 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    const textoSeleccionado = opcionesMotivo.find((opcion) => opcion.value === value)?.label;
+    setMotivo(textoSeleccionado);
   };
-
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
     closeModal();
@@ -145,16 +187,29 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
         fullWidth
         margin="normal"
       />
-      <TextField
-        label="Cargo"
-        type="text"
-        name="cargoPostulado"
-        value={formData.cargoPostulado}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-   
+      <StyledFormControl>
+          <FormControl fullWidth>
+            <InputLabel htmlFor="motivoPermiso">Cargos a Postular:</InputLabel>
+            <Select
+              label="Cargos a Postular"
+              name="motivoPermiso"
+              value={motivo}
+              onChange={handleInputChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            >
+              <MenuItem value="" disabled>
+                -----Seleccione un Tipo de cargo-----
+              </MenuItem>
+              {opcionesMotivo.map((opcion) => (
+                <MenuItem key={opcion.value} value={opcion.value}>
+                  {opcion.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </StyledFormControl>
         <Box
           sx={{
             display: "flex",

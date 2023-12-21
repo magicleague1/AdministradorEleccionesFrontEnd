@@ -16,7 +16,10 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import CrearElecciones from './CrearElecciones';
 import Inicio from './Inicio';
 import VerElecciones from './VerElecciones';
@@ -27,11 +30,14 @@ import VerConvocatoria from "./VerConvocatoria";
 import AsignacionPermisosC from "./AsignacionPermiso";
 import VerBoletasElectorales from "./VerBoletasElectorales";
 import JuradoElectorales from "./JuradosElectorales";
+import AgregarUsuarios from "./AgregarUsuarios";
+import VerUsuarios from "./VerUsuarios";
 
 
 function MenuIzquierdo() {
   const [openProcesoElectoral, setOpenProcesoElectoral] = useState(false);
   const [openComiteElectoral, setOpenComiteElectoral] = useState(false);
+  const [openUsuarios, setOpenUsuarios] = useState(false);
   const [mostrarCrearEleccion, setMostrarCrearEleccion] = useState(false);
   const [mostrarInicio, setMostrarInicio] = useState(true);
   const [mostrarVerElecciones, setMostrarVerElecciones] = useState(false);
@@ -42,12 +48,22 @@ function MenuIzquierdo() {
   const [mostrarAsignacionP, setMostrarAsignacionP] = useState(false);
   const [mostrarBoletas, setMostrarBoletas] = useState(false);
   const[mostrarJurados, setJurados]=useState(false);
+  const[crearUsuarios, setCrearUsuarios]=useState(false);
+  const[VerUsuarios1, setVerUsuarios1]=useState(false);
+
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const userType = new URLSearchParams(location.search).get('userType');
+  const userName = new URLSearchParams(location.search).get('UserName');
 
   const handleDrawerItemClick = (item) => {
     switch (item) {
       case "Inicio":
         handleInicioClick();
+        break;
+      case "Usuarios":
+        setOpenUsuarios(!openUsuarios);
         break;
       case "Proceso Electoral":
         setOpenProcesoElectoral(!openProcesoElectoral);
@@ -70,6 +86,7 @@ function MenuIzquierdo() {
         case "Jurados Electorales":
           handleJuradosE();
           break;
+       
       default:
         break;
   
@@ -88,6 +105,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
 
   const handleDrawerItemSubClick = (subItem) => {
@@ -103,6 +122,12 @@ function MenuIzquierdo() {
         break;
       case "Asignacion de Permisos":
         handleAsignarPermisos();
+        break;
+        case "Creacion de Usuarios":
+          handleCrearUsuario();
+        break;
+        case "Ver Usuarios":
+          handleVerUsuario();
         break;
       
       default:
@@ -121,6 +146,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
 
   const handleVerEleccionesClick = () => {
@@ -134,6 +161,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
 
   const handleVerComiteClick = () => {
@@ -147,6 +176,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
 
 
@@ -161,6 +192,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
 
   const handleAsignarMesaClick = () => {
@@ -174,6 +207,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
 
   const handleVerConvocatoria = () => {
@@ -187,6 +222,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
 
   const handleAsignarPermisos = () => {
@@ -200,6 +237,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(true);
     setMostrarBoletas(false);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
 
   const handleBoletasElectorales = () => {
@@ -213,6 +252,8 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(true);
     setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
   const handleJuradosE = () => {
     setMostrarCrearEleccion(false);
@@ -225,14 +266,43 @@ function MenuIzquierdo() {
     setMostrarAsignacionP(false);
     setMostrarBoletas(false);
     setJurados(true);
+    setCrearUsuarios(false);
+    setVerUsuarios1(false);
   };
-
+  const handleCrearUsuario = () => {
+    setMostrarCrearEleccion(false);
+    setMostrarInicio(false);
+    setMostrarVerElecciones(false);
+    setMostrarVerComite(false);
+    setMostrarVerPartido(false);
+    setMostrarVerConvocatoria(false);
+    setMostrarAsignacion(false);
+    setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
+    setJurados(false);
+    setCrearUsuarios(true);
+    setVerUsuarios1(false);
+  };
+  const handleVerUsuario = () => {
+    setMostrarCrearEleccion(false);
+    setMostrarInicio(false);
+    setMostrarVerElecciones(false);
+    setMostrarVerComite(false);
+    setMostrarVerPartido(false);
+    setMostrarVerConvocatoria(false);
+    setMostrarAsignacion(false);
+    setMostrarAsignacionP(false);
+    setMostrarBoletas(false);
+    setJurados(false);
+    setCrearUsuarios(false);
+    setVerUsuarios1(true);
+  };
   return (
     <div style={{ display: 'flex' }}>
     <Drawer variant="permanent" style={{ width: '320px' }}>
    
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
-        <img src={Logo} alt="profile_picture" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+        <img src={Logo} alt="profile_picture" style={{ width: '80px', height: '80px', borderRadius: '50%' }} />
         <h3 style={{ color: 'black', fontSize: '22px', marginTop: '8px' }}>Administrador de elecciones </h3>
       </div>
       <List>
@@ -240,6 +310,33 @@ function MenuIzquierdo() {
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary="Inicio" />
           </ListItem>
+          {userType === 'admin' && (
+            <>
+          <ListItem button onClick={() => handleDrawerItemClick("Usuarios")}>
+            <ListItemIcon>
+              <PeopleAltIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Usuarios" />
+            {openUsuarios ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openUsuarios} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button onClick={() => handleDrawerItemSubClick("Creacion de Usuarios")} style={{ backgroundColor: crearUsuarios ? 'lightgray' : 'inherit' }}>
+                <ListItemIcon>
+                  <GroupAddIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Crear Usuario Tribunal" />
+              </ListItem>
+               <ListItem button onClick={() => handleDrawerItemSubClick("Ver Usuarios")} style={{ backgroundColor: VerUsuarios1 ? 'lightgray' : 'inherit' }}>
+                <ListItemIcon>
+                  <BallotIcon />
+                </ListItemIcon>
+                <ListItemText primary="Ver Usuarios" />
+              </ListItem> 
+            </List>
+          </Collapse>
+          </>
+          )}
           <ListItem button onClick={() => handleDrawerItemClick("Proceso Electoral")}>
             <ListItemIcon>
               <AssignmentIcon />
@@ -322,7 +419,6 @@ function MenuIzquierdo() {
             </ListItemIcon>
             <ListItemText primary="Jurados Electorales" />
           </ListItem>
-
         </List>
         <Box sx={{ marginTop: 'auto', textAlign: 'center' , marginBottom:'10px'}}>
       <Button
@@ -347,6 +443,9 @@ function MenuIzquierdo() {
         {mostrarAsignacionP && <AsignacionPermisosC />}
         {mostrarBoletas && <VerBoletasElectorales/>}
         {mostrarJurados && <JuradoElectorales/>}
+        {crearUsuarios && <AgregarUsuarios/>}
+        {VerUsuarios1 && <VerUsuarios/>}
+
       </div>
     </div>
   );

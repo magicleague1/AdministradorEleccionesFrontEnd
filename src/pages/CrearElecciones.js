@@ -226,7 +226,7 @@ const CrearElecciones = () => {
             </FormControl>
             </StyledFormControl>
 
-            {formData.motivoEleccion === "facultativa" && (
+            {formData.motivoEleccion === "Facultativa" && (
               <StyledFormControl>
                 <FormControl fullWidth>
                 <InputLabel>Selecciona una facultad:</InputLabel>
@@ -255,7 +255,7 @@ const CrearElecciones = () => {
               
             )}
 
-            {formData.motivoEleccion === "carrera" && (
+            {formData.motivoEleccion === "Carrera" && (
               <>
                <StyledFormControl>
                <FormControl fullWidth>
