@@ -71,8 +71,6 @@ const LoginPage = () => {
         const data = response.data;
 
         if (data.success) {
-          // Autenticación exitosa
-          alert('Autenticación exitosa');
 
           // Puedes acceder a la información adicional
           console.log('Usuario:', data.user);

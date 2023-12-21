@@ -87,7 +87,7 @@ const VisualizacionBoletas = ({ isOpen, closeModal, eleccionId }) => {
                         <ListItemText
                           key={index}
                           primary={`${candidato.NOMBRE} ${candidato.APELLIDO}`}
-                          secondary={`Carnet: ${candidato.CARNETIDENTIDAD}`}
+                          secondary={`Cargo Postulado: ${candidato.CARGO_POSTULADO}`}
                           style={{ color: "black" }}
                         />
                       ))}

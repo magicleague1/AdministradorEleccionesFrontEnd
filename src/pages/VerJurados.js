@@ -59,47 +59,47 @@ function VerJuradosE({ codMesa }) {
       style={{ padding: '10px', textAlign: 'center' }}
       onClick={(e) => e.stopPropagation()}
     >
-      <TextField
-        label="Buscar por carnet de identidad"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        onChange={(e) => setSearchTerm(e.target.value)}
-        value={searchTerm}
-        style={{ width: '70%', marginLeft: 'auto', marginRight: 'auto' }}
-        InputProps={{
-          endAdornment: (
-            <IconButton
-              onClick={handleClearSearch}
-              style={{ marginRight: '-12px' }}
-            >
-              <ClearIcon />
-            </IconButton>
-          ),
-        }}
-      />
-      <div>
-        <Typography variant="h5" style={{ marginLeft: '10px' }}>
-          Jurados:
-        </Typography>
-        {filteredJurados.length === 0 ? (
-          <Typography>Aún no se asignaron jurados en esta mesa</Typography>
-        ) : (
-          <List>
-            {filteredJurados.map((jurado, index) => (
-              <div key={jurado.CARNETIDENTIDAD}>
-                <ListItem>
-                  <ListItemText
-                    primary={`${jurado.NOMBRE} ${jurado.APELLIDO}`}
-                    secondary={`Codigo SIS: ${jurado.CODSIS} - ${jurado.CARGO_JURADO} ` }
-                  />
-                </ListItem>
-                {index !== filteredJurados.length - 1 && <Divider />}
-              </div>
-            ))}
-          </List>
-        )}
-      </div>
+     <TextField
+  label="Buscar por carnet de identidad"
+  variant="outlined"
+  fullWidth
+  margin="normal"
+  onChange={(e) => setSearchTerm(e.target.value)}
+  value={searchTerm}
+  style={{ width: '70%', marginLeft: 'auto', marginRight: 'auto' }}
+  InputProps={{
+    endAdornment: (
+      <IconButton
+        onClick={handleClearSearch}
+        style={{ marginRight: '-12px' }}
+      >
+        <ClearIcon />
+      </IconButton>
+    ),
+  }}
+/>
+<div>
+  <Typography variant="h5" style={{ marginLeft: '10px' }}>
+    Jurados:
+  </Typography>
+  {filteredJurados.length === 0 && searchTerm === "" ? (
+    <Typography>Aún no se asignaron jurados en esta mesa</Typography>
+  ) : (
+    <List>
+      {filteredJurados.map((jurado, index) => (
+        <div key={jurado.CARNETIDENTIDAD}>
+          <ListItem>
+            <ListItemText
+              primary={`${jurado.NOMBRE} ${jurado.APELLIDO}`}
+              secondary={`Codigo SIS: ${jurado.CODSIS} - ${jurado.CARGO_JURADO} `}
+            />
+          </ListItem>
+          {index !== filteredJurados.length - 1 && <Divider />}
+        </div>
+      ))}
+    </List>
+  )}
+</div>
     </Paper>
   );
 }

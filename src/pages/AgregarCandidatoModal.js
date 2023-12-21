@@ -79,7 +79,7 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
     { value: 'Director de Carrera', label: 'Director de Carrera' },
   ];
   const handleGuardar = () => {
-    if (formData.carnetIdentidad === "" || formData.cargoPostulado === "") {
+    if (formData.carnetIdentidad === "" || motivo === "") {
       setSnackbarType("error");
       setSnackbarMessage("Complete correctamente los datos.");
       setSnackbarOpen(true);
@@ -89,7 +89,7 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
     const nuevoCandidato = {
       COD_FRENTE: formData.codFrente,
       CARNETIDENTIDAD: formData.carnetIdentidad,
-      CARGO_POSTULADO: formData.cargoPostulado,
+      CARGO_POSTULADO: motivo,
     };
   
     axios
@@ -100,12 +100,13 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
       })
       .then((response) => {
         const existeCandidato = response.data.existeCandidato;
-        console.log(existeCandidato);
+   
         if (existeCandidato) {
           setSnackbarType("error");
           setSnackbarMessage("Este candidato ya está registrado.");
           setSnackbarOpen(true);
         } else {
+          console.log(nuevoCandidato);
           axios
             .post(`${url}frentes/asignarCandidatos`, nuevoCandidato)
             .then((response) => {
@@ -116,9 +117,12 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
             })
             .catch((error) => {
               setSnackbarType("error");
-              setSnackbarMessage(
-                `Ocurrió un error al agregar un candidato al frente político: ${error}`
-              );
+              // Verificar si el error contiene un mensaje personalizado desde el backend
+              const errorMessage =
+                error.response && error.response.data && error.response.data.error
+                  ? error.response.data.error
+                  : "El candidato no puede ser un estudiante";
+              setSnackbarMessage(errorMessage);
               setSnackbarOpen(true);
             });
         }
@@ -245,7 +249,7 @@ const AgregarCandidatoModal = ({ isOpen, closeModal, eleccionId}) => {
             variant="filled"
             onClose={handleCloseSnackbar}
             severity={snackbarType}
-            sx={{ width: '100%', maxWidth: '600px', fontSize: '1.2rem', padding: '20px' }}
+            sx={{ width: '100%', maxWidth: '600px', fontSize: '0.9rem', padding: '20px' }}
           >
             {snackbarMessage}
           </MuiAlert>
